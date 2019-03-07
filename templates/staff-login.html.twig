@@ -39,7 +39,10 @@
                 console.log(username + " " + password);
                 $.post("/backend/staff/login", {username: username, password: password})
                     .done(function(data) {
-                        alert(isAuthenticated(data));
+                        if(isAuthenticated(data)) {
+                            //redirect to dashboard
+                            window.location = "/dashboard";
+                        }
                 });
             },
             

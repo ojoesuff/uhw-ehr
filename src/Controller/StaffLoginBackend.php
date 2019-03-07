@@ -35,13 +35,5 @@ class StaffLoginBackend extends AbstractController {
                 "false"
             );
         }
-        // $person = $repo->findOneBy([
-
-        //     'username' => $username,
-        //     'staffPassword' => $password,
-        // ]);
-
-        /*return $this->redirectToRoute('/admin/create');
-        return $this->render('admin-create.html.twig');*/
      }
 }
