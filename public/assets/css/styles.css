@@ -1,3 +1,70 @@
-#test {
-    color: red !important; 
+/*
+color scheme
+main: #5acc92
+bright: #70ffb6
+dark: #387f5b
+
+dark grey: #9f9fa0
+medium grey: #c5c5c9
+light grey: #ecf2f6
+*/
+@import url('https://fonts.googleapis.com/css?family=Roboto:400,500,700');
+
+* {
+    font-family: 'Roboto', sans-serif!important;
 }
+.ui-page {
+    background:#ecf2f6;
+}
+.drop-shadow {
+    box-shadow: 5px 5px 2px #c5c5c9;
+}
+
+.box {
+    background: #f9f9f9;
+    box-shadow: 5px 5px 2px #c5c5c9;
+    margin: 0 auto;
+    margin-top: 5rem;
+    border-radius: 0.6rem;
+    padding: 1rem;
+    padding-bottom: 2rem;
+}
+
+.width-xsmall {
+    width: 30%;
+}
+.width-small {
+    width: 40%;
+}
+
+.width-medium {
+    width: 60%;
+}
+
+.width-large {
+    width: 80%;
+}
+.width-xlarge {
+    width: 90%;
+}
+
+.centre {
+    margin: 0 auto;
+}
+
+.centre-img {
+    display: block;
+    margin: 0 auto;
+}
+
+/*input placeholder disappears when focused*/
+input:focus::-webkit-input-placeholder { 
+    color:transparent; 
+}
+
+.error {
+    color: red;
+}
+
+
+

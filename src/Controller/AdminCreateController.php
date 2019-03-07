@@ -5,7 +5,7 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route; 
 
-class AdministratorCreateController extends AbstractController {
+class AdminCreateController extends AbstractController {
     /**
      * @Route("/admin/create", name="admin-create")
      */

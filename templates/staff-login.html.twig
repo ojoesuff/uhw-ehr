@@ -1,2 +1,57 @@
 {% include './header/header.html.twig' %}
-<h1>Staff login page</h1>
+<body>    
+    <div class="box width-small">
+        <img src="{{asset('assets/images/logo.svg')}}" class="centre-img width-small" alt="UHW Logo">
+        <form method="post" id="login-form" class="width-large centre">
+             <label for="username" class="ui-hidden-accessible">Username:</label>
+             <input type="text" id="username" name="username" id="username" placeholder="Username">
+             <label for="password" class="ui-hidden-accessible">Password:</label>
+             <input type="password" id="password" name="password" id="password" placeholder="Password">       
+            <input type="submit" id="loginButton" data-inline="true" value="Login" data-theme="b">
+        </form>
+    </div>    
+</body>
+
+<script>
+    //jQuery form validator plugin
+    $(document).ready(function() {
+        $("#login-form").validate({
+            //custom rules for each element
+            rules: {
+                username: 'required',
+                password: 'required'
+            },
+            //custom error messages for each element
+            messages: {
+                username: 'Username is required',
+                password: 'Password is required',
+            },
+            errorPlacement: function(error, element) {
+                //insert error outside of input div
+                error.insertAfter(element.parent());                
+            },
+            //handles the submit only if form is valid
+            submitHandler: function(form) {
+                form.submit();
+                let username = $("#username").val();
+                let password = $("#password").val();
+
+                console.log(username + " " + password);
+                $.post("/backend/staff/login", {username: username, password: password})
+                    .done(function(data) {
+                        alert(isAuthenticated(data));
+                });
+            },
+            
+        });
+    });
+
+    //converts string from backend response to boolean
+    function isAuthenticated(data) {
+        if(data === 'true') {
+            return true;
+        } else if (data === 'false') {
+            return false;
+        }
+    }
+</script>

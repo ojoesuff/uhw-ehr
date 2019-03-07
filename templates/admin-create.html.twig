@@ -1,10 +1,38 @@
 {% include './header/header.html.twig' %}
-<body>
-    <h3 id="test" data-role="none">Create User</h3>
-    <form>
-         <label for="username">Username:</label>
-         <input type="text" name="username" id="username" value="">
-         <label for="password">Password:</label>
-         <input type="password" name="password" id="password" value="">
-    </form>
+<body>    
+    <div class="box width-large">
+    <h3>Create User</h3>
+        <form method="post" class="width-large centre">
+             <label class="ui-hidden-accessible" for="username">Username:</label>
+             <input type="text" id="username" name="username" id="username" value="">
+             <label for="password">Password:</label>
+             <input type="password" id="password" name="password" id="password" value="">
+            <fieldset data-role="controlgroup" name="staff-type" id="staff-type" data-type="horizontal">
+                <legend>Staff Type</legend>
+                <input type="radio" name="staff-type" id="doctor" value="doctor">
+                <label for="doctor">Doctor</label>
+                <input type="radio" name="staff-type" id="nurse" value="nurse">
+                <label for="nurse">Nurse</label>
+                <input type="radio" name="staff-type" id="clerical" value="clerical">
+                <label for="clerical">Clerical</label>
+            </fieldset>        
+            <input type="submit" id="createButton" data-inline="true" value="Create" data-theme="b">
+        </form>
+    </div>    
 </body>
+<script>
+    $("#createButton").click(function() {
+        var username = $("#username").val();
+        var password = $("#password").val();
+        var staffType = $("input[name='staff-type']:checked").val(); //get radio button value thats checked
+        console.log(username);
+        console.log(password);
+        console.log(staffType);
+
+        $.post("/backend/admin/create", {username:username, password:password, staffType:staffType})
+        .done(function(data) {
+            alert("Loaded into database: " + data);
+        })
+
+    });
+</script>
