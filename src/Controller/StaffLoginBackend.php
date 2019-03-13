@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class StaffLoginBackend extends AbstractController {
     /**
-     * @Route("/backend/staff/login", name="login") methods={"GET", "POST"}
+     * @Route("/backend/staff/login", name="backend-login") methods={"GET", "POST"}
      */
 
      public function loginStaff() {

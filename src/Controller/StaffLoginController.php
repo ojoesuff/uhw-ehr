@@ -34,9 +34,7 @@ class StaffLoginController extends AbstractController {
             ]);  
             
             if($repo) {
-                $this->redirectToRoute('dashboard');
-            } else {
-                $this->redirectToRoute('admin-create');
+                return $this->redirectToRoute('dashboard', array(), 301);
             }
             
     }

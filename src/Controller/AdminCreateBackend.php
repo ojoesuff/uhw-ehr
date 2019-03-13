@@ -6,7 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\UserStaff;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response; 
+use Symfony\Component\HttpFoundation\RedirectResponse; 
 
 class AdminCreateBackend extends AbstractController {
     /**
@@ -31,8 +31,6 @@ class AdminCreateBackend extends AbstractController {
         $entityManager->persist($userStaff);
         $entityManager->flush(); 
 
-        return new Response(
-            'register page was called!'
-        );
+        return $this->redirectToRoute('dashboard');
      }
 }

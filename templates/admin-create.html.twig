@@ -2,7 +2,7 @@
 <body>    
     <div class="box width-large">
     <h3>Create User</h3>
-        <form method="post" class="width-large centre">
+        <form method="post" id="createForm" class="width-large centre">
              <label class="ui-hidden-accessible" for="username">Username:</label>
              <input type="text" id="username" name="username" id="username" value="">
              <label for="password">Password:</label>
@@ -21,7 +21,7 @@
     </div>    
 </body>
 <script>
-    $("#createButton").click(function() {
+    $("#createForm").submit(function() {
         var username = $("#username").val();
         var password = $("#password").val();
         var staffType = $("input[name='staff-type']:checked").val(); //get radio button value thats checked
@@ -29,10 +29,6 @@
         console.log(password);
         console.log(staffType);
 
-        $.post("/backend/admin/create", {username:username, password:password, staffType:staffType})
-        .done(function(data) {
-            alert("Loaded into database: " + data);
-        })
-
+        $.post("/backend/admin/create", {username:username, password:password, staffType:staffType});
     });
 </script>
