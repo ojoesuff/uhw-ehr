@@ -2,17 +2,36 @@
 <body>    
     <div class="box width-small">
         <img src="{{asset('assets/images/logo.svg')}}" class="centre-img width-small" alt="UHW Logo">
-        <form method="post" id="login-form" class="width-large centre">
+        {{ form_start(form, 
+                {'attr': {
+                    'class': 'width-large centre'
+                }
+            }) }}
+            {{ form_errors(form.username) }}
+            {{ form_widget(form.username, 
+                {'attr': {
+                    'placeholder': 'Username'
+                }
+            }) }}
+            {{ form_errors(form.staffPassword) }}
+            {{ form_widget(form.staffPassword, 
+                {'attr': {
+                    'placeholder': 'Password'
+                }
+            }) }} 
+            <input type="submit" id="loginButton" data-inline="true" value="Login" data-theme="b">   
+        {{ form_end(form) }}
+        {#<form method="post" id="login-form" class="width-large centre">
              <label for="username" class="ui-hidden-accessible">Username:</label>
-             <input type="text" id="username" name="username" id="username" placeholder="Username">
+             <input type="text" id="username" name="username" placeholder="Username">
              <label for="password" class="ui-hidden-accessible">Password:</label>
-             <input type="password" id="password" name="password" id="password" placeholder="Password">       
+             <input type="password" id="password" name="password" placeholder="Password">       
             <input type="submit" id="loginButton" data-inline="true" value="Login" data-theme="b">
-        </form>
+        </form>#}
     </div>    
 </body>
 
-<script>
+{#<script>
     //jQuery form validator plugin
     $(document).ready(function() {
         $("#login-form").validate({
@@ -57,4 +76,4 @@
             return false;
         }
     }
-</script>
+</script>#}
