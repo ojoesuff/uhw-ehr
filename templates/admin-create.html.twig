@@ -29,6 +29,10 @@
         console.log(password);
         console.log(staffType);
 
-        $.post("/backend/admin/create", {username:username, password:password, staffType:staffType});
+        $.post("/backend/admin/create", {username:username, password:password, staffType:staffType})
+        .done(function(data) {
+            //redirect to dashboard   
+            window.location = "/dashboard"; 
+        });
     });
 </script>

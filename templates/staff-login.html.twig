@@ -1,4 +1,12 @@
 {% include './header/header.html.twig' %}
+{# creates session variable to pass to JS below #}
+{% set sessionLoggedIn = app.session.get('loggedIn')%}
+<script> 
+    var sessionLoggedIn = "{{ sessionLoggedIn }}";
+    if(sessionLoggedIn) {
+        window.location = "/dashboard"; 
+    }  
+</script>
 <body>    
     <div class="box width-small">
         <img src="{{asset('assets/images/logo.svg')}}" class="centre-img width-small" alt="UHW Logo">
@@ -22,9 +30,17 @@
                 {'attr': {
                     'placeholder': 'Password'
                 }
-            }) }} 
-            <input type="submit" id="loginButton" data-inline="true" value="Login" data-theme="b">   
+            }) }}
+            {# display error if un or pw is not found #}
+            <div class="error">
+                <p>{{error | default("")}}</p>
+            </div>  
+            <input type="submit" id="loginButton" data-inline="true" value="Login" data-theme="b">  
+            
         {{ form_end(form) }}
+        <p>{{loggedIn}}</p>
+        
+        
         {#<form method="post" id="login-form" class="width-large centre">
              <label for="username" class="ui-hidden-accessible">Username:</label>
              <input type="text" id="username" name="username" placeholder="Username">
@@ -34,50 +50,25 @@
         </form>#}
     </div>    
 </body>
+<script>
 
-{#<script>
-    //jQuery form validator plugin
-    $(document).ready(function() {
-        $("#login-form").validate({
-            //custom rules for each element
-            rules: {
-                username: 'required',
-                password: 'required'
-            },
-            //custom error messages for each element
-            messages: {
-                username: 'Username is required',
-                password: 'Password is required',
-            },
-            errorPlacement: function(error, element) {
-                //insert error outside of input div
-                error.insertAfter(element.parent());                
-            },
-            //handles the submit only if form is valid
-            submitHandler: function(form) {
-                form.submit();
-                let username = $("#username").val();
-                let password = $("#password").val();
+    //redirect to dashboard if user is logged in
+    /*var sessionLoggedIn = "{{ sessionLoggedIn }}";
+    if(sessionLoggedIn) {
+        window.location = "/dashboard"; 
+    } */  
 
-                console.log(username + " " + password);
-                $.post("/backend/staff/login", {username: username, password: password})
-                    .done(function(data) {
-                        if(isAuthenticated(data)) {
-                            //redirect to dashboard
-                            window.location = "/dashboard";
-                        }
-                });
-            },
-            
+    $("form").submit(function() {
+        var username = $("#login_username").val();
+        var password = $("#login_staffPassword").val();
+        console.log(username);
+        console.log(password);
+
+        $.post("/staff/login", {username:username, password:password})
+        .done(function(data) {
+            console.log(data);
         });
+        
     });
 
-    //converts string from backend response to boolean
-    function isAuthenticated(data) {
-        if(data === 'true') {
-            return true;
-        } else if (data === 'false') {
-            return false;
-        }
-    }
-</script>#}
+</script>

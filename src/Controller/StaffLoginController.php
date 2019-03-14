@@ -7,6 +7,7 @@ use App\Form\LoginType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route; //used to create custom url routes
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 
@@ -22,6 +23,8 @@ class StaffLoginController extends AbstractController {
 
         $form->handleRequest($request);
 
+        $loggedIn = false;
+
         if ($form->isSubmitted() && $form->isValid()) {
 
             $username = $form['username']->getData();
@@ -35,7 +38,6 @@ class StaffLoginController extends AbstractController {
             ]);  
             
             if($repo) {
-
                 //store authenication in session to loads different views
                 $id = $repo->getId();
                 $staffType = $repo->getStaffType();
@@ -44,13 +46,25 @@ class StaffLoginController extends AbstractController {
                 $session->set('loggedIn', true);
                 $session->set('staffType', $staffType);
 
-                return $this->redirectToRoute('admin-create', array(), 301);
+                $loggedIn = true;
+
+
+            } else {
+                //send error message if username and password is not found
+                return $this->render('staff-login.html.twig', array(
+                    'form' => $form->createView(),
+                    'error' => 'Username or password incorrect'
+                ));                
+
             }
+
+            
             
     }
-    
+
     return $this->render('staff-login.html.twig', array(
-        'form' => $form->createView() 
+        'form' => $form->createView(),
+        'loggedIn' => $loggedIn
     ));
 }
 }

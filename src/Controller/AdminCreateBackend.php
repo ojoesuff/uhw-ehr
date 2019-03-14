@@ -7,6 +7,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\UserStaff;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse; 
+use Symfony\Component\HttpFoundation\Response; 
 
 class AdminCreateBackend extends AbstractController {
     /**
@@ -31,6 +32,6 @@ class AdminCreateBackend extends AbstractController {
         $entityManager->persist($userStaff);
         $entityManager->flush(); 
 
-        return $this->redirectToRoute('dashboard');
+        return new Response("Success");
      }
 }
