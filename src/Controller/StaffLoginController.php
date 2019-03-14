@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route; //used to create custom url routes
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
+
 class StaffLoginController extends AbstractController {
     /**
      * @Route("/staff/login", name="staff-login") methods={"GET", "POST"}
@@ -34,11 +35,20 @@ class StaffLoginController extends AbstractController {
             ]);  
             
             if($repo) {
-                return $this->redirectToRoute('dashboard', array(), 301);
+
+                //store authenication in session to loads different views
+                $id = $repo->getId();
+                $staffType = $repo->getStaffType();
+                $session = $request->getSession();
+                $session->set('id', $id);
+                $session->set('loggedIn', true);
+                $session->set('staffType', $staffType);
+
+                return $this->redirectToRoute('admin-create', array(), 301);
             }
             
     }
-
+    
     return $this->render('staff-login.html.twig', array(
         'form' => $form->createView() 
     ));

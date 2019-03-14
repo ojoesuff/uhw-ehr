@@ -66,6 +66,7 @@ ul {
 .centre-img {
     display: block;
     margin: 0 auto;
+    margin-bottom: 5px;
 }
 
 /*input placeholder disappears when focused*/
