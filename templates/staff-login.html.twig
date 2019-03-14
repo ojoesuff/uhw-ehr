@@ -1,74 +1,29 @@
 {% include './header/header.html.twig' %}
-{# creates session variable to pass to JS below #}
-{% set sessionLoggedIn = app.session.get('loggedIn')%}
-<script> 
-    var sessionLoggedIn = "{{ sessionLoggedIn }}";
-    if(sessionLoggedIn) {
-        window.location = "/dashboard"; 
-    }  
-</script>
 <body>    
     <div class="box width-small">
-        <img src="{{asset('assets/images/logo.svg')}}" class="centre-img width-small" alt="UHW Logo">
-        {{ form_start(form, {'attr': {
-            'novalidate': 'novalidate', 
-            'class': 'width-large centre'}
-        }) }}
-            <div class="error">
-                {{ form_errors(form.username) }}
-            </div>
-            
-            {{ form_widget(form.username, 
-                {'attr': {
-                    'placeholder': 'Username'
-                }
-            }) }}
-            <div class="error">
-                {{ form_errors(form.staffPassword) }}
-            </div>
-            {{ form_widget(form.staffPassword, 
-                {'attr': {
-                    'placeholder': 'Password'
-                }
-            }) }}
-            {# display error if un or pw is not found #}
-            <div class="error">
-                <p>{{error | default("")}}</p>
-            </div>  
-            <input type="submit" id="loginButton" data-inline="true" value="Login" data-theme="b">  
-            
-        {{ form_end(form) }}
-        <p>{{loggedIn}}</p>
-        
-        
-        {#<form method="post" id="login-form" class="width-large centre">
+        <img src="{{asset('assets/images/logo.svg')}}" class="centre-img width-small" alt="UHW Logo">   
+        <form method="post" id="login-form" class="width-large centre">
              <label for="username" class="ui-hidden-accessible">Username:</label>
              <input type="text" id="username" name="username" placeholder="Username">
              <label for="password" class="ui-hidden-accessible">Password:</label>
              <input type="password" id="password" name="password" placeholder="Password">       
             <input type="submit" id="loginButton" data-inline="true" value="Login" data-theme="b">
-        </form>#}
+        </form>
     </div>    
 </body>
 <script>
 
-    //redirect to dashboard if user is logged in
-    /*var sessionLoggedIn = "{{ sessionLoggedIn }}";
-    if(sessionLoggedIn) {
-        window.location = "/dashboard"; 
-    } */  
-
-    $("form").submit(function() {
-        var username = $("#login_username").val();
-        var password = $("#login_staffPassword").val();
+    $("#login-form").submit(function() {
+        var username = $("#username").val();
+        var password = $("#password").val();
         console.log(username);
         console.log(password);
 
-        $.post("/staff/login", {username:username, password:password})
+        $.post("../backend/staff/login", {username:username, password:password})
         .done(function(data) {
-            console.log(data);
+            alert(data);
         });
         
     });
 
-</script>
+</script> 

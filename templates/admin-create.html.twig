@@ -31,7 +31,8 @@
 
         $.post("/backend/admin/create", {username:username, password:password, staffType:staffType})
         .done(function(data) {
-            //redirect to dashboard   
+            //redirect to dashboard  
+            alert(data); 
             window.location = "/dashboard"; 
         });
     });
