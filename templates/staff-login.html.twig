@@ -2,18 +2,22 @@
 <body>    
     <div class="box width-small">
         <img src="{{asset('assets/images/logo.svg')}}" class="centre-img width-small" alt="UHW Logo">
-        {{ form_start(form, 
-                {'attr': {
-                    'class': 'width-large centre'
-                }
-            }) }}
-            {{ form_errors(form.username) }}
+        {{ form_start(form, {'attr': {
+            'novalidate': 'novalidate', 
+            'class': 'width-large centre'}
+        }) }}
+            <div class="error">
+                {{ form_errors(form.username) }}
+            </div>
+            
             {{ form_widget(form.username, 
                 {'attr': {
                     'placeholder': 'Username'
                 }
             }) }}
-            {{ form_errors(form.staffPassword) }}
+            <div class="error">
+                {{ form_errors(form.staffPassword) }}
+            </div>
             {{ form_widget(form.staffPassword, 
                 {'attr': {
                     'placeholder': 'Password'
