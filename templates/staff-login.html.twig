@@ -6,24 +6,52 @@
              <label for="username" class="ui-hidden-accessible">Username:</label>
              <input type="text" id="username" name="username" placeholder="Username">
              <label for="password" class="ui-hidden-accessible">Password:</label>
-             <input type="password" id="password" name="password" placeholder="Password">       
+             <input type="password" id="password" name="password" placeholder="Password">
+            <p class="error" id="login-error"></p>       
             <input type="submit" id="loginButton" data-inline="true" value="Login" data-theme="b">
         </form>
     </div>    
 </body>
 <script>
-
-    $("#login-form").submit(function() {
-        var username = $("#username").val();
-        var password = $("#password").val();
-        console.log(username);
-        console.log(password);
-
-        $.post("../backend/staff/login", {username:username, password:password})
-        .done(function(data) {
-            alert(data);
+    
+    $(document).ready(function() {  
+        //jQuery form validator plugin
+        $("#login-form").validate({
+            //custom rules for each element
+            rules: {
+                username: 'required',
+                password: 'required'
+            },
+            //custom error messages for each element
+            messages: {
+                username: 'Username is required',
+                password: 'Password is required',
+            },
+            errorPlacement: function(error, element) {
+                //insert error outside of input div
+                error.insertBefore(element.parent());                
+            },
+            //handles the submit only if form is valid
+            submitHandler: function(form) {
+                form.submit();
+                let username = $("#username").val();
+                let password = $("#password").val();
+                console.log(username + " " + password);
+                $.post("../backend/staff/login", {username:username, password:password})        
+                .done(function(data) {
+                    //redirect to dashboard 
+                    if(data === "true") {
+                        window.location = "/dashboard"; 
+                    } else {
+                        alert("Username and password incorrect");
+                        //$("#login-error").text("Username and password incorrect");
+                    }
+                    
+                });
+            },
+            
         });
-        
     });
+
 
 </script> 

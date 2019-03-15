@@ -25,23 +25,23 @@ class StaffLoginBackend extends AbstractController {
 
         if($repo) {
 
-            $session = new Session();
-            $session->start();
+            // $session = new Session();
+            // $session->start();
             
-             //save data to session for authenication
-            $id = $repo->getId();
-            $staffType = $repo->getStaffType();
-            $session->set('id', $id);
-            $session->set('loggedIn', true);
-            $session->set('staffType', $staffType);
+            //  //save data to session for authenication
+            // $id = $repo->getId();
+            // $staffType = $repo->getStaffType();
+            // $session->set('id', $id);
+            // $session->set('loggedIn', true);
+            // $session->set('staffType', $staffType);
 
             return new Response(
                 "true"
             );
         } else {
-            return new Response(
-                "false"
-            );
+            return $this->render('staff-login.html.twig', [
+                'loginError' => 'Username shit'
+            ]);
         }
 
      }
