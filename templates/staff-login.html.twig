@@ -40,11 +40,11 @@
                 $.post("../backend/staff/login", {username:username, password:password})        
                 .done(function(data) {
                     //redirect to dashboard 
+                    alert(data);
                     if(data === "true") {
                         window.location = "/dashboard"; 
                     } else {
                         alert("Username and password incorrect");
-                        //$("#login-error").text("Username and password incorrect");
                     }
                     
                 });

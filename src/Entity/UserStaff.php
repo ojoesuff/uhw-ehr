@@ -61,9 +61,17 @@ class UserStaff
         return $this->staffPassword;
     }
 
+    //php function for hashing password with bcrypt and auto salt genaration - default cost = 10
+    public function hashPassword(string $staffPassword) : ?string 
+    {
+        $hashedPassword = password_hash($staffPassword, PASSWORD_DEFAULT);
+
+        return $hashedPassword;
+    }
+
     public function setStaffPassword(string $staffPassword): self
     {
-        $this->staffPassword = $staffPassword;
+        $this->staffPassword = password_hash($staffPassword, PASSWORD_DEFAULT);
 
         return $this;
     }

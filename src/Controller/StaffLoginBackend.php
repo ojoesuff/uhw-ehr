@@ -19,11 +19,17 @@ class StaffLoginBackend extends AbstractController {
         $username = $request->request->get('username', 'none');
         $password = $request->request->get('password', 'none');
         $repo = $this->getDoctrine()->getRepository(UserStaff::class)->findOneBy([
-            'username' => $username,
-            'staffPassword' => $password,
+            'username' => $username
         ]);
-
+        
+        //check hashed password from db
         if($repo) {
+            $passwordCorrect = password_verify($password, $repo->getStaffPassword());
+        } else {
+            $passwordCorrect = false;
+        }
+
+        if($passwordCorrect) {
 
             // $session = new Session();
             // $session->start();
@@ -39,9 +45,9 @@ class StaffLoginBackend extends AbstractController {
                 "true"
             );
         } else {
-            return $this->render('staff-login.html.twig', [
-                'loginError' => 'Username shit'
-            ]);
+            return new Response(
+                "false"
+            );
         }
 
      }
