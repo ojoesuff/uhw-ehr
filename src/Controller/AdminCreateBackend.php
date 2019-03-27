@@ -48,15 +48,19 @@ class AdminCreateBackend extends AbstractController {
             $county = $request->request->get('county');
             $eircode = $request->request->get('eircode');
             $country = $request->request->get('country');
-            $dateOfBirth = $request->request->get('dateOfBirth');
+            //convert to DateTime object
+            $dateOfBirth = date_create($request->request->get('dateOfBirth'));
+            //current time
+            $dateCreated = date_create();
             $telNo = $request->request->get('telNo');
+            //prevent empty string being passed to DB for number
             if($telNo === "") {
                $telNo = null;
             }
             $mobileNo = $request->request->get('mobileNo');
             if($mobileNo === "") {
                $mobileNo = null;
-            }
+            }            
 
             $entityManager = $this->getDoctrine()->getManager();
 
@@ -69,9 +73,22 @@ class AdminCreateBackend extends AbstractController {
             $patient->setCounty($county);
             $patient->setEircode($eircode);
             $patient->setCountry($country);
-            // $patient->setDateOfBirth($dateOfBirth);
+            $patient->setDateOfBirth($dateOfBirth);
             $patient->setTelNo($telNo);
             $patient->setMobileNo($mobileNo);
+            $patient->setDateCreated($dateCreated);
+            
+
+            //default value in entity being written as null when input is empty
+            //below solution found at https://stackoverflow.com/questions/3376881/default-value-in-doctrine
+            if ($patient->getStatus() === null) {
+               $patient->setStatus('Pending');
+            }
+            if ($patient->getPriority() === null) {
+               $patient->setPriority('Low');
+            }
+
+            //1986-05-25
 
             $entityManager->persist($patient);
             $entityManager->flush(); 

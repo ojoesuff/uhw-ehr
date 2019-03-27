@@ -366,8 +366,6 @@
         let telNo = $("#tel-no").val(); 
         let mobileNo = $("#mobile-no").val(); 
 
-        console.log(telNo);
-
         $.post("/backend/admin/create", {type:"patient", firstName:firstName, 
         middleName:middleName, lastName:lastName, email:email, address:address,
         county:county, eircode:eircode, country:country, dateOfBirth:dateOfBirth,

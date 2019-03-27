@@ -15,6 +15,7 @@ class Patient
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @ORM\SequenceGenerator(sequenceName="id", initialValue=0000001)
      */
     private $id;
 
@@ -59,7 +60,7 @@ class Patient
     private $eircode;
 
     /**
-     * @ORM\Column(type="date")
+     * @ORM\Column(type="datetime")
      */
     private $dateOfBirth;
 
@@ -69,12 +70,12 @@ class Patient
     private $dateCreated;
 
     /**
-     * @ORM\Column(type="string", length=30, options={"default" : "Pending"})
+     * @ORM\Column(type="string", length=30)
      */
     private $status;
 
     /**
-     * @ORM\Column(type="string", length=20, options={"default" : "Low"})
+     * @ORM\Column(type="string", length=20)
      */
     private $priority;
 
