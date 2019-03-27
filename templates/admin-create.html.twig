@@ -330,7 +330,7 @@
                 <input type="number" id="tel-no" name="tel-no">
                 <label for="mobile-no">Mobile No.</label>
                 <input type="number" id="mobile-no" name="mobile-no">                                   
-                <input type="submit" id="patient-create-button" data-inline="true" value="Create" data-theme="b">
+                <input type="submit" id="patient-create-button" data-inline="true" value="Create">
                
             </form>
         </div>    
@@ -339,12 +339,9 @@
 
 <script>
     $("#create-user-form").submit(function() {
-        var username = $("#user-username").val();
-        var password = $("#user-password").val();
-        var staffType = $("input[name='staff-type']:checked").val(); //get radio button value thats checked
-        console.log(username);
-        console.log(password);
-        console.log(staffType);
+        let username = $("#user-username").val();
+        let password = $("#user-password").val();
+        let staffType = $("input[name='staff-type']:checked").val(); //get radio button value thats checked
 
         $.post("/backend/admin/create", {type:"user", username:username, 
         password:password, staffType:staffType})
@@ -352,6 +349,31 @@
             //redirect to dashboard  
             alert(data); 
             window.location = "/dashboard"; 
+        });
+    });
+
+    $("#create-patient-form").submit(function() {
+        let firstName = $("#first-name").val();
+        let middleName = $("#middle-name").val();
+        let lastName = $("#last-name").val();
+        let email = $("#patient-email").val();
+        let address = [$("#address-line1").val(), 
+        $("#address-line2").val(), $("#address-line3").val()];
+        let county = $('#county').find(":selected").text();
+        let eircode = $("#eircode").val(); 
+        let country = $('#country').find(":selected").text();
+        let dateOfBirth = $("#dob").val(); 
+        let telNo = $("#tel-no").val(); 
+        let mobileNo = $("#mobile-no").val(); 
+
+        console.log(telNo);
+
+        $.post("/backend/admin/create", {type:"patient", firstName:firstName, 
+        middleName:middleName, lastName:lastName, email:email, address:address,
+        county:county, eircode:eircode, country:country, dateOfBirth:dateOfBirth,
+        telNo:telNo, mobileNo:mobileNo})
+        .done(function(data) {
+            console.log(data);
         });
     });
 </script>
