@@ -19,6 +19,7 @@ class UserStaff
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @ORM\SequenceGenerator(sequenceName="id", initialValue=0000001)
      * @Assert\NotBlank(message = "Enter a username")
      */
     private $username;

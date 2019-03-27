@@ -6,9 +6,16 @@ use App\Entity\UserStaff;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response; 
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;  
 
 class StaffLoginBackend extends AbstractController {
+    //initialise session
+    private $session;
+
+    public function __construct(SessionInterface $session)
+    {
+        $this->session = $session;
+    }
     /**
      * @Route("/backend/staff/login", name="backend-staff-login") methods={"GET", "POST"}
      */   
@@ -30,16 +37,13 @@ class StaffLoginBackend extends AbstractController {
         }
 
         if($passwordCorrect) {
-
-            // $session = new Session();
-            // $session->start();
             
-            //  //save data to session for authenication
-            // $id = $repo->getId();
-            // $staffType = $repo->getStaffType();
-            // $session->set('id', $id);
-            // $session->set('loggedIn', true);
-            // $session->set('staffType', $staffType);
+             //save data to session for authenication
+            $id = $repo->getId();
+            $staffType = $repo->getStaffType();
+            $this->session->set('id', $id);
+            $this->session->set('loggedIn', true);
+            $this->session->set('staffType', $staffType);
 
             return new Response(
                 "true"

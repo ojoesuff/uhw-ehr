@@ -5,6 +5,7 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\UserStaff;
+use App\Entity\Patient;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse; 
 use Symfony\Component\HttpFoundation\Response; 
@@ -16,21 +17,27 @@ class AdminCreateBackend extends AbstractController {
 
      public function createStaff() {
 
-        $request = Request::createFromGlobals();
+         $request = Request::createFromGlobals();
 
-        $username = $request->request->get('username', 'none');
-        $password = $request->request->get('password', 'none');
-        $staffType = $request->request->get('staffType', 'none');
+         $type = $request->request->get('type');
 
-        $entityManager = $this->getDoctrine()->getManager();
+         if($type === "user") {
+            $username = $request->request->get('username', 'none');
+            $password = $request->request->get('password', 'none');
+            $staffType = $request->request->get('staffType', 'none');
 
-        $userStaff = new UserStaff();
-        $userStaff->setUsername($username);
-        $userStaff->setStaffPassword($password);
-        $userStaff->setStaffType($staffType);
+            $entityManager = $this->getDoctrine()->getManager();
 
-        $entityManager->persist($userStaff);
-        $entityManager->flush(); 
+            $userStaff = new UserStaff();
+            $userStaff->setUsername($username);
+            $userStaff->setStaffPassword($password);
+            $userStaff->setStaffType($staffType);
+
+            $entityManager->persist($userStaff);
+            $entityManager->flush(); 
+         }
+
+        
 
         return new Response("Success");
      }
