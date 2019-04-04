@@ -14,9 +14,16 @@ light grey: #ecf2f6
     font-family: 'Roboto', sans-serif!important;
 }
 
+
 .ui-page {
-    background:#ecf2f6;
+    height: 100%;
 }
+
+.ui-page, .ui-content, .ui-panel-wrapper {
+    background:#ecf2f6!important;
+}
+
+
 .ui-content {
     margin: 0 auto!important;
 }
@@ -24,14 +31,20 @@ light grey: #ecf2f6
     box-shadow: 5px 5px 2px #c5c5c9;
 }
 
+.center {
+    margin: 0 auto;
+}
+
 .box {
     background: #f9f9f9;
     box-shadow: 5px 5px 2px #c5c5c9;
-    margin: 0 auto;
     margin-top: 5rem;
     border-radius: 0.6rem;
     padding: 1rem;
     padding-bottom: 2rem;
+}
+.green-paragraph {
+    color: #70ffb6;
 }
 
 .width-xsmall {
@@ -70,13 +83,31 @@ light grey: #ecf2f6
     max-width: 800px;
 }
 .width-720 {
-    max-width: 720;
+    max-width: 720px;
 }
 .width-640 {
-    max-width: 640;
+    max-width: 640px;
 }
 .width-560 {
-    max-width: 560;
+    max-width: 560px;
+}
+.width-480 {
+    max-width: 480px;
+}
+.width-400 {
+    max-width: 400px;
+}
+.width-320 {
+    max-width: 320px;
+}
+.width-240 {
+    max-width: 240px;
+}
+.width-160 {
+    max-width: 160px;
+}
+.width-80 {
+    max-width: 80px;
 }
 
 .centre {
@@ -100,9 +131,42 @@ input:focus::-webkit-input-placeholder {
 
 #side-nav {
     background: #387f5b;
-    height: 100vh;
-    float: left;
-}   
+    height: 100%;
+} 
+
+ul {
+    list-style-type: none;
+}
+
+.inline {
+    display: inline;
+}
+
+.ui-panel {
+    height: 100%;
+}
+
+.flex-container {
+    display: flex;
+    flex-wrap: wrap;
+}
+.flex-item-1 {
+    flex: 1 1 200px;
+}
+
+.flex-test {
+    max-width: 500px;
+}
+
+.input-style {
+    background: #ecf2f6;
+    border-radius: 0.3vw;
+    padding: 0.4vw;
+}
+
+
+
+
 
 /* shows the jQuery mobile panel by default and hides the reveal menu button
 seen at https://jsfiddle.net/jag6ose3/ */

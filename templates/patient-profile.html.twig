@@ -3,15 +3,52 @@
 <div data-role="page">
     <div data-role="panel" id="side-nav">
         <img src="{{asset('assets/images/logo.svg')}}" class="centre-img width-90p" alt="UHW Logo">
+        <a href="#home" class="nav-link-button ui-btn ui-shadow ui-corner-all ui-btn-icon-right ui-icon-home" data-theme="c">Home</a>
+        <a href="#home" class="nav-link-button ui-btn ui-shadow ui-corner-all ui-btn-icon-right ui-icon-search" data-theme="c">Search</a>
+        <a href="#home" class="nav-link-button ui-btn ui-shadow ui-corner-all ui-btn-icon-right ui-icon-user" data-theme="c">Patient</a>
+        <a href="#home" class="nav-link-button ui-btn ui-shadow ui-corner-all ui-btn-icon-right ui-icon-bullets" data-theme="c">Records</a>
+
     </div>  
       
-    <div data-role="content">
-        <a href="#side-nav" id="open-nav" data-role="button" data-inline="true" data-display="push" data-position="left" data-dismissible="true">Show panel</a>
-        <p>CPjoijdsicodi vd hsuichuihdcuihsuidhciodu cudsuicniusdich sdiocjiosdciu sdicb isdncjisdc
-            sdiuhsiuduisndoii n osdv
-             d ndkjvsdiovjjsd dsvsdvnsjdbvjnsdkjcksldjsdkvbjksdnvlksdklcush uie hufhuwhu we fwef
-             ondvibduinvooviniovn
-        </p>        
+    <div data-role="content" class="width-960">
+        <a href="#side-nav" class="ui-btn ui-icon-bars ui-btn-icon-notext ui-corner-all" id="open-nav" data-role="button" data-inline="true" data-display="push" data-position="left" data-dismissible="true"></a>
+        <h2 class="inline">Eoin Joseph Hearne</h2>
+        <button data-inline="true">EDIT</button>
+        <p>2316516506516506</p>
+        <div class="width-240">
+            <button>NEW RECORD</button>
+        </div>
+        <div class="flex-container">
+            <div class="box flex-item-1">
+                <div class="flex-container">
+                    <div class="flex-item-1">
+                        <p class="green-paragraph">Priority</p>
+                        <p class="input-style">High</p>                        
+                    </div>                      
+                    <div class="flex-item-1">
+                        <p class="green-paragraph">Status</p>
+                        <p class="input-style">Inpatient</p>                        
+                    </div>                
+                </div>
+            </div>
+            <div class="box flex-item-1 flex-test">
+                    <div class="flex-container">
+                        <p class="green-paragraph">Medical Records</p>
+                    </div>
+                </div>
+        </div>
+        <div class="flex-container">
+            <div class="box flex-item-1 flex-test">
+                <div class="flex-container">
+                    <p class="green-paragraph">Calendar</p>
+                </div>
+            </div>
+            <div class="box flex-item-1 flex-test">
+                    <div class="flex-container">
+                        <p class="green-paragraph">Appointment History</p>
+                    </div>
+                </div>
+        </div>        
     </div>
 </div>
 <script>
