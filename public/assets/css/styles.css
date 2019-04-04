@@ -11,7 +11,7 @@ light grey: #ecf2f6
 green = #53C152
 red = #C13E31
 */
-@import url('https://fonts.googleapis.com/css?family=Roboto:400,500,700');
+@import url('https://fonts.googleapis.com/css?family=Roboto:200,400,500,700');
 
 * {
     font-family: 'Roboto', sans-serif!important;
@@ -46,8 +46,12 @@ red = #C13E31
     padding: 1rem;
     padding-bottom: 2rem;
 }
-.green-paragraph {
+.green {
     color: #70ffb6;
+}
+
+.dark-green {
+    color: #387f5b;
 }
 
 .width-xsmall {
@@ -70,6 +74,12 @@ red = #C13E31
 }
 .width-20p {
     width: 20%;
+}
+.width-30p {
+    width: 30%;
+}
+.width-40p {
+    width: 40%;
 }
 .width-90p {
     width: 90%;
@@ -165,6 +175,12 @@ ul {
 
 .input-style {
     background: #ecf2f6;
+    border-radius: 0.5vw;
+    padding: 0.4vw;
+}
+
+.input-style-dark {
+    background: #c5c5c9;
     border-radius: 0.5vw;
     padding: 0.4vw;
 }

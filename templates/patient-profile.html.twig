@@ -22,25 +22,25 @@
             <div class="box flex-item-1">
                 <div class="flex-container">
                     <div class="flex-item-1">
-                        <p class="green-paragraph">Priority</p>
+                        <p class="green">Priority</p>
                         <p class="input-style bg-red">High</p>                        
                     </div>                      
                     <div class="flex-item-1">
-                        <p class="green-paragraph">Status</p>
+                        <p class="green">Status</p>
                         <p class="input-style bg-light-green">In-patient</p>                        
                     </div>                
                 </div>
                 <div class="flex-container">
                     <div class="flex-item-1">
-                        <p class="green-paragraph">Date of Birth</p>
+                        <p class="green">Date of Birth</p>
                         <p class="input-style">25 May 1986</p>                        
                     </div>                      
                     <div class="flex-item-1">
-                        <p class="green-paragraph">Department</p>
+                        <p class="green">Department</p>
                         <p class="input-style bg-light-green">Cardiology</p>                        
                     </div>                
                 </div>
-                <p class="green-paragraph">Address</p>
+                <p class="green">Address</p>
                 <p class="input-style">47 Pheasant Walk</p>
                 <p class="input-style">Collins Avenue</p>
                 <p class="input-style">Dunmore Road</p>
@@ -52,14 +52,21 @@
                         <p class="input-style">NJY 23H</p>                        
                     </div>                
                 </div>
-                <p class="green-paragraph">Email</p>
+                <p class="green">Email</p>
                 <p class="input-style">ojoesuff@homtail.com</p> 
             </div>
-            <div class="box flex-item-1 flex-test">
+            <div class="box flex-item-1">
+                <p class="green">Appointments</p>
                 <div class="flex-container">
-                    <p class="green-paragraph">Appointments<br></p>
-                    <input type="date" id="appointment-date" data-inline="false">
-                </div>
+                    <input type="date" id="appointment-date">                
+                    <form id="appointment-update-form" method="post" onsubmit="getAppointments(event);">
+                        <button data-inline="true">View</button>
+                    </form>
+                </div>  
+                <h2 class="dark-green light-text">Upcoming Appointments</h2>
+                <p class="input-style-dark">25 Mar 2019, 14:00, Dr. Murphy, Cardiology</p>
+                <p class="input-style-dark">16 Mar 2019, 13:00, Dr. Nobody, A&amp;E</p>
+                    
             </div>
             
             
@@ -67,12 +74,12 @@
         <div class="flex-container">
             <div class="box flex-item-1 flex-test">
                 <div class="flex-container">
-                    <p class="green-paragraph">Medical Records</p>
+                    <p class="green">Medical Records</p>
                 </div>
             </div>
             <div class="box flex-item-1 flex-test">
                 <div class="flex-container">
-                    <p class="green-paragraph">Appointment History</p>
+                    <p class="dark-green">Appointment History</p>
                 </div>
             </div>
             
@@ -87,5 +94,9 @@
         var todaysDateFormat = todaysDate.toISOString().slice(0,10);
         $('#appointment-date').val(todaysDateFormat);
     });
+
+    function getAppointments(event) {
+        event.preventDefault();
+    }
 </script>
 
