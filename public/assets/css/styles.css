@@ -17,6 +17,9 @@ light grey: #ecf2f6
 .ui-page {
     background:#ecf2f6;
 }
+.ui-content {
+    margin: 0 auto!important;
+}
 .drop-shadow {
     box-shadow: 5px 5px 2px #c5c5c9;
 }
@@ -37,16 +40,43 @@ light grey: #ecf2f6
 .width-small {
     width: 40%;
 }
-
 .width-medium {
     width: 60%;
 }
-
 .width-large {
     width: 80%;
 }
 .width-xlarge {
     width: 90%;
+}
+.width-15p {
+    width: 15%;
+}
+.width-20p {
+    width: 20%;
+}
+.width-90p {
+    width: 90%;
+}
+
+.width-960 {
+    max-width: 960px;
+    margin: 0 auto;
+}
+.width-880 {
+    max-width: 880;
+}
+.width-800 {
+    max-width: 800px;
+}
+.width-720 {
+    max-width: 720;
+}
+.width-640 {
+    max-width: 640;
+}
+.width-560 {
+    max-width: 560;
 }
 
 .centre {
@@ -67,6 +97,37 @@ input:focus::-webkit-input-placeholder {
 .error {
     color: red;
 }
+
+#side-nav {
+    background: #387f5b;
+    height: 100vh;
+    float: left;
+}   
+
+/* shows the jQuery mobile panel by default and hides the reveal menu button
+seen at https://jsfiddle.net/jag6ose3/ */
+@media (min-width: 40em) {
+    #side-nav {
+        visibility: visible;
+        position: relative;
+        left: 0;
+        clip: initial;
+        float: left;
+        width: 15%;
+    }
+    .my-content {
+        width: 67%;
+        padding-top: 2em;
+        padding-left: 5%;
+        padding-right: 3%;
+        float: right;
+    }
+    #open-nav {
+    visibility:hidden;   
+    }
+}
+
+
 
 
 
