@@ -23,35 +23,69 @@
                 <div class="flex-container">
                     <div class="flex-item-1">
                         <p class="green-paragraph">Priority</p>
-                        <p class="input-style">High</p>                        
+                        <p class="input-style bg-red">High</p>                        
                     </div>                      
                     <div class="flex-item-1">
                         <p class="green-paragraph">Status</p>
-                        <p class="input-style">Inpatient</p>                        
+                        <p class="input-style bg-light-green">In-patient</p>                        
                     </div>                
                 </div>
+                <div class="flex-container">
+                    <div class="flex-item-1">
+                        <p class="green-paragraph">Date of Birth</p>
+                        <p class="input-style">25 May 1986</p>                        
+                    </div>                      
+                    <div class="flex-item-1">
+                        <p class="green-paragraph">Department</p>
+                        <p class="input-style bg-light-green">Cardiology</p>                        
+                    </div>                
+                </div>
+                <p class="green-paragraph">Address</p>
+                <p class="input-style">47 Pheasant Walk</p>
+                <p class="input-style">Collins Avenue</p>
+                <p class="input-style">Dunmore Road</p>
+                <div class="flex-container">
+                    <div class="flex-item-1">
+                        <p class="input-style">Waterford</p>                        
+                    </div>                      
+                    <div class="flex-item-1">
+                        <p class="input-style">NJY 23H</p>                        
+                    </div>                
+                </div>
+                <p class="green-paragraph">Email</p>
+                <p class="input-style">ojoesuff@homtail.com</p> 
             </div>
             <div class="box flex-item-1 flex-test">
-                    <div class="flex-container">
-                        <p class="green-paragraph">Medical Records</p>
-                    </div>
+                <div class="flex-container">
+                    <p class="green-paragraph">Appointments<br></p>
+                    <input type="date" id="appointment-date" data-inline="false">
                 </div>
+            </div>
+            
+            
         </div>
         <div class="flex-container">
             <div class="box flex-item-1 flex-test">
                 <div class="flex-container">
-                    <p class="green-paragraph">Calendar</p>
+                    <p class="green-paragraph">Medical Records</p>
                 </div>
             </div>
             <div class="box flex-item-1 flex-test">
-                    <div class="flex-container">
-                        <p class="green-paragraph">Appointment History</p>
-                    </div>
+                <div class="flex-container">
+                    <p class="green-paragraph">Appointment History</p>
                 </div>
+            </div>
+            
         </div>        
     </div>
 </div>
 <script>
-
+    //add todays date to date input when page loads
+    $(document).ready( function() {
+        var todaysDate = new Date();
+        //converts date to string formatted to html date input https://stackoverflow.com/questions/3066586/get-string-in-yyyymmdd-format-from-js-date-object
+        var todaysDateFormat = todaysDate.toISOString().slice(0,10);
+        $('#appointment-date').val(todaysDateFormat);
+    });
 </script>
 

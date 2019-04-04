@@ -7,6 +7,9 @@ dark: #387f5b
 dark grey: #9f9fa0
 medium grey: #c5c5c9
 light grey: #ecf2f6
+
+green = #53C152
+red = #C13E31
 */
 @import url('https://fonts.googleapis.com/css?family=Roboto:400,500,700');
 
@@ -126,7 +129,7 @@ input:focus::-webkit-input-placeholder {
 }
 
 .error {
-    color: red;
+    color: #C13E31;
 }
 
 #side-nav {
@@ -152,6 +155,8 @@ ul {
 }
 .flex-item-1 {
     flex: 1 1 200px;
+    align-self: flex-start;
+    margin: 0.1vw;
 }
 
 .flex-test {
@@ -160,9 +165,28 @@ ul {
 
 .input-style {
     background: #ecf2f6;
-    border-radius: 0.3vw;
+    border-radius: 0.5vw;
     padding: 0.4vw;
 }
+
+p {
+    margin: 0.5vw;
+}
+
+.bg-red {
+    background:#C13E31;
+    color: #ecf2f6;
+}
+
+.bg-light-green {
+    background:#70ffb6;
+    font-weight: 700;
+}
+
+.qs-datepicker {
+    width: 100%!important;
+}
+
 
 
 
