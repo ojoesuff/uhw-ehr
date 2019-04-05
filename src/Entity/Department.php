@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -22,14 +24,20 @@ class Department
     private $name;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Appointment", mappedBy="departmentId", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="App\Entity\Patient", mappedBy="department")
      */
-    private $appointment;
+    private $patients;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Patient", mappedBy="departmentId", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="App\Entity\Appointment", mappedBy="department", orphanRemoval=true)
      */
-    private $patient;
+    private $appointments;
+
+    public function __construct()
+    {
+        $this->patients = new ArrayCollection();
+        $this->appointments = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -48,36 +56,63 @@ class Department
         return $this;
     }
 
-    public function getAppointment(): ?Appointment
+    /**
+     * @return Collection|Patient[]
+     */
+    public function getPatients(): Collection
     {
-        return $this->appointment;
+        return $this->patients;
     }
 
-    public function setAppointment(Appointment $appointment): self
+    public function addPatient(Patient $patient): self
     {
-        $this->appointment = $appointment;
-
-        // set the owning side of the relation if necessary
-        if ($this !== $appointment->getDepartmentId()) {
-            $appointment->setDepartmentId($this);
+        if (!$this->patients->contains($patient)) {
+            $this->patients[] = $patient;
+            $patient->setDepartment($this);
         }
 
         return $this;
     }
 
-    public function getPatient(): ?Patient
+    public function removePatient(Patient $patient): self
     {
-        return $this->patient;
+        if ($this->patients->contains($patient)) {
+            $this->patients->removeElement($patient);
+            // set the owning side to null (unless already changed)
+            if ($patient->getDepartment() === $this) {
+                $patient->setDepartment(null);
+            }
+        }
+
+        return $this;
     }
 
-    public function setPatient(?Patient $patient): self
+    /**
+     * @return Collection|Appointment[]
+     */
+    public function getAppointments(): Collection
     {
-        $this->patient = $patient;
+        return $this->appointments;
+    }
 
-        // set (or unset) the owning side of the relation if necessary
-        $newDepartmentId = $patient === null ? null : $this;
-        if ($newDepartmentId !== $patient->getDepartmentId()) {
-            $patient->setDepartmentId($newDepartmentId);
+    public function addAppointment(Appointment $appointment): self
+    {
+        if (!$this->appointments->contains($appointment)) {
+            $this->appointments[] = $appointment;
+            $appointment->setDepartment($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAppointment(Appointment $appointment): self
+    {
+        if ($this->appointments->contains($appointment)) {
+            $this->appointments->removeElement($appointment);
+            // set the owning side to null (unless already changed)
+            if ($appointment->getDepartment() === $this) {
+                $appointment->setDepartment(null);
+            }
         }
 
         return $this;

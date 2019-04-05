@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20190327204141 extends AbstractMigration
+final class Version20190405093631 extends AbstractMigration
 {
     public function getDescription() : string
     {
@@ -22,7 +22,7 @@ final class Version20190327204141 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('ALTER TABLE patient CHANGE date_of_birth date_of_birth VARCHAR(255) NOT NULL, CHANGE status status VARCHAR(30) NOT NULL, CHANGE priority priority VARCHAR(20) NOT NULL');
+        $this->addSql('ALTER TABLE patient ADD date_of_birth DATETIME NOT NULL');
     }
 
     public function down(Schema $schema) : void
@@ -30,6 +30,6 @@ final class Version20190327204141 extends AbstractMigration
         // this down() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('ALTER TABLE patient CHANGE date_of_birth date_of_birth DATE NOT NULL, CHANGE status status VARCHAR(30) DEFAULT \'Pending\' NOT NULL COLLATE utf8mb4_unicode_ci, CHANGE priority priority VARCHAR(20) DEFAULT \'Low\' NOT NULL COLLATE utf8mb4_unicode_ci');
+        $this->addSql('ALTER TABLE patient DROP date_of_birth');
     }
 }

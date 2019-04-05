@@ -15,7 +15,6 @@ class Patient
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @ORM\SequenceGenerator(sequenceName="id", initialValue=0000001)
      */
     private $id;
 
@@ -25,44 +24,34 @@ class Patient
     private $email;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=100)
      */
     private $firstName;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=100, nullable=true)
      */
     private $middleNames;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=100, nullable=true)
      */
     private $lastName;
 
     /**
-     * @ORM\Column(type="array")
+     * @ORM\Column(type="array", nullable=true)
      */
     private $address = [];
 
     /**
-     * @ORM\Column(type="string", length=30, nullable=true)
+     * @ORM\Column(type="string", length=100, nullable=true)
      */
     private $county;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $country;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=15, nullable=true)
      */
     private $eircode;
-
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    private $dateOfBirth;
 
     /**
      * @ORM\Column(type="datetime")
@@ -70,7 +59,7 @@ class Patient
     private $dateCreated;
 
     /**
-     * @ORM\Column(type="string", length=30)
+     * @ORM\Column(type="string", length=20)
      */
     private $status;
 
@@ -90,14 +79,24 @@ class Patient
     private $mobileNo;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Appointment", mappedBy="patientId")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Department", inversedBy="patients")
+     */
+    private $department;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Appointment", mappedBy="patient", orphanRemoval=true)
      */
     private $appointments;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Department", inversedBy="patient", cascade={"persist", "remove"})
+     * @ORM\Column(type="string", length=100, nullable=true)
      */
-    private $departmentId;
+    private $country;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $dateOfBirth;
 
     public function __construct()
     {
@@ -162,7 +161,7 @@ class Patient
         return $this->address;
     }
 
-    public function setAddress(array $address): self
+    public function setAddress(?array $address): self
     {
         $this->address = $address;
 
@@ -181,18 +180,6 @@ class Patient
         return $this;
     }
 
-    public function getCountry(): ?string
-    {
-        return $this->country;
-    }
-
-    public function setCountry(string $country): self
-    {
-        $this->country = $country;
-
-        return $this;
-    }
-
     public function getEircode(): ?string
     {
         return $this->eircode;
@@ -201,18 +188,6 @@ class Patient
     public function setEircode(?string $eircode): self
     {
         $this->eircode = $eircode;
-
-        return $this;
-    }
-
-    public function getDateOfBirth(): ?\DateTimeInterface
-    {
-        return $this->dateOfBirth;
-    }
-
-    public function setDateOfBirth(\DateTimeInterface $dateOfBirth): self
-    {
-        $this->dateOfBirth = $dateOfBirth;
 
         return $this;
     }
@@ -277,6 +252,18 @@ class Patient
         return $this;
     }
 
+    public function getDepartment(): ?Department
+    {
+        return $this->department;
+    }
+
+    public function setDepartment(?Department $department): self
+    {
+        $this->department = $department;
+
+        return $this;
+    }
+
     /**
      * @return Collection|Appointment[]
      */
@@ -289,7 +276,7 @@ class Patient
     {
         if (!$this->appointments->contains($appointment)) {
             $this->appointments[] = $appointment;
-            $appointment->setPatientId($this);
+            $appointment->setPatient($this);
         }
 
         return $this;
@@ -300,22 +287,34 @@ class Patient
         if ($this->appointments->contains($appointment)) {
             $this->appointments->removeElement($appointment);
             // set the owning side to null (unless already changed)
-            if ($appointment->getPatientId() === $this) {
-                $appointment->setPatientId(null);
+            if ($appointment->getPatient() === $this) {
+                $appointment->setPatient(null);
             }
         }
 
         return $this;
     }
 
-    public function getDepartmentId(): ?department
+    public function getCountry(): ?string
     {
-        return $this->departmentId;
+        return $this->country;
     }
 
-    public function setDepartmentId(?department $departmentId): self
+    public function setCountry(?string $country): self
     {
-        $this->departmentId = $departmentId;
+        $this->country = $country;
+
+        return $this;
+    }
+
+    public function getDateOfBirth(): ?\DateTimeInterface
+    {
+        return $this->dateOfBirth;
+    }
+
+    public function setDateOfBirth(\DateTimeInterface $dateOfBirth): self
+    {
+        $this->dateOfBirth = $dateOfBirth;
 
         return $this;
     }

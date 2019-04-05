@@ -17,7 +17,7 @@ class Appointment
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=50)
      */
     private $medicalStaff = "General";
 
@@ -27,26 +27,26 @@ class Appointment
     private $date;
 
     /**
-     * @ORM\Column(type="string", length=30)
+     * @ORM\Column(type="string", length=50)
      */
     private $status;
 
     /**
      * @ORM\Column(type="boolean")
      */
-    private $complete;
+    private $complete = false;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Patient", inversedBy="appointments")
+     * @ORM\ManyToOne(targetEntity="App\Entity\patient", inversedBy="appointments")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $patientId;
+    private $patient;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Department", inversedBy="appointment", cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity="App\Entity\department", inversedBy="appointments")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $departmentId;
+    private $department;
 
     public function getId(): ?int
     {
@@ -101,26 +101,26 @@ class Appointment
         return $this;
     }
 
-    public function getPatientId(): ?Patient
+    public function getPatient(): ?patient
     {
-        return $this->patientId;
+        return $this->patient;
     }
 
-    public function setPatientId(?Patient $patientId): self
+    public function setPatient(?patient $patient): self
     {
-        $this->patientId = $patientId;
+        $this->patient = $patient;
 
         return $this;
     }
 
-    public function getDepartmentId(): ?Department
+    public function getDepartment(): ?department
     {
-        return $this->departmentId;
+        return $this->department;
     }
 
-    public function setDepartmentId(Department $departmentId): self
+    public function setDepartment(?department $department): self
     {
-        $this->departmentId = $departmentId;
+        $this->department = $department;
 
         return $this;
     }

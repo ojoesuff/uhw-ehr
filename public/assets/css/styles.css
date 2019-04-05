@@ -169,6 +169,12 @@ ul {
     margin: 0.1vw;
 }
 
+.flex-item-small-form {
+    flex: 1 1 125px;
+    align-self: flex-start;
+    margin: 0.1vw;
+}
+
 .flex-test {
     max-width: 500px;
 }

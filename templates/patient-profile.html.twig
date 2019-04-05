@@ -14,30 +14,40 @@
         <a href="#side-nav" class="ui-btn ui-icon-bars ui-btn-icon-notext ui-corner-all" id="open-nav" data-role="button" data-inline="true" data-display="push" data-position="left" data-dismissible="true"></a>
         <h2 class="inline">Eoin Joseph Hearne</h2>
         <button data-inline="true">EDIT</button>
-        <p>2316516506516506</p>
+        <p>33</p>
         <div class="width-240">
             <button>NEW RECORD</button>
         </div>
         <div class="flex-container">
             <div class="box flex-item-1">
                 <div class="flex-container">
-                    <div class="flex-item-1">
+                    <div class="flex-item-small-form">
                         <p class="green">Priority</p>
                         <p class="input-style bg-red">High</p>                        
                     </div>                      
-                    <div class="flex-item-1">
+                    <div class="flex-item-small-form">
                         <p class="green">Status</p>
                         <p class="input-style bg-light-green">In-patient</p>                        
                     </div>                
                 </div>
                 <div class="flex-container">
-                    <div class="flex-item-1">
+                    <div class="flex-item-small-form">
                         <p class="green">Date of Birth</p>
                         <p class="input-style">25 May 1986</p>                        
                     </div>                      
-                    <div class="flex-item-1">
+                    <div class="flex-item-small-form">
                         <p class="green">Department</p>
                         <p class="input-style bg-light-green">Cardiology</p>                        
+                    </div>                
+                </div>
+                <div class="flex-container">
+                    <div class="flex-item-small-form">
+                        <p class="green">Telephone</p>
+                        <p class="input-style">051 873641</p>                        
+                    </div>                      
+                    <div class="flex-item-small-form">
+                        <p class="green">Mobile</p>
+                        <p class="input-style">085 7577647</p>                        
                     </div>                
                 </div>
                 <p class="green">Address</p>
@@ -45,10 +55,10 @@
                 <p class="input-style">Collins Avenue</p>
                 <p class="input-style">Dunmore Road</p>
                 <div class="flex-container">
-                    <div class="flex-item-1">
+                    <div class="flex-item-small-form">
                         <p class="input-style">Waterford</p>                        
                     </div>                      
-                    <div class="flex-item-1">
+                    <div class="flex-item-small-form">
                         <p class="input-style">NJY 23H</p>                        
                     </div>                
                 </div>
@@ -80,8 +90,8 @@
                 </div>                
             </div>
             <div class="box flex-item-1 flex-test">
-                <div class="flex-container">
-                    <h3 class="dark-green light-text">Appointment History</h3>
+                <div data-role="collapsible">
+                    <h4>Appointment History</h4>
                     <p class="input-style-dark">25 Mar 2019, 14:00, Dr. Murphy, Cardiology</p>
                     <p class="input-style-dark">16 Mar 2019, 13:00, Dr. Nobody, A&amp;E</p>  
                     <p class="input-style-dark">25 Mar 2019, 14:00, Dr. Murphy, Cardiology</p>
@@ -107,7 +117,7 @@
         event.preventDefault();
     }
 
-    function getPatientDetails(patientId = 4) {
+    function getPatientDetails(patientId = 1) {
 
         $.post("/backend/patient", {type:"patient", patientId:patientId})
         .done(function(data) {
