@@ -12,9 +12,9 @@
       
     <div data-role="content" class="width-960">
         <a href="#side-nav" class="ui-btn ui-icon-bars ui-btn-icon-notext ui-corner-all" id="open-nav" data-role="button" data-inline="true" data-display="push" data-position="left" data-dismissible="true"></a>
-        <h2 class="inline">Eoin Joseph Hearne</h2>
+        <h2 class="inline" id="name"></h2>
         <button data-inline="true">EDIT</button>
-        <p>33</p>
+        <p id="patientId"></p>
         <div class="width-240">
             <button>NEW RECORD</button>
         </div>
@@ -23,47 +23,47 @@
                 <div class="flex-container">
                     <div class="flex-item-small-form">
                         <p class="green">Priority</p>
-                        <p class="input-style bg-red">High</p>                        
+                        <p class="input-style" id="priority"></p>                        
                     </div>                      
                     <div class="flex-item-small-form">
                         <p class="green">Status</p>
-                        <p class="input-style bg-light-green">In-patient</p>                        
+                        <p class="input-style bg-light-green" id="status"></p>                        
                     </div>                
                 </div>
                 <div class="flex-container">
                     <div class="flex-item-small-form">
                         <p class="green">Date of Birth</p>
-                        <p class="input-style">25 May 1986</p>                        
+                        <p class="input-style" id="dob"></p>                        
                     </div>                      
                     <div class="flex-item-small-form">
                         <p class="green">Department</p>
-                        <p class="input-style bg-light-green">Cardiology</p>                        
+                        <p class="input-style bg-light-green" id="department"></p>                        
                     </div>                
                 </div>
                 <div class="flex-container">
                     <div class="flex-item-small-form">
                         <p class="green">Telephone</p>
-                        <p class="input-style">051 873641</p>                        
+                        <p class="input-style" id="telNo"></p>                        
                     </div>                      
                     <div class="flex-item-small-form">
                         <p class="green">Mobile</p>
-                        <p class="input-style">085 7577647</p>                        
+                        <p class="input-style" id="mobileNo"></p>                        
                     </div>                
                 </div>
                 <p class="green">Address</p>
-                <p class="input-style">47 Pheasant Walk</p>
-                <p class="input-style">Collins Avenue</p>
-                <p class="input-style">Dunmore Road</p>
+                <p class="input-style" id="address-line1"></p>
+                <p class="input-style" id="address-line2"></p>
+                <p class="input-style" id="address-line3"></p>
                 <div class="flex-container">
                     <div class="flex-item-small-form">
-                        <p class="input-style">Waterford</p>                        
+                        <p class="input-style" id="county"></p>                        
                     </div>                      
                     <div class="flex-item-small-form">
-                        <p class="input-style">NJY 23H</p>                        
+                        <p class="input-style" id="eircode"></p>                        
                     </div>                
                 </div>
                 <p class="green">Email</p>
-                <p class="input-style">ojoesuff@homtail.com</p> 
+                <p class="input-style" id="email"></p> 
             </div>
             <div class="box flex-item-1">
                 <p class="green">Appointments</p>
@@ -104,7 +104,6 @@
 <script>
     
     $(document).ready( function() {
-
         getPatientDetails();
         //add todays date to date input when page loads
         var todaysDate = new Date();
@@ -122,6 +121,51 @@
         $.post("/backend/patient", {type:"patient", patientId:patientId})
         .done(function(data) {
             console.log(data);
+            //filter json data from backend
+            let details = data[0].details;
+            let name = details.name;
+            let patientId = details.id;
+            let priority = details.priority;
+            let status = details.status;
+            let dob = details.dob;
+            let department = details.department;
+            let telNo = details.telNo;
+            let mobileNo = details.mobileNo;
+            let addressArray = details.address;
+            let county = details.county;
+            let eircode = details.eircode;
+            let email = details.email;
+
+            let outstandingAppointments = data[1].outstandingAppointments;
+            let completedAppointments = data[2].completedAppointments;
+
+            //update html file with data
+            $("#name").text(name);
+            $("#patientId").text(patientId);
+            $("#priority").text(priority);
+            //set background colour of priority
+            switch(priority) {                
+                case "Medium":
+                    $("#priority").addClass("bg-amber");
+                    break;
+                case "High":
+                    $("#priority").addClass("bg-red");
+                    break;
+                default:
+                    $("#priority").addClass("bg-light-green");
+            }
+            $("#status").text(status);
+            $("#dob").text(dob);
+            $("#department").text(department);
+            $("#telNo").text(telNo);
+            $("#mobileNo").text(mobileNo);
+            $("#email").text(email);
+            $("#county").text(county);
+            $("#eircode").text(eircode);
+            $("#address-line1").text(addressArray[0]);
+            $("#address-line2").text(addressArray[1]);
+            $("#address-line3").text(addressArray[2]);           
+
         });
     }
 </script>

@@ -37,13 +37,13 @@ class Appointment
     private $complete = false;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\patient", inversedBy="appointments")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Patient", inversedBy="appointments")
      * @ORM\JoinColumn(nullable=false)
      */
     private $patient;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\department", inversedBy="appointments")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Department", inversedBy="appointments")
      * @ORM\JoinColumn(nullable=false)
      */
     private $department;
@@ -101,24 +101,24 @@ class Appointment
         return $this;
     }
 
-    public function getPatient(): ?patient
+    public function getPatient(): ?Patient
     {
         return $this->patient;
     }
 
-    public function setPatient(?patient $patient): self
+    public function setPatient(?Patient $patient): self
     {
         $this->patient = $patient;
 
         return $this;
     }
 
-    public function getDepartment(): ?department
+    public function getDepartment(): ?Department
     {
         return $this->department;
     }
 
-    public function setDepartment(?department $department): self
+    public function setDepartment(?Department $department): self
     {
         $this->department = $department;
 

@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Patient;
 use App\Entity\Department;
+use App\Entity\Appointment;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse; 
 use Symfony\Component\HttpFoundation\Response; 
@@ -48,7 +49,8 @@ class PatientBackend extends AbstractController {
                }               
                $priority = $patient->getPriority();
                $status = $patient->getStatus();
-               $dob = $patient->getDateOfBirth();
+               $date = $patient->getDateOfBirth();
+               $dob = $date->format("d M Y");
                $telNo = $patient->getTelNo();
                $mobileNo = $patient->getMobileNo();
                $address = $patient->getAddress();
@@ -61,9 +63,49 @@ class PatientBackend extends AbstractController {
                "telNo" => $telNo, "mobileNo" => $mobileNo,
                "county" => $county, "eircode" => $eircode, "email" => $email]);
 
-               $appointments = $patient->getAppointments();
+               //get 2 most recent appointments
+               $outstandingAppointments = $entityManager->getRepository(Appointment::class)->getTwoMostRecentOutstandingApp($patientId);
+               $completedAppointments = $entityManager->getRepository(Appointment::class)->getThreeCompletedApps($patientId);
+               
+               $outstandingAppsArray = array("outstandingAppointments" => array());
+               $completedAppointmentsArray = array("completedAppointments" => array());
 
+               if($outstandingAppsArray) {
+                  foreach($outstandingAppointments as $appointment) {
+                     $appointmentId = $appointment->getId();
+                     $department = $appointment->getDepartment();
+                     $departmentName = $department->getName();
+                     $dueDate = $appointment->getDate();
+                     $date = $dueDate->format("Y-m-d");
+                     $time = $dueDate->format("H:i:s");
+                     $medicalStaff = $appointment->getMedicalStaff();
+                     
+                     $appointmentArray = array("appointmentId" => $appointmentId, "departmentName" => $departmentName,
+                     "date" => $date, "time" => $time, "medicalStaff" => $medicalStaff);
+   
+                     array_push($outstandingAppsArray["outstandingAppointments"], $appointmentArray);
+                  }
+               }
+               if($completedAppointmentsArray) {
+                  foreach($completedAppointments as $appointment) {
+                     $appointmentId = $appointment->getId();
+                     $department = $appointment->getDepartment();
+                     $departmentName = $department->getName();
+                     $dueDate = $appointment->getDate();
+                     $date = $dueDate->format("Y-m-d");
+                     $time = $dueDate->format("H:i:s");
+                     $medicalStaff = $appointment->getMedicalStaff();
+                     
+                     $appointmentArray = array("appointmentId" => $appointmentId, "departmentName" => $departmentName,
+                     "date" => $date, "time" => $time, "medicalStaff" => $medicalStaff);
+   
+                     array_push($completedAppointmentsArray["completedAppointments"], $appointmentArray);
+                  }   
+               }
+               
                array_push($jsonResponse, $patientDetails);
+               array_push($jsonResponse, $outstandingAppsArray);
+               array_push($jsonResponse, $completedAppointmentsArray);
 
 
                return new JsonResponse($jsonResponse);

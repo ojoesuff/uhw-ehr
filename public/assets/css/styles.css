@@ -10,6 +10,7 @@ light grey: #ecf2f6
 
 green = #53C152
 red = #C13E31
+amber = #FFAE56
 */
 @import url('https://fonts.googleapis.com/css?family=Roboto:200,400,500,700');
 
@@ -17,8 +18,7 @@ red = #C13E31
     font-family: 'Roboto', sans-serif!important;
 }
 
-
-.ui-page {
+.ui-page, body, html {
     height: 100%;
 }
 
@@ -155,7 +155,7 @@ ul {
     display: inline;
 }
 
-.ui-panel {
+.ui-panel, .ui-panel-wrapper {
     height: 100%;
 }
 
@@ -198,6 +198,9 @@ p {
 .bg-red {
     background:#C13E31;
     color: #ecf2f6;
+}
+.bg-amber {
+    background:#FFAE56
 }
 
 .bg-light-green {
