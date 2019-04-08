@@ -23,18 +23,17 @@ class PatientBackend extends AbstractController {
 
          $type = $request->request->get('type');
 
-         if($type === "patient") {
-            $patientId = $request->request->get('patientId');
+         $entityManager = $this->getDoctrine()->getManager();
 
-            $entityManager = $this->getDoctrine()->getManager();
+         if($type === "details") {
+
+            $patientId = $request->request->get('patientId');     
 
             $patient = $entityManager->getRepository(Patient::class)->findOneBy([
                "id" => $patientId
             ]);
             
             if($patient) {
-               //set empty array for JSON response and add to it
-               $jsonResponse = array();
                //get all the patients details 
                $firstName = $patient->getFirstName();
                $middleName = $patient->getMiddleNames();
@@ -61,58 +60,74 @@ class PatientBackend extends AbstractController {
                $patientDetails = array("details" => ["name" => $name, "id" => $patientId, "priority" => $priority,
                "status" => $status, "dob" => $dob, "department" => $department, "address" => $address,
                "telNo" => $telNo, "mobileNo" => $mobileNo,
-               "county" => $county, "eircode" => $eircode, "email" => $email]);
+               "county" => $county, "eircode" => $eircode, "email" => $email]);        
 
-               //get 2 most recent appointments
-               $outstandingAppointments = $entityManager->getRepository(Appointment::class)->getTwoMostRecentOutstandingApp($patientId);
-               $completedAppointments = $entityManager->getRepository(Appointment::class)->getThreeCompletedApps($patientId);
-               
-               $outstandingAppsArray = array("outstandingAppointments" => array());
-               $completedAppointmentsArray = array("completedAppointments" => array());
-
-               if($outstandingAppsArray) {
-                  foreach($outstandingAppointments as $appointment) {
-                     $appointmentId = $appointment->getId();
-                     $department = $appointment->getDepartment();
-                     $departmentName = $department->getName();
-                     $dueDate = $appointment->getDate();
-                     $date = $dueDate->format("Y-m-d");
-                     $time = $dueDate->format("H:i:s");
-                     $medicalStaff = $appointment->getMedicalStaff();
-                     
-                     $appointmentArray = array("appointmentId" => $appointmentId, "departmentName" => $departmentName,
-                     "date" => $date, "time" => $time, "medicalStaff" => $medicalStaff);
-   
-                     array_push($outstandingAppsArray["outstandingAppointments"], $appointmentArray);
-                  }
-               }
-               if($completedAppointmentsArray) {
-                  foreach($completedAppointments as $appointment) {
-                     $appointmentId = $appointment->getId();
-                     $department = $appointment->getDepartment();
-                     $departmentName = $department->getName();
-                     $dueDate = $appointment->getDate();
-                     $date = $dueDate->format("Y-m-d");
-                     $time = $dueDate->format("H:i:s");
-                     $medicalStaff = $appointment->getMedicalStaff();
-                     
-                     $appointmentArray = array("appointmentId" => $appointmentId, "departmentName" => $departmentName,
-                     "date" => $date, "time" => $time, "medicalStaff" => $medicalStaff);
-   
-                     array_push($completedAppointmentsArray["completedAppointments"], $appointmentArray);
-                  }   
-               }
-               
-               array_push($jsonResponse, $patientDetails);
-               array_push($jsonResponse, $outstandingAppsArray);
-               array_push($jsonResponse, $completedAppointmentsArray);
-
-
-               return new JsonResponse($jsonResponse);
+               return new JsonResponse($patientDetails);
             }
 
             return new Response("No patient records found");
  
+         }
+
+         if($type === "outstandingAppoint") {
+
+            $patientId = $request->request->get('patientId');
+
+            $outstandingAppointments = $entityManager->getRepository(Appointment::class)->getTwoMostRecentOutstandingApp($patientId);
+
+            $twoAppointments = array("outstandingAppointments" => array());
+
+            if($outstandingAppointments) {
+               foreach($outstandingAppointments as $appointment) {
+                  $appointmentId = $appointment->getId();
+                  $department = $appointment->getDepartment();
+                  $departmentName = $department->getName();
+                  $dueDate = $appointment->getDate();
+                  $date = $dueDate->format("d M Y");
+                  $time = $dueDate->format("H:i");
+                  $medicalStaff = $appointment->getMedicalStaff();
+                  
+                  $appointmentArray = array("appointmentId" => $appointmentId, "departmentName" => $departmentName,
+                  "date" => $date, "time" => $time, "medicalStaff" => $medicalStaff);
+
+                  array_push($twoAppointments["outstandingAppointments"], $appointmentArray);
+                  
+               }
+
+               return new JsonResponse($twoAppointments);
+            }
+            return new Response("none");
+         }
+
+         if($type === "completeAppoint") {
+
+            $patientId = $request->request->get('patientId');
+
+            $completedAppointments = $entityManager->getRepository(Appointment::class)->getThreeCompletedApps($patientId);
+
+            $threeAppointments = array("completedAppointments" => array());
+
+            if($completedAppointments) {
+               foreach($completedAppointments as $appointment) {
+                  $appointmentId = $appointment->getId();
+                  $department = $appointment->getDepartment();
+                  $departmentName = $department->getName();
+                  $dueDate = $appointment->getDate();
+                  $date = $dueDate->format("d M Y");
+                  $time = $dueDate->format("H:i");
+                  $medicalStaff = $appointment->getMedicalStaff();
+                  
+                  $appointmentArray = array("appointmentId" => $appointmentId, "departmentName" => $departmentName,
+                  "date" => $date, "time" => $time, "medicalStaff" => $medicalStaff);
+
+                  array_push($threeAppointments["completedAppointments"], $appointmentArray);                  
+                  
+               }
+
+               return new JsonResponse($threeAppointments);
+               
+            }
+            return new Response("none");
          }
 
         return new Response("Success");

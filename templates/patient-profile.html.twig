@@ -73,10 +73,8 @@
                         <button data-inline="true">View</button>
                     </form>
                 </div>  
-                <h3 class="dark-green light-text">Upcoming Appointments</h3>
-                <p class="input-style-dark">25 Mar 2019, 14:00, Dr. Murphy, Cardiology</p>
-                <p class="input-style-dark">16 Mar 2019, 13:00, Dr. Nobody, A&amp;E</p>  
-                <p class="input-style-dark">25 Mar 2019, 14:00, Dr. Murphy, Cardiology</p>                  
+                <h3 class="dark-green light-text">Upcoming Appointments</h3>  
+                <input type="hidden" id="upcoming-appointments-insert">              
             </div>          
             
         </div>
@@ -92,9 +90,7 @@
             <div class="box flex-item-1 flex-test">
                 <div data-role="collapsible">
                     <h4>Appointment History</h4>
-                    <p class="input-style-dark">25 Mar 2019, 14:00, Dr. Murphy, Cardiology</p>
-                    <p class="input-style-dark">16 Mar 2019, 13:00, Dr. Nobody, A&amp;E</p>  
-                    <p class="input-style-dark">25 Mar 2019, 14:00, Dr. Murphy, Cardiology</p>
+                    <input type="hidden" id="completed-appointments-insert"> 
                 </div>
             </div>
             
@@ -104,7 +100,11 @@
 <script>
     
     $(document).ready( function() {
-        getPatientDetails();
+
+        let patientId = 1;
+        getPatientDetails(patientId);
+        getPatientOutstandingAppoint(patientId);
+        getPatientCompleteAppoint(patientId);
         //add todays date to date input when page loads
         var todaysDate = new Date();
         //converts date to string formatted to html date input https://stackoverflow.com/questions/3066586/get-string-in-yyyymmdd-format-from-js-date-object
@@ -116,13 +116,15 @@
         event.preventDefault();
     }
 
-    function getPatientDetails(patientId = 1) {
+    
 
-        $.post("/backend/patient", {type:"patient", patientId:patientId})
+    function getPatientDetails(patientId) {
+
+        $.post("/backend/patient", {type:"details", patientId:patientId})
         .done(function(data) {
             console.log(data);
             //filter json data from backend
-            let details = data[0].details;
+            let details = data.details;
             let name = details.name;
             let patientId = details.id;
             let priority = details.priority;
@@ -135,9 +137,6 @@
             let county = details.county;
             let eircode = details.eircode;
             let email = details.email;
-
-            let outstandingAppointments = data[1].outstandingAppointments;
-            let completedAppointments = data[2].completedAppointments;
 
             //update html file with data
             $("#name").text(name);
@@ -164,10 +163,67 @@
             $("#eircode").text(eircode);
             $("#address-line1").text(addressArray[0]);
             $("#address-line2").text(addressArray[1]);
-            $("#address-line3").text(addressArray[2]);           
+            $("#address-line3").text(addressArray[2]);    
 
         });
     }
+
+    function getPatientOutstandingAppoint(patientId) {
+        $.post("/backend/patient", {type:"outstandingAppoint", patientId:patientId})
+        .done(function(data) {
+            let appointments = data.outstandingAppointments;
+            if(data === "none") {
+                //update dom if no records found
+                $("No upcoming appointments").insertBefore("#upcoming-appointments-insert");
+            } else {
+                appointments.forEach(function(appointment) {
+                    let appointmentId = appointment.appointmentId;
+                    let departmentName = appointment.departmentName;
+                    let date = appointment.date;
+                    let medicalStaff = appointment.medicalStaff;
+                    let time = appointment.time;
+
+                    let htmlAppointment = "<p class='input-style-dark'>" + 
+                        date + ", " + time + ", " + medicalStaff + ", " +
+                        departmentName + "</p>";
+
+                    $(htmlAppointment).insertBefore("#upcoming-appointments-insert");
+                        
+                });
+            } //end if/else        
+            
+        }); //end post/done
+
+    } //end getPatientOutstandingAppoint
+
+    function getPatientCompleteAppoint(patientId) {
+        $.post("/backend/patient", {type:"completeAppoint", patientId:patientId})
+        .done(function(data) {
+            console.log(data);           
+            if(data === "none") {
+                //update dom if no records found
+                $("No upcoming appointments").insertBefore("#completed-appointments-insert");
+            } else {
+                let appointments = data.completedAppointments;
+                appointments.forEach(function(appointment) {
+                    let appointmentId = appointment.appointmentId;
+                    let departmentName = appointment.departmentName;
+                    let date = appointment.date;
+                    let medicalStaff = appointment.medicalStaff;
+                    let time = appointment.time;
+
+                    let htmlAppointment = "<p class='input-style-dark'>" + 
+                        date + ", " + time + ", " + medicalStaff + ", " +
+                        departmentName + "</p>";
+
+                    $(htmlAppointment).insertBefore("#completed-appointments-insert");
+                        
+                });
+            } //end if/else        
+            
+        }); //end post/done
+
+    } //end getPatientCompleteAppoint
 </script>
 </body>
 </html>
