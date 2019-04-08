@@ -13,7 +13,7 @@
     <div data-role="content" class="width-960">
         <a href="#side-nav" class="ui-btn ui-icon-bars ui-btn-icon-notext ui-corner-all" id="open-nav" data-role="button" data-inline="true" data-display="push" data-position="left" data-dismissible="true"></a>
         <h2 class="inline" id="name"></h2>
-        <button data-inline="true">EDIT</button>
+        <a href="#edit-profile" class="ui-shadow ui-btn ui-corner-all ui-btn-inline" data-transition="pop">EDIT</a>
         <p id="patientId"></p>
         <div class="width-240">
             <button>NEW RECORD</button>
@@ -97,6 +97,96 @@
         </div>        
     </div>
 </div>
+
+<div data-role="page" id="edit-profile" data-dialog="true">
+    <div data-role="header">
+        <h3 class="light-grey light-text">Edit Profile</h3> 
+    </div>
+    <div data-role="content">
+        <p class="green">First Name</p>
+        <input type="text" class="input-style" id="edit-first-name">
+        <p class="green">Middle Name(s)</p>
+        <input type="text" class="input-style" id="edit-middle-names">
+        <p class="green">Last Name</p>
+        <input type="text" class="input-style" id="edit-last-name">
+        <div class="flex-container">
+            <div class="flex-item-small-form">
+                <p class="green">Date of Birth</p>
+                <input type="date" class="input-style" id="edit-dob">                      
+            </div>                      
+            <div class="flex-item-small-form">
+                <label for="department" class="green">Department</label>
+                <select class="green" name="department" id="edit-department" data-mini="true">
+                    <option value="" disabled selected>Choose dept</option>
+                    <option value="antrim">Antrim</option>
+                    <option value="armagh">Armagh</option>
+                    <option value="carlow">Carlow</option>    
+                </select>                  
+            </div>                
+        </div>
+        <div class="flex-container">
+            <div class="flex-item-small-form">
+                <p class="green">Telephone</p>
+                <input type="number" class="input-style" id="edit-telNo">                      
+            </div>                      
+            <div class="flex-item-small-form">
+                <p class="green">Mobile</p>
+                <input type="number" class="input-style" id="edit-mobileNo">                      
+            </div>                
+        </div>
+        <p class="green">Address</p>
+        <input type="text" class="input-style" id="edit-address-line1">
+        <input type="text" class="input-style" id="edit-address-line2">
+        <input type="text" class="input-style" id="edit-address-line3">
+        <div class="flex-container">
+            <div class="flex-item-small-form"> 
+            <!-- found at http://www.waterfordwebdesign.ie/alphabetical-list-32-counties-ireland/-->
+            <label for="county" class="green">County</label>
+            <select name="county" id="edit-county" data-mini="true">
+                <option value="" disabled selected>Choose county</option>
+                <option value="antrim">Antrim</option>
+                <option value="armagh">Armagh</option>
+                <option value="carlow">Carlow</option>
+                <option value="cavan">Cavan</option>
+                <option value="clare">Clare</option>
+                <option value="cork">Cork</option>
+                <option value="derry">Derry</option>
+                <option value="donegal">Donegal</option>
+                <option value="down">Down</option>
+                <option value="dublin">Dublin</option>
+                <option value="fermanagh">Fermanagh</option>
+                <option value="galway">Galway</option>
+                <option value="kerry">Kerry</option>
+                <option value="kildare">Kildare</option>
+                <option value="kilkenny">Kilkenny</option>
+                <option value="laois">Laois</option>
+                <option value="leitrim">Leitrim</option>
+                <option value="limerick">Limerick</option>
+                <option value="longford">Longford</option>
+                <option value="louth">Louth</option>
+                <option value="mayo">Mayo</option>
+                <option value="meath">Meath</option>
+                <option value="monaghan">Monaghan</option>
+                <option value="offaly">Offaly</option>
+                <option value="roscommon">Roscommon</option>
+                <option value="sligo">Sligo</option>
+                <option value="tipperary">Tipperary</option>
+                <option value="tyrone">Tyrone</option>
+                <option value="waterford">Waterford</option>
+                <option value="westmeath">Westmeath</option>
+                <option value="wexford">Wexford</option>
+                <option value="wicklow">Wicklow</option>
+            </select>                       
+            </div>                      
+            <div class="flex-item-small-form">
+                <input type="text" class="input-style" id="edit-eircode">                      
+            </div>                
+        </div>
+        <p class="green">Email</p>
+        <input type="text" class="input-style" id="email">
+        <button data-inline="true">Update</button>
+    </div>
+</div> <!-- /edit-profile-->
 <script>
     
     $(document).ready( function() {
@@ -153,6 +243,8 @@
                 default:
                     $("#priority").addClass("bg-light-green");
             }
+
+            //add data to main patient profile
             $("#status").text(status);
             $("#dob").text(dob);
             $("#department").text(department);
@@ -164,6 +256,8 @@
             $("#address-line1").text(addressArray[0]);
             $("#address-line2").text(addressArray[1]);
             $("#address-line3").text(addressArray[2]);    
+
+            //add data to edit patient profile dialog window
 
         });
     }
@@ -183,9 +277,7 @@
                     let medicalStaff = appointment.medicalStaff;
                     let time = appointment.time;
 
-                    let htmlAppointment = "<p class='input-style-dark'>" + 
-                        date + ", " + time + ", " + medicalStaff + ", " +
-                        departmentName + "</p>";
+                    let htmlAppointment = `<p class='input-style-dark'>${date}, ${time}, ${medicalStaff}, ${departmentName}</p>`;
 
                     $(htmlAppointment).insertBefore("#upcoming-appointments-insert");
                         
@@ -212,9 +304,12 @@
                     let medicalStaff = appointment.medicalStaff;
                     let time = appointment.time;
 
-                    let htmlAppointment = "<p class='input-style-dark'>" + 
+                    /*let htmlAppointment = "<p class='input-style-dark'>" + 
                         date + ", " + time + ", " + medicalStaff + ", " +
-                        departmentName + "</p>";
+                        departmentName + "</p>";*/
+                        
+                    let htmlAppointment = `<p class='input-style-dark'>${date}, ${time}, ${medicalStaff}, ${departmentName}</p>`;
+                     
 
                     $(htmlAppointment).insertBefore("#completed-appointments-insert");
                         

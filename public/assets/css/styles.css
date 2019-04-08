@@ -185,6 +185,10 @@ ul {
     padding: 0.4vw;
 }
 
+.light-grey {
+    color: #ecf2f6;
+}
+
 .input-style-dark {
     background: #c5c5c9;
     border-radius: 0.5vw;
