@@ -25,9 +25,9 @@ class PatientBackend extends AbstractController {
 
          $entityManager = $this->getDoctrine()->getManager();
 
-         if($type === "details") {
+         $patientId = $request->request->get('patientId');
 
-            $patientId = $request->request->get('patientId');     
+         if($type === "details") {                 
 
             $patient = $entityManager->getRepository(Patient::class)->findOneBy([
                "id" => $patientId
@@ -72,8 +72,6 @@ class PatientBackend extends AbstractController {
 
          if($type === "outstandingAppoint") {
 
-            $patientId = $request->request->get('patientId');
-
             $outstandingAppointments = $entityManager->getRepository(Appointment::class)->getTwoMostRecentOutstandingApp($patientId);
 
             $twoAppointments = array("outstandingAppointments" => array());
@@ -101,8 +99,6 @@ class PatientBackend extends AbstractController {
          }
 
          if($type === "completeAppoint") {
-
-            $patientId = $request->request->get('patientId');
 
             $completedAppointments = $entityManager->getRepository(Appointment::class)->getThreeCompletedApps($patientId);
 
@@ -132,8 +128,6 @@ class PatientBackend extends AbstractController {
          }
 
          if($type === "updateDetails") {
-
-            $patientId = $request->request->get('patientId');
             //find patient repo with patient id
             $patient = $entityManager->getRepository(Patient::class)->findOneBy([
                "id" => $patientId
@@ -188,6 +182,38 @@ class PatientBackend extends AbstractController {
                return new Response("error");
             } //end if/else
             
+         }
+
+         if($type === "getAppointmentsByDate") {
+
+            //convert to DateTime object
+            $date = date_create($request->request->get('date'));
+            //find patient repo with patient id
+            $appointments = $entityManager->getRepository(Appointment::class)->getAppointmentsByDate($patientId, $date);
+
+            $appointmentsArray = array();
+
+            if($appointments) {
+               foreach($appointments as $appointment) {
+                  $appointmentId = $appointment->getId();
+                  $department = $appointment->getDepartment();
+                  $departmentName = $department->getName();
+                  $dueDate = $appointment->getDate();
+                  $date = $dueDate->format("d M Y");
+                  $time = $dueDate->format("H:i");
+                  $medicalStaff = $appointment->getMedicalStaff();
+                  
+                  $appointmentArray = array("appointmentId" => $appointmentId, "departmentName" => $departmentName,
+                  "date" => $date, "time" => $time, "medicalStaff" => $medicalStaff);
+
+                  array_push($appointmentsArray, $appointmentArray);        
+               }
+
+               return new JsonResponse($appointmentsArray);
+
+            } else {
+               return new Response("none");
+            }
          }
 
         return new Response("Success");

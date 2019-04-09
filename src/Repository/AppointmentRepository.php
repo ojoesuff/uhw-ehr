@@ -65,4 +65,17 @@ class AppointmentRepository extends ServiceEntityRepository
         ->getQuery()
         ->getResult();
     }
+
+    public function getAppointmentsByDate($patientId, $date) {
+        return $this->createQueryBuilder('app')        
+        ->andWhere('app.date >= :date_start')
+        ->andWhere('app.date <= :date_end')
+        ->andWhere('app.complete = 0')
+        // found at https://stackoverflow.com/questions/11553183/select-entries-between-dates-in-doctrine-2
+        ->setParameter('date_start', $date->format('Y-m-d 00:00:00'))
+        ->setParameter('date_end',   $date->format('Y-m-d 23:59:59'))
+        ->orderBy('app.date', 'ASC')
+        ->getQuery()
+        ->getResult();
+    }
 }

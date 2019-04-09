@@ -92,15 +92,18 @@
                 </div>                
             </div>
             <div class="box flex-item-1 flex-test">
-                <div data-role="collapsible">
+                <div data-role="collapsible" id="appointment-history">
                     <h4>Appointment History</h4>
+                    <a href="#all-completed-appointments" class="ui-shadow ui-btn ui-corner-all ui-btn-inline" data-transition="pop">ALL</a>
                     <input type="hidden" id="completed-appointments-insert"> 
+                    
                 </div>
             </div>
             
         </div>        
     </div>
-</div>
+</div> <!-- /main-->
+
 <div data-role="page" id="edit-profile" data-dialog="true">
     <div data-role="header">
         <h3 class="light-grey light-text">Edit Profile</h3> 
@@ -447,6 +450,16 @@
     </form>
     </div>
 </div> <!-- /edit-profile-->
+
+<div id="all-completed-appointments" data-role="page" data-dialog="true">
+    <div data-role="content">
+        <div data-role="header">
+            <h3 class="light-grey light-text">Appointment History</h3> 
+        </div>
+    </div>
+
+</div><!-- /all-completed-appointments-->
+
 <script>
 
     patientId = 1;
@@ -454,7 +467,6 @@
     $(document).ready( function() {
         getPatientDetails(patientId);
         getPatientOutstandingAppoint(patientId);
-        getPatientCompleteAppoint(patientId);
         //add todays date to date input when page loads
         var todaysDate = new Date();
         //converts date to string formatted to html date input https://stackoverflow.com/questions/3066586/get-string-in-yyyymmdd-format-from-js-date-object
@@ -464,13 +476,34 @@
 
     function getAppointments(event) {
         event.preventDefault();
-    }    
+        let date = $("#appointment-date").val();
+        $.post("/backend/patient", {type:"getAppointmentsByDate", patientId:patientId, date:date})
+        .done(function(data) {
+            $(".upcoming-appointments").remove();
+            $("<h4 class='dark-green upcoming-appointments'>By date:</h4>").insertBefore("#upcoming-appointments-insert");
+            if(data === "none") {
+                //update DOM with message
+                $("<p class='upcoming-appointments'>No upcoming appointments for date</p>").insertBefore("#upcoming-appointments-insert");
+            } else {  
+                 data.forEach(function(appointment) {
+                    let appointmentId = appointment.appointmentId;
+                    let departmentName = appointment.departmentName;
+                    let date = appointment.date;
+                    let medicalStaff = appointment.medicalStaff;
+                    let time = appointment.time;
+
+                    let htmlAppointment = `<p class='input-style-dark upcoming-appointments'>${date}, ${time}, ${medicalStaff}, ${departmentName}</p>`;
+
+                    $(htmlAppointment).insertBefore("#upcoming-appointments-insert");
+                }); //end foreach            
+            } //end if/else
+        }); //end post/done
+    } //end getAppointments
 
     function getPatientDetails(patientId) {
 
         $.post("/backend/patient", {type:"details", patientId:patientId})
         .done(function(data) {
-            console.log(data);
             //filter json data from backend
             let details = data.details;
             let firstName = details.firstName;
@@ -535,7 +568,6 @@
             //ensure the county value is selected by converting to lowercase
             $("#edit-county").val(county.toLowerCase());
             $("#edit-country").val(country);
-            console.log(country);
             $("#edit-eircode").val(eircode);
             $("#edit-email").val(email);
 
@@ -557,7 +589,7 @@
                     let medicalStaff = appointment.medicalStaff;
                     let time = appointment.time;
 
-                    let htmlAppointment = `<p class='input-style-dark'>${date}, ${time}, ${medicalStaff}, ${departmentName}</p>`;
+                    let htmlAppointment = `<p class='input-style-dark upcoming-appointments'>${date}, ${time}, ${medicalStaff}, ${departmentName}</p>`;
 
                     $(htmlAppointment).insertBefore("#upcoming-appointments-insert");
                         
@@ -570,11 +602,11 @@
 
     function getPatientCompleteAppoint(patientId) {
         $.post("/backend/patient", {type:"completeAppoint", patientId:patientId})
-        .done(function(data) {
-            console.log(data);           
+        .done(function(data) { 
+            $(".completed-appointment").remove();      
             if(data === "none") {
                 //update dom if no records found
-                $("No upcoming appointments").insertBefore("#completed-appointments-insert");
+                $("<p class='completed-appointment'>No upcoming appointments</p>").insertBefore("#completed-appointments-insert");
             } else {
                 let appointments = data.completedAppointments;
                 appointments.forEach(function(appointment) {
@@ -588,8 +620,7 @@
                         date + ", " + time + ", " + medicalStaff + ", " +
                         departmentName + "</p>";*/
                         
-                    let htmlAppointment = `<p class='input-style-dark'>${date}, ${time}, ${medicalStaff}, ${departmentName}</p>`;
-                     
+                    let htmlAppointment = `<p class='input-style-dark completed-appointment'>${date}, ${time}, ${medicalStaff}, ${departmentName}</p>`;
 
                     $(htmlAppointment).insertBefore("#completed-appointments-insert");
                         
@@ -600,32 +631,6 @@
 
     } //end getPatientCompleteAppoint
     
-    /*$("#update-patient-button").click(function(event) {
-        event.preventDefault();
-        let id = patientId;
-        let firstName = $("#edit-first-name").val();
-        let middleName = $("#edit-middle-names").val();
-        let lastName = $("#edit-last-name").val();
-        let email = $("#edit-email").val();
-        let address = [$("#edit-address-line1").val(), 
-        $("#edit-address-line2").val(), $("#edit-address-line3").val()];
-        let county = $('#edit-county').find(":selected").text();
-        let eircode = $("#edit-eircode").val(); 
-        let country = $('#edit-country').find(":selected").text();
-        let dateOfBirth = $("#edit-dob").val(); 
-        let telNo = $("#edit-telNo").val(); 
-        let mobileNo = $("#edit-mobileNo").val(); 
-        let department = $('#edit-department').find(":selected").text(); 
-
-        $.post("/backend/patient", {type:"updateDetails", patientId:id, firstName:firstName, 
-        middleName:middleName, lastName:lastName, email:email, address:address,
-        county:county, eircode:eircode, country:country, dateOfBirth:dateOfBirth,
-        telNo:telNo, mobileNo:mobileNo, department:department})
-        .done(function(data) {
-            console.log(data);
-        });
-    });*/
-
     //form validator for updating patients details
     $(document).ready(function() {  
         //jQuery form validator plugin
@@ -678,6 +683,14 @@
             },
             
         });
+    });
+
+    //handles the event if the collapsible is expanded
+    $("#appointment-history").collapsible({
+        expand: function( event, ui ) {
+            //get appointment history        
+            getPatientCompleteAppoint(patientId);
+        }
     });
 
 </script>
