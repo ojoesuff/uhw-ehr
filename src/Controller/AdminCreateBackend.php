@@ -38,7 +38,7 @@ class AdminCreateBackend extends AbstractController {
          }
 
          if($type === "patient") {
-
+            
             //get data from request
             $firstName = $request->request->get('firstName');
             $middleName = $request->request->get('middleName');
@@ -76,8 +76,7 @@ class AdminCreateBackend extends AbstractController {
             $patient->setDateOfBirth($dateOfBirth);
             $patient->setTelNo($telNo);
             $patient->setMobileNo($mobileNo);
-            $patient->setDateCreated($dateCreated);
-            
+            $patient->setDateCreated($dateCreated);            
 
             //default value in entity being written as null when input is empty
             //below solution found at https://stackoverflow.com/questions/3376881/default-value-in-doctrine
@@ -87,8 +86,6 @@ class AdminCreateBackend extends AbstractController {
             if ($patient->getPriority() === null) {
                $patient->setPriority('Low');
             }
-
-            //1986-05-25
 
             $entityManager->persist($patient);
             $entityManager->flush(); 

@@ -36,10 +36,8 @@ class PatientBackend extends AbstractController {
             if($patient) {
                //get all the patients details 
                $firstName = $patient->getFirstName();
-               $middleName = $patient->getMiddleNames();
+               $middleNames = $patient->getMiddleNames();
                $lastName = $patient->getLastName();
-               $name = "$firstName ".($middleName ? "$middleName " : "")
-               .($lastName ? "$lastName" : "");
                $departmentId = $patient->getDepartment();
                if($departmentId) {
                   $department = $departmentId->getName();
@@ -49,18 +47,21 @@ class PatientBackend extends AbstractController {
                $priority = $patient->getPriority();
                $status = $patient->getStatus();
                $date = $patient->getDateOfBirth();
-               $dob = $date->format("d M Y");
+               $dobDisplay = $date->format("d M Y");
+               $dob = $date->format("Y-m-d");
                $telNo = $patient->getTelNo();
                $mobileNo = $patient->getMobileNo();
                $address = $patient->getAddress();
                $county = $patient->getCounty();
+               $country = $patient->getCountry();
                $eircode = $patient->getEircode();
                $email = $patient->getEmail();
 
-               $patientDetails = array("details" => ["name" => $name, "id" => $patientId, "priority" => $priority,
-               "status" => $status, "dob" => $dob, "department" => $department, "address" => $address,
-               "telNo" => $telNo, "mobileNo" => $mobileNo,
-               "county" => $county, "eircode" => $eircode, "email" => $email]);        
+               $patientDetails = array("details" => ["firstName" => $firstName,
+               "middleNames" => $middleNames, "lastName" => $lastName, "id" => $patientId, "priority" => $priority,
+               "status" => $status, "dobDisplay" => $dobDisplay, "department" => $department, "address" => $address,
+               "telNo" => $telNo, "mobileNo" => $mobileNo, "dob" => $dob,
+               "county" => $county, "country" => $country, "eircode" => $eircode, "email" => $email]);        
 
                return new JsonResponse($patientDetails);
             }
@@ -128,6 +129,65 @@ class PatientBackend extends AbstractController {
                
             }
             return new Response("none");
+         }
+
+         if($type === "updateDetails") {
+
+            $patientId = $request->request->get('patientId');
+            //find patient repo with patient id
+            $patient = $entityManager->getRepository(Patient::class)->findOneBy([
+               "id" => $patientId
+            ]);
+
+            if($patient) {
+               //get data from request            
+               $firstName = $request->request->get('firstName');
+               $middleName = $request->request->get('middleName');
+               $lastName = $request->request->get('lastName');
+               $email = $request->request->get('email');
+               $address = $request->request->get('address');
+               $county = $request->request->get('county');
+               $eircode = $request->request->get('eircode');
+               $country = $request->request->get('country');
+               //convert to DateTime object
+               $dateOfBirth = date_create($request->request->get('dateOfBirth'));
+               $telNo = $request->request->get('telNo');
+               //prevent empty string being passed to DB for number
+               if($telNo === "") {
+                  $telNo = null;
+               }
+               $mobileNo = $request->request->get('mobileNo');
+               if($mobileNo === "") {
+                  $mobileNo = null;
+               }  
+               $departmentName  = $request->request->get('department'); 
+               $department = $entityManager->getRepository(Department::class)->findOneBy([
+                  "name" => $departmentName
+               ]);   
+
+               if($department) {
+                  $patient->setDepartment($department);
+               }
+
+               $patient->setFirstName($firstName);
+               $patient->setMiddleNames($middleName);
+               $patient->setLastName($lastName);
+               $patient->setEmail($email);
+               $patient->setAddress($address);
+               $patient->setCounty($county);
+               $patient->setEircode($eircode);
+               $patient->setCountry($country);
+               $patient->setDateOfBirth($dateOfBirth);
+               $patient->setTelNo($telNo);
+               $patient->setMobileNo($mobileNo);
+
+               $entityManager->flush(); 
+
+               return new Response("success");
+            } else {
+               return new Response("error");
+            } //end if/else
+            
          }
 
         return new Response("Success");
