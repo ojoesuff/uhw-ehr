@@ -78,4 +78,13 @@ class AppointmentRepository extends ServiceEntityRepository
         ->getQuery()
         ->getResult();
     }
+
+    public function getAllPreviousAppoint($patientId) { 
+        return $this->createQueryBuilder('app')
+        ->andWhere("app.patient = $patientId")
+        ->andWhere('app.complete = 1')
+        ->orderBy('app.date', 'ASC')
+        ->getQuery()
+        ->getResult();
+    }
 }

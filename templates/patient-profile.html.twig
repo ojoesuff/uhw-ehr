@@ -94,7 +94,7 @@
             <div class="box flex-item-1 flex-test">
                 <div data-role="collapsible" id="appointment-history">
                     <h4>Appointment History</h4>
-                    <a href="#all-completed-appointments" class="ui-shadow ui-btn ui-corner-all ui-btn-inline" data-transition="pop">ALL</a>
+                    <a href="#all-completed-appointments" id="appointment-history-button" class="ui-shadow ui-btn ui-corner-all ui-btn-inline" data-transition="pop">ALL</a>
                     <input type="hidden" id="completed-appointments-insert"> 
                     
                 </div>
@@ -454,7 +454,8 @@
 <div id="all-completed-appointments" data-role="page" data-dialog="true">
     <div data-role="content">
         <div data-role="header">
-            <h3 class="light-grey light-text">Appointment History</h3> 
+            <h3 class="light-grey light-text">Appointment History</h3>
+            <input type="hidden" id="appointment-history-insert"> 
         </div>
     </div>
 
@@ -578,9 +579,10 @@
         $.post("/backend/patient", {type:"outstandingAppoint", patientId:patientId})
         .done(function(data) {
             let appointments = data.outstandingAppointments;
+            $(".upcoming-appointments").remove();
             if(data === "none") {
                 //update dom if no records found
-                $("No upcoming appointments").insertBefore("#upcoming-appointments-insert");
+                $("<p class='upcoming-appointments'>No upcoming appointments</p>").insertBefore("#upcoming-appointments-insert");
             } else {
                 appointments.forEach(function(appointment) {
                     let appointmentId = appointment.appointmentId;
@@ -606,7 +608,7 @@
             $(".completed-appointment").remove();      
             if(data === "none") {
                 //update dom if no records found
-                $("<p class='completed-appointment'>No upcoming appointments</p>").insertBefore("#completed-appointments-insert");
+                $("<p class='completed-appointment'>No previous appointments</p>").insertBefore("#completed-appointments-insert");
             } else {
                 let appointments = data.completedAppointments;
                 appointments.forEach(function(appointment) {
@@ -615,10 +617,6 @@
                     let date = appointment.date;
                     let medicalStaff = appointment.medicalStaff;
                     let time = appointment.time;
-
-                    /*let htmlAppointment = "<p class='input-style-dark'>" + 
-                        date + ", " + time + ", " + medicalStaff + ", " +
-                        departmentName + "</p>";*/
                         
                     let htmlAppointment = `<p class='input-style-dark completed-appointment'>${date}, ${time}, ${medicalStaff}, ${departmentName}</p>`;
 
@@ -692,6 +690,36 @@
             getPatientCompleteAppoint(patientId);
         }
     });
+
+    $("#appointment-history-button").mouseup(function(event) {
+
+        //changed from click to mouseup event as click prevented popup from executing
+        event.preventDefault();
+
+        $.post("/backend/patient", {type:"appointmentHistory", patientId:patientId})
+        .done(function(data) { 
+            console.log(data);
+            $(".appointment-history").remove();      
+            if(data === "none") {
+                //update dom if no records found
+                $("<p class='appointment-history'>No previous appointments</p>").insertBefore("#appointment-history-insert");
+            } else {
+                data.forEach(function(appointment) {
+                    let appointmentId = appointment.appointmentId;
+                    let departmentName = appointment.departmentName;
+                    let date = appointment.date;
+                    let medicalStaff = appointment.medicalStaff;
+                    let time = appointment.time;
+
+                    let htmlAppointment = `<p class='input-style dark-grey appointment-history'>${date}, ${time}, ${medicalStaff}, ${departmentName}</p>`;
+
+                    $(htmlAppointment).insertBefore("#appointment-history-insert");
+                        
+                });
+            } //end if/else        
+            
+        }); //end post/done
+    }); // end mouseup
 
 </script>
 </body>

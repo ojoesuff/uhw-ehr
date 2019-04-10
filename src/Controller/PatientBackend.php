@@ -216,6 +216,35 @@ class PatientBackend extends AbstractController {
             }
          }
 
+         if($type === "appointmentHistory") {
+
+            $appointments = $entityManager->getRepository(Appointment::class)->getAllPreviousAppoint($patientId);
+
+            $appointmentsArray = array();
+
+            if($appointments) {
+               foreach($appointments as $appointment) {
+                  $appointmentId = $appointment->getId();
+                  $department = $appointment->getDepartment();
+                  $departmentName = $department->getName();
+                  $dueDate = $appointment->getDate();
+                  $date = $dueDate->format("d M Y");
+                  $time = $dueDate->format("H:i");
+                  $medicalStaff = $appointment->getMedicalStaff();
+                  
+                  $appointmentArray = array("appointmentId" => $appointmentId, "departmentName" => $departmentName,
+                  "date" => $date, "time" => $time, "medicalStaff" => $medicalStaff);
+
+                  array_push($appointmentsArray, $appointmentArray);        
+               }
+
+               return new JsonResponse($appointmentsArray);
+
+            } else {
+               return new Response("none");
+            }            
+         }
+
         return new Response("Success");
      }
 }
