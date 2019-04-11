@@ -59,4 +59,31 @@ class PatientRepository extends ServiceEntityRepository
             ->getResult();
 
     }
+
+    public function findPatientsAdvanced($firstName,  $middleNames, $lastName, 
+    $email, $addressLine1, $addressLine2, $addressLine3, $dob) {
+
+        $dobDefault = create_date("1000-01-01");
+
+        //starts query builder
+        $queryBuilder = $this->createQueryBuilder('p');
+        //only add query parameters if fields are not empty or default
+        if(!empty($firstName)) {
+            $queryBuilder
+                ->andWhere('p.firstName LIKE :firstName')
+                ->setParameter('firstName', '%'.$firstName.'%');
+        }
+        if(!$dob === $dobDefault) {
+            $queryBuilder
+                ->andWhere('p.dateOfBirth >= :date_start')
+                ->andWhere('p.dateOfBirth <= :date_end')
+                ->setParameter('date_start', $dobDefault->format('Y-m-d 00:00:00'))
+                ->setParameter('date_end',   $dobDefault->format('Y-m-d 23:59:59'));
+        }
+
+        return $queryBuilder
+            ->getQuery()
+            ->getResult();
+
+    }
 }

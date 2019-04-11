@@ -460,7 +460,6 @@
         let urlString = window.location.href;
         let url = new URL(urlString);
         var patientId = url.searchParams.get("id");
-        console.log(urlString);
 
         getPatientDetails(patientId);
         getPatientOutstandingAppoint(patientId);
@@ -694,7 +693,6 @@
 
         $.post("/backend/patient", {type:"appointmentHistory", patientId:patientId})
         .done(function(data) { 
-            console.log(data);
             $(".appointment-history").remove();      
             if(data === "none") {
                 //update dom if no records found

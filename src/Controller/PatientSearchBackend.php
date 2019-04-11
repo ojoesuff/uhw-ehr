@@ -35,9 +35,31 @@ class PatientSearchBackend extends AbstractController {
                 return new JsonResponse($patientsArray);
             } else {
                 return new Response("none");
-            }
-            
-            
+            }           
+        }
+
+        if($type === "advancedSearch") {
+
+            $firstName = $request->request->get('firstName');
+            $middleNames = $request->request->get('middleNames');
+            $lastName = $request->request->get('lastName');
+            $email = $request->request->get('email');
+            $addressLine1 = $request->request->get('addressLine1');
+            $addressLine2 = $request->request->get('addressLine2');
+            $addressLine3 = $request->request->get('addressLine3');
+            //convert to DateTime object
+            $dob = date_create($request->request->get('dob')); 
+
+            $patients = $entityManager->getRepository(Patient::class)->findPatientsAdvanced($firstName, 
+            $middleNames, $lastName, $email, $addressLine1, $addressLine2, $addressLine3, $dob);
+
+            // $testArray = array("firstName" => $this->isEmpty($firstName), "middleNames" => $this->isEmpty($middleNames),
+            // "lastName" => $this->isEmpty($lastName), "email" => $this->isEmpty($email), "addressLine1" => $this->isEmpty($addressLine1),
+            // "addressLine2" => $this->isEmpty($addressLine2), "addressLine3" => $this->isEmpty($addressLine3),
+            // "dob" => $this->isEmpty($dob)
+            // );
+
+            return new JsonResponse($patients);
         }
 
         return new Response("default");
@@ -64,6 +86,14 @@ class PatientSearchBackend extends AbstractController {
         }
 
         return $patientsArray;
+     }
+
+     public function isEmpty($data) {
+         if(empty($data)) {
+            return "empty";
+         } else {
+             return $data;
+         }
      }
 
 }
