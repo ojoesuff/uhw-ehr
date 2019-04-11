@@ -47,4 +47,16 @@ class PatientRepository extends ServiceEntityRepository
         ;
     }
     */
+
+    public function findPatientsByName($name) {
+
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.firstName LIKE :name OR p.lastName LIKE :name')
+            ->setParameter('name', $name.'%')
+            ->orderBy('p.firstName', 'ASC')
+            ->setMaxResults(5)
+            ->getQuery()
+            ->getResult();
+
+    }
 }

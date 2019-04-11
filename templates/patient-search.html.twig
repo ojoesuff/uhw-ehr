@@ -4,7 +4,14 @@
     {% include './sidenav/sidenav.html.twig' %} 
     <div data-role="content" class="width-640">
         <h2>Patient Search</h2>
-        <input type="search" name="search-box" id="search-box" placeholder="Search">
+        <div id="quick-search">
+            <input type="text" name="search-box" id="search-box" placeholder="Search">
+            <div id="quick-search-results" hidden>
+                <hr>
+                <input type="hidden" id="quick-search-insert">
+            </div>
+        </div>
+        
         <div data-role="collapsible" id="advanced-search" data-theme="c">
             <h4>Advanced Search</h4>
             <form method="post" id="update-patient-form">
@@ -342,3 +349,41 @@
 </div>
 </body>
 </html>
+
+<script>
+
+    $("#search-box").keyup(function() {
+        let maxChar = 2;
+        let search = $("#search-box").val();
+        if(search.length > maxChar) {
+            $.post("/backend/search", {type: "quickSearch", search: search})
+            .done(function(data) {
+                console.log(data); 
+                $(".search-result").remove();
+                $("#quick-search-results").show();
+                if(data === "none") {
+                    $("<div class='search-result'><p>No records found</p><hr></div>").insertBefore("#quick-search-insert");
+                } else {
+                    data.forEach(function(patient) {
+                        let id = patient.id;
+                        let firstName = patient.firstName;
+                        let middleNames = patient.middleNames;
+                        let lastName = patient.lastName;
+                        let name = `${firstName}${middleNames ? " " + middleNames + " " : " " }${lastName ? " " + lastName + " " : " "}`;
+                        let address = patient.address;
+                        let addressLine1 = address[0];
+                        let addressLine2 = address[1];
+                        let addressLine3 = address[2];
+                        let county = patient.county
+                        let fullAddress = `${addressLine1} ${addressLine2} ${addressLine3} ${county}`;                        
+
+                        $(`<div class='search-result'><a class='search-result-link' onclick="window.location = '/patient/profile?id=${id}'" href='#'><p>${name}, ${fullAddress}, ${id}</p></a><hr></div>`)
+                        .insertBefore("#quick-search-insert");
+                    });
+                }          
+
+                
+            });
+        }
+    });
+</script>

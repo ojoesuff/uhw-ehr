@@ -453,11 +453,15 @@
 
 </div><!-- /all-completed-appointments-->
 
-<script>
-
-    patientId = 1;
+<script>         
     
-    $(document).ready( function() {
+
+         //get parameter from URL seen at https://www.w3docs.com/snippets/javascript/how-to-get-current-url-in-javascript.html
+        let urlString = window.location.href;
+        let url = new URL(urlString);
+        var patientId = url.searchParams.get("id");
+        console.log(urlString);
+
         getPatientDetails(patientId);
         getPatientOutstandingAppoint(patientId);
         //add todays date to date input when page loads
@@ -465,7 +469,7 @@
         //converts date to string formatted to html date input https://stackoverflow.com/questions/3066586/get-string-in-yyyymmdd-format-from-js-date-object
         var todaysDateFormat = todaysDate.toISOString().slice(0,10);
         $('#appointment-date').val(todaysDateFormat);
-    });
+
 
     function getAppointments(event) {
         event.preventDefault();

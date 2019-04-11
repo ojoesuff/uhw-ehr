@@ -158,6 +158,9 @@ class Patient
 
     public function getAddress(): ?array
     {
+        if(!$this->address) {
+            return array("" , "", "");
+        }
         return $this->address;
     }
 

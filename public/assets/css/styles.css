@@ -46,8 +46,13 @@ amber = #FFAE56
     padding: 1rem;
     padding-bottom: 2rem;
 }
+
+#quick-search-results {
+    background: #f9f9f9;
+    margin: 0;
+}
 .green {
-    color: #70ffb6;
+    color: #5acc92;
 }
 
 .dark-green {
@@ -220,6 +225,16 @@ p {
     margin-top: 40px;
 }
 
+.search-result a {
+    color: #387f5b!important;
+    text-decoration: none;
+    font-weight: normal;
+}
+
+
+.search-result p:hover {
+    color: #5acc92;
+}
 
 
 
