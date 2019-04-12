@@ -513,10 +513,23 @@
             let dob = details.dob;
             let department = details.department;
             let telNo = details.telNo;
+            //set value if null or not selected
+            if(telNo === null) {
+                telNo = "";
+            }
             let mobileNo = details.mobileNo;
-            let addressArray = details.address;
+            if(mobileNo === null) {
+                mobileNo = "";
+            }            
             let county = details.county;
+            if(county === "Choose option") {
+                county = "";
+            }
             let country = details.country;
+            if(country === "Choose option") {
+                country = "";
+            }
+            let addressArray = details.address;
             let eircode = details.eircode;
             let email = details.email;
 
@@ -675,8 +688,8 @@
                 });
             },
             
-        });
-    });
+        }); //end validate
+    }); // end document ready
 
     //handles the event if the collapsible is expanded
     $("#appointment-history").collapsible({

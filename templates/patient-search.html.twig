@@ -6,8 +6,7 @@
         <h2>Patient Search</h2>
         <div id="quick-search">
             <input type="text" name="search-box" id="search-box" placeholder="Search">
-            <div id="quick-search-results" hidden>
-                <hr>
+            <div id="quick-search-results">
                 <input type="hidden" id="quick-search-insert">
             </div>
         </div>
@@ -41,9 +40,18 @@
                 <input type="text" class="input-style" id="address-line3">
                 <p class="green">Email</p>
                 <input type="email" class="input-style" id="email">                      
-                <button data-inline="true" data-theme="d" id="search-patient-button" onclick="advancedSearch(event)">Search</button>
+                <a href="#advanced-search-results" data-inline="true" id="search-patient-button" onmousedown="advancedSearch(event)" 
+                class="ui-shadow ui-btn ui-corner-all ui-btn-inline" data-transition="pop" data-theme="d">Search</a>
             </form>
         </div>
+    </div>
+</div>
+<div data-role="page" id="advanced-search-results" data-dialog="true">
+    <div data-role="header">
+        <h3 class="light-grey light-text">Advanced Search Results</h3>        
+    </div>
+    <div data-role="content">
+        <input type="hidden" id="advanced-search-insert"> 
     </div>
 </div>
 </body>
@@ -52,16 +60,18 @@
 <script>
 
     $("#search-box").keyup(function() {
+        $(".search-result").remove();
         let maxChar = 2;
         let search = $("#search-box").val();
         if(search.length > maxChar) {
             $.post("/backend/search", {type: "quickSearch", search: search})
             .done(function(data) {
-                $(".search-result").remove();
-                $("#quick-search-results").show();
                 if(data === "none") {
+                    $(".search-result").remove();
                     $("<div class='search-result'><p>No records found</p><hr></div>").insertBefore("#quick-search-insert");
                 } else {
+                    $(".search-result").remove();
+                    $("<div class='search-result'><hr></div>").insertBefore("#quick-search-insert");
                     data.forEach(function(patient) {
                         let id = patient.id;
                         let firstName = patient.firstName;
@@ -94,13 +104,34 @@
         let addressLine1 = $("#address-line1").val();
         let addressLine2 = $("#address-line2").val();
         let addressLine3 = $("#address-line3").val();
-        let email = $("email").val();
+        let email = $("#email").val();
 
         $.post("/backend/search", {type: "advancedSearch", firstName: firstName,
         middleNames:middleNames, lastName: lastName, dob: dob, addressLine1: addressLine1,
         addressLine2: addressLine2, addressLine3: addressLine3, email: email})
         .done(function(data) {
             console.log(data);
+            $(".advanced-search-result").remove();
+            if(data === "none") {
+                $("<div class='advanced-search-result' data-theme='c'><h4>No results found</h4></div>").insertBefore("#advanced-search-insert");
+            } else {
+                data.forEach(function(patient) {
+                    let id = patient.id;
+                    let firstName = patient.firstName;
+                    let middleNames = patient.middleNames;
+                    let lastName = patient.lastName;
+                    let name = `${firstName}${middleNames ? " " + middleNames + " " : " " }${lastName ? " " + lastName + " " : " "}`;
+                    let address = patient.address;
+                    let addressLine1 = address[0];
+                    let addressLine2 = address[1];
+                    let addressLine3 = address[2];
+                    let county = patient.county
+                    let fullAddress = `${addressLine1} ${addressLine2} ${addressLine3} ${county}`;                        
+
+                    $(`<div class='advanced-search-result'><a class='search-result-link' onclick="window.location = '/patient/profile?id=${id}'" href='#'><p>${name}, ${fullAddress}, ${id}</p></a><hr></div>`)
+                    .insertBefore("#advanced-search-insert");
+                });
+            } 
         })
     }
 </script>

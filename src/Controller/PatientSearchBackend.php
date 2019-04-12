@@ -30,7 +30,7 @@ class PatientSearchBackend extends AbstractController {
 
             if($patients) {
 
-                $patientsArray = $this->filterPatientQuickSearch($patients);
+                $patientsArray = $this->filterPatientSearch($patients);
 
                 return new JsonResponse($patientsArray);
             } else {
@@ -49,24 +49,35 @@ class PatientSearchBackend extends AbstractController {
             $addressLine3 = $request->request->get('addressLine3');
             //convert to DateTime object
             $dob = date_create($request->request->get('dob')); 
+            $dobDefault = date_create("1000-01-01");
 
-            $patients = $entityManager->getRepository(Patient::class)->findPatientsAdvanced($firstName, 
-            $middleNames, $lastName, $email, $addressLine1, $addressLine2, $addressLine3, $dob);
+            //check if any fields have a value in them before quering DB
+            if(!empty($firstName) or !empty($middleNames) or !empty($lastName) or !empty($email)
+            or !empty($addressLine1) or !empty($addressLine2) or !empty($addressLine3) or $dob > $dobDefault) {
+                
+                $patients = $entityManager->getRepository(Patient::class)->findPatientsAdvanced($firstName, 
+                $middleNames, $lastName, $email, $addressLine1, $addressLine2, $addressLine3, $dob);
 
-            // $testArray = array("firstName" => $this->isEmpty($firstName), "middleNames" => $this->isEmpty($middleNames),
-            // "lastName" => $this->isEmpty($lastName), "email" => $this->isEmpty($email), "addressLine1" => $this->isEmpty($addressLine1),
-            // "addressLine2" => $this->isEmpty($addressLine2), "addressLine3" => $this->isEmpty($addressLine3),
-            // "dob" => $this->isEmpty($dob)
-            // );
+                 if($patients) {
 
-            return new JsonResponse($patients);
+                    $patientsArray = $this->filterPatientSearch($patients);
+
+                    return new JsonResponse($patientsArray);
+                } else {
+                    return new Response("none");
+                } 
+            } else {
+                return new Response("none");
+            }
+
+            
         }
 
         return new Response("default");
 
      }
 
-     public function filterPatientQuickSearch($patients) {
+     public function filterPatientSearch($patients) {
 
         $patientsArray = array();
 
