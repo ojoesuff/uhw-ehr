@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -39,6 +41,38 @@ class UserStaff
      * @ORM\Column(type="boolean")
      */
     private $accountLocked = 0;
+
+    /**
+     * @ORM\Column(type="string", length=100)
+     */
+    private $firstName;
+
+    /**
+     * @ORM\Column(type="string", length=100, nullable=true)
+     */
+    private $lastName;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\MacularClinicRecord", mappedBy="staffId")
+     */
+    private $macularClinicRecords;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\RadiologyRecord", mappedBy="staffId")
+     */
+    private $radiologyRecords;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\AAndERecord", mappedBy="staffId")
+     */
+    private $aAndERecords;
+
+    public function __construct()
+    {
+        $this->macularClinicRecords = new ArrayCollection();
+        $this->radiologyRecords = new ArrayCollection();
+        $this->aAndERecords = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -97,6 +131,123 @@ class UserStaff
     public function setAccountLocked(bool $accountLocked): self
     {
         $this->accountLocked = $accountLocked;
+
+        return $this;
+    }
+
+    public function getFirstName(): ?string
+    {
+        return $this->firstName;
+    }
+
+    public function setFirstName(string $firstName): self
+    {
+        $this->firstName = $firstName;
+
+        return $this;
+    }
+
+    public function getLastName(): ?string
+    {
+        return $this->lastName;
+    }
+
+    public function setLastName(?string $lastName): self
+    {
+        $this->lastName = $lastName;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|MacularClinicRecord[]
+     */
+    public function getMacularClinicRecords(): Collection
+    {
+        return $this->macularClinicRecords;
+    }
+
+    public function addMacularClinicRecord(MacularClinicRecord $macularClinicRecord): self
+    {
+        if (!$this->macularClinicRecords->contains($macularClinicRecord)) {
+            $this->macularClinicRecords[] = $macularClinicRecord;
+            $macularClinicRecord->setStaffId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMacularClinicRecord(MacularClinicRecord $macularClinicRecord): self
+    {
+        if ($this->macularClinicRecords->contains($macularClinicRecord)) {
+            $this->macularClinicRecords->removeElement($macularClinicRecord);
+            // set the owning side to null (unless already changed)
+            if ($macularClinicRecord->getStaffId() === $this) {
+                $macularClinicRecord->setStaffId(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|RadiologyRecord[]
+     */
+    public function getRadiologyRecords(): Collection
+    {
+        return $this->radiologyRecords;
+    }
+
+    public function addRadiologyRecord(RadiologyRecord $radiologyRecord): self
+    {
+        if (!$this->radiologyRecords->contains($radiologyRecord)) {
+            $this->radiologyRecords[] = $radiologyRecord;
+            $radiologyRecord->setStaffId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRadiologyRecord(RadiologyRecord $radiologyRecord): self
+    {
+        if ($this->radiologyRecords->contains($radiologyRecord)) {
+            $this->radiologyRecords->removeElement($radiologyRecord);
+            // set the owning side to null (unless already changed)
+            if ($radiologyRecord->getStaffId() === $this) {
+                $radiologyRecord->setStaffId(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|AAndERecord[]
+     */
+    public function getAAndERecords(): Collection
+    {
+        return $this->aAndERecords;
+    }
+
+    public function addAAndERecord(AAndERecord $aAndERecord): self
+    {
+        if (!$this->aAndERecords->contains($aAndERecord)) {
+            $this->aAndERecords[] = $aAndERecord;
+            $aAndERecord->setStaffId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAAndERecord(AAndERecord $aAndERecord): self
+    {
+        if ($this->aAndERecords->contains($aAndERecord)) {
+            $this->aAndERecords->removeElement($aAndERecord);
+            // set the owning side to null (unless already changed)
+            if ($aAndERecord->getStaffId() === $this) {
+                $aAndERecord->setStaffId(null);
+            }
+        }
 
         return $this;
     }

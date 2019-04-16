@@ -2,8 +2,7 @@
 <body>
 <div data-role="page">    
     {% include './sidenav/sidenav.html.twig' %} 
-    <div data-role="content" class="width-960">
-        <a href="#side-nav" class="ui-btn ui-icon-bars ui-btn-icon-notext ui-corner-all" id="open-nav" data-role="button" data-inline="true" data-display="push" data-position="left" data-dismissible="true"></a>
+    <div data-role="content" class="width-960">        
         <h2 class="inline" id="name"></h2>
         <a href="#edit-profile" class="ui-shadow ui-btn ui-corner-all ui-btn-inline" data-transition="pop">EDIT</a>
         <p id="patientId"></p>
@@ -83,7 +82,7 @@
                     <p class="input-style-dark">Cardiology, Dr. Murphy, 25 Mar 2019, 14:00</p> 
                 </div>                
             </div>
-            <div class="box flex-item-1 flex-test">
+            <div class="box flex-item-1">
                 <div data-role="collapsible" id="appointment-history">
                     <h4>Appointment History</h4>
                     <a href="#all-completed-appointments" id="appointment-history-button" class="ui-shadow ui-btn ui-corner-all ui-btn-inline" data-transition="pop">ALL</a>

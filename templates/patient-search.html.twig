@@ -38,8 +38,17 @@
                 <input type="text" class="input-style" id="address-line1">
                 <input type="text" class="input-style" id="address-line2">
                 <input type="text" class="input-style" id="address-line3">
-                <p class="green">Email</p>
-                <input type="email" class="input-style" id="email">                      
+                
+                <div class="flex-container">
+                        <div class="flex-item-small-form"> 
+                            <p class="green">Email</p>
+                            <input type="email" class="input-style" id="email"> 
+                        </div>
+                        <div class="flex-item-small-form">
+                            <p class="green">Patient Number</p>
+                            <input type="number" class="input-style" id="patient-id">  
+                        </div>
+                    </div>                       
                 <a href="#advanced-search-results" data-inline="true" id="search-patient-button" onmousedown="advancedSearch(event)" 
                 class="ui-shadow ui-btn ui-corner-all ui-btn-inline" data-transition="pop" data-theme="d">Search</a>
             </form>
@@ -54,11 +63,10 @@
         <input type="hidden" id="advanced-search-insert"> 
     </div>
 </div>
-</body>
-</html>
-
 <script>
 
+    //quick search executes on keyup and posts to backend when 
+    //a minimum number of characters are entered
     $("#search-box").keyup(function() {
         $(".search-result").remove();
         let maxChar = 2;
@@ -82,7 +90,11 @@
                         let addressLine1 = address[0];
                         let addressLine2 = address[1];
                         let addressLine3 = address[2];
-                        let county = patient.county
+                        let county = patient.county;
+                        //change to blank string if no option selected
+                        if(county === "Choose option") {
+                            county = "";
+                        }
                         let fullAddress = `${addressLine1} ${addressLine2} ${addressLine3} ${county}`;                        
 
                         $(`<div class='search-result'><a class='search-result-link' onclick="window.location = '/patient/profile?id=${id}'" href='#'><p>${name}, ${fullAddress}, ${id}</p></a><hr></div>`)
@@ -105,10 +117,11 @@
         let addressLine2 = $("#address-line2").val();
         let addressLine3 = $("#address-line3").val();
         let email = $("#email").val();
+        let patientId = $("#patient-id").val();
 
         $.post("/backend/search", {type: "advancedSearch", firstName: firstName,
         middleNames:middleNames, lastName: lastName, dob: dob, addressLine1: addressLine1,
-        addressLine2: addressLine2, addressLine3: addressLine3, email: email})
+        addressLine2: addressLine2, addressLine3: addressLine3, email: email, patientId: patientId})
         .done(function(data) {
             console.log(data);
             $(".advanced-search-result").remove();
@@ -125,7 +138,11 @@
                     let addressLine1 = address[0];
                     let addressLine2 = address[1];
                     let addressLine3 = address[2];
-                    let county = patient.county
+                    let county = patient.county;
+                    //change to blank string if no option selected
+                    if(county === "Choose option") {
+                        county = "";
+                    }
                     let fullAddress = `${addressLine1} ${addressLine2} ${addressLine3} ${county}`;                        
 
                     $(`<div class='advanced-search-result'><a class='search-result-link' onclick="window.location = '/patient/profile?id=${id}'" href='#'><p>${name}, ${fullAddress}, ${id}</p></a><hr></div>`)
@@ -135,3 +152,5 @@
         })
     }
 </script>
+</body>
+</html>

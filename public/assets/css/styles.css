@@ -138,6 +138,10 @@ amber = #FFAE56
     margin-bottom: 5px;
 }
 
+#login-box {
+    margin-top: 60px;
+}
+
 /*input placeholder disappears when focused*/
 input:focus::-webkit-input-placeholder { 
     color:transparent; 
@@ -169,9 +173,8 @@ ul {
     flex-wrap: wrap;
 }
 .flex-item-1 {
-    flex: 1 1 200px;
-    align-self: flex-start;
-    margin: 0.1vw;
+    flex: 1 1 300px;
+    margin: 1vw;
 }
 
 .flex-item-small-form {

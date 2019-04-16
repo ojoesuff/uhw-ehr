@@ -1,20 +1,64 @@
 {% include './header/header.html.twig' %}
 <body>    
-    <div class="box width-small">
-        <img src="{{asset('assets/images/logo.svg')}}" class="centre-img width-small" alt="UHW Logo">   
-        <form method="post" id="login-form" class="width-large centre">
-            <label for="username" class="ui-hidden-accessible">Username:</label>
-            <input type="text" id="username" name="username" placeholder="Username">
-            <label for="password" class="ui-hidden-accessible">Password:</label>
-            <input type="password" id="password" name="password" placeholder="Password">
-            <p class="error" id="login-error"></p>       
-            <input type="submit" id="loginButton" data-inline="true" value="Login" data-theme="b">
-        </form>
+    <div data-role="page">
+        <div data-role="content">
+            <div class="width-400 box centre" id="login-box">
+                <img src="{{asset('assets/images/logo.svg')}}" class="centre-img width-small" alt="UHW Logo">   
+                <form method="post" id="login-form" class="width-960 centre">
+                    <p id="username-error"></p>
+                    <label for="username" class="ui-hidden-accessible">Username:</label>
+                    <input type="text" id="username" name="username" placeholder="Username">
+                    <p id="password-error"></p>
+                    <label for="password" class="ui-hidden-accessible">Password:</label>
+                    <input type="password" id="password" name="password" placeholder="Password">
+                    <p id="username-password-error"></p>      
+                    <input type="submit" id="loginButton" data-inline="true" value="Login" data-theme="b">
+                </form>
+            </div>            
+        </div>        
     </div>    
 </body>
 <script>
+
+    $("#login-form").submit(function(event) {
+        event.preventDefault();               
+        let username = $("#username").val();
+        let password = $("#password").val();
+        //add error if username is blank
+        if(username === "") {
+            let usernameErrorMsg = "Please enter a username";
+            $("#username-error").addClass("error");
+            $("#username-error").text(usernameErrorMsg);
+        }
+        //add error if password is blank
+        if(password === "") {
+            let passwordErrorMsg = "Please enter a password";
+            $("#password-error").addClass("error");
+            $("#password-error").text(passwordErrorMsg);
+        }
+        //post to backend if no errors exist
+        if(!($(".error").length)) {
+            console.log(username + " " + password);
+            $.post("../backend/staff/login", {username:username, password:password})        
+            .done(function(data) {
+                //redirect to dashboard
+                if(data === "true") {
+                    window.location = "/dashboard"; 
+                } else {
+                    let UsernamePasswordErrorMsg = "Username or password incorrect";
+                    $("#username-password-error").addClass("error");
+                    $("#username-password-error").text(UsernamePasswordErrorMsg);
+                }
+                
+            });
+        }
+    })
     
-    $(document).ready(function() {  
+    function removeErrors() {
+        $(".error").text("");
+        $(".error").removeClass(); 
+    }
+    /*$(document).ready(function() {  
         //jQuery form validator plugin
         $("#login-form").validate({
             //custom rules for each element
@@ -51,7 +95,7 @@
             },
             
         });
-    });
+    });*/
 
 
 </script> 

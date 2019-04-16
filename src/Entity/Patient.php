@@ -98,9 +98,27 @@ class Patient
      */
     private $dateOfBirth;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\MacularClinicRecord", mappedBy="patientId")
+     */
+    private $macularClinicRecords;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\RadiologyRecord", mappedBy="patientId")
+     */
+    private $radiologyRecords;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\AAndERecord", mappedBy="patientId")
+     */
+    private $aAndERecords;
+
     public function __construct()
     {
         $this->appointments = new ArrayCollection();
+        $this->macularClinicRecords = new ArrayCollection();
+        $this->radiologyRecords = new ArrayCollection();
+        $this->aAndERecords = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -318,6 +336,99 @@ class Patient
     public function setDateOfBirth(\DateTimeInterface $dateOfBirth): self
     {
         $this->dateOfBirth = $dateOfBirth;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|MacularClinicRecord[]
+     */
+    public function getMacularClinicRecords(): Collection
+    {
+        return $this->macularClinicRecords;
+    }
+
+    public function addMacularClinicRecord(MacularClinicRecord $macularClinicRecord): self
+    {
+        if (!$this->macularClinicRecords->contains($macularClinicRecord)) {
+            $this->macularClinicRecords[] = $macularClinicRecord;
+            $macularClinicRecord->setPatientId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMacularClinicRecord(MacularClinicRecord $macularClinicRecord): self
+    {
+        if ($this->macularClinicRecords->contains($macularClinicRecord)) {
+            $this->macularClinicRecords->removeElement($macularClinicRecord);
+            // set the owning side to null (unless already changed)
+            if ($macularClinicRecord->getPatientId() === $this) {
+                $macularClinicRecord->setPatientId(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|RadiologyRecord[]
+     */
+    public function getRadiologyRecords(): Collection
+    {
+        return $this->radiologyRecords;
+    }
+
+    public function addRadiologyRecord(RadiologyRecord $radiologyRecord): self
+    {
+        if (!$this->radiologyRecords->contains($radiologyRecord)) {
+            $this->radiologyRecords[] = $radiologyRecord;
+            $radiologyRecord->setPatientId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRadiologyRecord(RadiologyRecord $radiologyRecord): self
+    {
+        if ($this->radiologyRecords->contains($radiologyRecord)) {
+            $this->radiologyRecords->removeElement($radiologyRecord);
+            // set the owning side to null (unless already changed)
+            if ($radiologyRecord->getPatientId() === $this) {
+                $radiologyRecord->setPatientId(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|AAndERecord[]
+     */
+    public function getAAndERecords(): Collection
+    {
+        return $this->aAndERecords;
+    }
+
+    public function addAAndERecord(AAndERecord $aAndERecord): self
+    {
+        if (!$this->aAndERecords->contains($aAndERecord)) {
+            $this->aAndERecords[] = $aAndERecord;
+            $aAndERecord->setPatientId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAAndERecord(AAndERecord $aAndERecord): self
+    {
+        if ($this->aAndERecords->contains($aAndERecord)) {
+            $this->aAndERecords->removeElement($aAndERecord);
+            // set the owning side to null (unless already changed)
+            if ($aAndERecord->getPatientId() === $this) {
+                $aAndERecord->setPatientId(null);
+            }
+        }
 
         return $this;
     }
