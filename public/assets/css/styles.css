@@ -228,14 +228,14 @@ p {
     margin-top: 40px;
 }
 
-.search-result a, .advanced-search-result a {
+.search-result a, .advanced-search-result a, .medical-record-link {
     color: #387f5b!important;
     text-decoration: none;
     font-weight: normal;
 }
 
 
-.search-result p:hover, .advanced-search-result p:hover {
+.search-result p:hover, .advanced-search-result p:hover, .medical-record-link p:hover {
     color: #5acc92;
 }
 

@@ -21,20 +21,22 @@
 <script>
 
     $("#login-form").submit(function(event) {
-        event.preventDefault();               
+        event.preventDefault(); 
+        //remove all previous errors
+        removeError(".error");              
         let username = $("#username").val();
         let password = $("#password").val();
         //add error if username is blank
         if(username === "") {
-            let usernameErrorMsg = "Please enter a username";
-            $("#username-error").addClass("error");
-            $("#username-error").text(usernameErrorMsg);
+            addError("#username-error", "Please enter a username");
+        } else {
+            removeError("#username-error");
         }
         //add error if password is blank
         if(password === "") {
-            let passwordErrorMsg = "Please enter a password";
-            $("#password-error").addClass("error");
-            $("#password-error").text(passwordErrorMsg);
+            addError("#password-error","Please enter a password");
+        } else {
+            removeError("#password-error")
         }
         //post to backend if no errors exist
         if(!($(".error").length)) {
@@ -45,18 +47,21 @@
                 if(data === "true") {
                     window.location = "/dashboard"; 
                 } else {
-                    let UsernamePasswordErrorMsg = "Username or password incorrect";
-                    $("#username-password-error").addClass("error");
-                    $("#username-password-error").text(UsernamePasswordErrorMsg);
+                    addError("#username-password-error", "Username or password incorrect");
                 }
                 
             });
         }
     })
     
-    function removeErrors() {
-        $(".error").text("");
-        $(".error").removeClass(); 
+    function removeError(target) {
+        $(target).text("");
+        $(target).removeClass(); 
+    }
+
+    function addError(target, msg) {
+        $(target).addClass("error");
+        $(target).text(msg);
     }
     /*$(document).ready(function() {  
         //jQuery form validator plugin

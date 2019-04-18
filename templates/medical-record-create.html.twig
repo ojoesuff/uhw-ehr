@@ -3,25 +3,205 @@
 <div data-role="page">    
     {% include './sidenav/sidenav.html.twig' %} 
     <div data-role="content" class="width-960"> 
-        <h2 class="inline" id="name"></h2>
+        <h2 class="inline name"></h2>
+        <p class="patientId"></p>
         <h2>New Medical Record</h2>
         <div data-role="collapsible">
             <h4>Accident and Emergency</h4>
+            <div class="input-style-dark">
+                <a class="medical-record-link" id="aande-admission-form-link" href="#aande-admission-form" class="ui-shadow ui-btn ui-corner-all ui-btn-inline" data-transition="pop"><p>General Admission</p></a>
+            </div>            
         </div>
         <div data-role="collapsible" data-theme="c">
             <h4>Radiology</h4>
+            <div class="input-style-dark">
+                <a class="medical-record-link" href="#radiology-admission-form" class="ui-shadow ui-btn ui-corner-all ui-btn-inline" data-transition="pop"><p>General Admission</p></a>
+            </div>   
         </div>
         <div data-role="collapsible">
             <h4>Eye</h4>
+            <div class="input-style-dark">
+                <a class="medical-record-link" href="#macular-clinic-form" class="ui-shadow ui-btn ui-corner-all ui-btn-inline" data-transition="pop"><p>Macular Clinic</p></a>
+            </div> 
         </div>
     </div>
 </div>
+
+<div data-role="page" data-dialog="true" id="aande-admission-form">
+    <div data-role="header">
+        <h4 class="light-grey light-text">Accident and Emergency</h4>   
+        <h4 class="light-grey light-text">General Admission</h4>   
+        <h4 class="light-grey light-text name"></h4>      
+    </div>
+    <div data-role="content">
+        <div class="flex-container">                               
+            <div class="flex-item-small-form">
+                <p class="green">Location Incident Occurred</p>
+                <input type="text" id="aande-location">                       
+            </div> 
+        </div>   
+        <p class="green">Description of Injury</p>
+        <textarea id="injury-description"></textarea>
+        <div class="flex-container">
+            <div class="flex-item-small-form">
+                <p class="green">Injury Area</p>
+                <input type="text" id="injury-area">                       
+            </div>                      
+            <div class="flex-item-small-form">
+                <label for="injury-type" class="green">Type of Injury</label>
+                <select name="injury-type" id="injury-type" data-mini="true">
+                    <option value="" disabled selected>Choose one</option>
+                    <option value="concussion">Concussion</option>
+                    <option value="dislocation">Dislocation</option> 
+                    <option value="fracture">Fracture</option> 
+                    <option value="laceration">Laceration</option>                    
+                    <option value="sprain">Sprain</option> 
+                </select>
+            </div> 
+        </div> 
+                       
+            <div class="flex-container">
+                <div class="flex-item-small-form">
+                    <label for="medication" class="green">Medication Taken</label>
+                    <select name="medication" id="medication" data-mini="true">
+                        <option value="none" selected>None</option>
+                        <option value="androgens">Androgens</option> 
+                        <option value="antacids">Antacids</option>
+                        <option value="antibiotics">Antibiotics</option> 
+                        <option value="antihistamines">Antihistamines</option> 
+                        <option value="asprin">Asprin</option> 
+                        <option value="anxiolytics">Anxiolytics</option>
+                        <option value="cytoprotectants">Cytoprotectants</option> 
+                        <option value="laxatives">Laxatives</option> 
+                        <option value="mydriatics">Mydriatics</option>
+                        <option value="opioids">Opioids</option>                         
+                        <option value="stimulants">Stimulants</option>     
+                        <option value="other">Other</option>                
+                     </select>                      
+                </div>                      
+            </div>
+            <div class="flex-container">
+                <div class="flex-item-small-form" hidden id="hidden-medicine-name">
+                    <p class="green">Medicine Name</p>
+                    <input type="text" id="medicine-name">                       
+                </div> 
+                <div class="flex-item-small-form" hidden id="hidden-medicine-amount">
+                    <p class="green">Amount</p>
+                    <input type="text" id="medicine-amount">                       
+                </div>                  
+            </div> 
+            <div class="flex-container">
+                <div class="flex-item-small-form">
+                    <fieldset data-theme="e" data-role="controlgroup" name="xray-required" id="xray-required" data-type="horizontal">
+                        <legend class="green">X-ray Required</legend>
+                        <input type="radio" name="xray-required" id="xray-yes" value="yes">
+                        <label for="xray-yes">Yes</label>
+                        <input type="radio" name="xray-required" id="xray-no" value="no">
+                        <label for="xray-no">No</label>
+                    </fieldset>                       
+                </div>                      
+                <div class="flex-item-small-form">
+                    <fieldset data-inline="true" data-theme="e" data-role="controlgroup" name="vomitting" id="vomitting" data-type="horizontal">
+                        <legend class="green">Vomitting</legend>
+                        <input type="radio" name="vomitting" id="vomitting-yes" value="yes">
+                        <label for="vomitting-yes">Yes</label>
+                        <input type="radio" name="vomitting" id="vomitting-no" value="no">
+                        <label for="vomitting-no">No</label>
+                    </fieldset>                       
+                </div> 
+            </div> 
+            <div class="flex-container">
+                <div class="flex-item-small-form">
+                    <label for="priority" class="green">Priority</label>
+                    <select name="priority" id="priority" data-mini="true">
+                        <option value="low" selected>Low</option>
+                        <option value="medium">Medium</option>    
+                        <option value="high">High</option>     
+                    </select>      
+                </div>                      
+                <div class="flex-item-small-form">
+                    <fieldset data-inline="true" data-theme="e" data-role="controlgroup" name="surgery-required" id="vomitting" data-type="horizontal">
+                        <legend class="green">Surgery Required</legend>
+                        <input type="radio" name="surgery-required" id="surgery-yes" value="yes">
+                        <label for="surgery-yes">Yes</label>
+                        <input type="radio" name="surgery-required" id="surgery-no" value="no">
+                        <label for="surgery-no">No</label>
+                    </fieldset>                       
+                </div> 
+            </div>
+            <div class="flex-container">
+                <div class="flex-item-small-form">
+                    <p class="green">Arrival Date</p>
+                    <input type="date" id="aande-arrival-date">                       
+                </div> 
+                <div class="flex-item-small-form">
+                    <p class="green">Arrival Time</p>
+                    <input type="time" id="aande-arrival-time">                       
+                </div> 
+            </div>   
+            <p class="green">Notes</p> 
+            <textarea id="aande-notes"></textarea>          
+        </div>        
+    </div>
+    
+</div> 
 <script>
-     //get parameter from URL seen at https://www.w3docs.com/snippets/javascript/how-to-get-current-url-in-javascript.html
-     let urlString = window.location.href;
-     let url = new URL(urlString);
-     var patientId = url.searchParams.get("id");
-     console.log(patientId);
+
+    
+     
+
+     $(document).ready(function() {   
+         //get parameter from URL seen at https://www.w3docs.com/snippets/javascript/how-to-get-current-url-in-javascript.html
+        let urlString = window.location.href;
+        let url = new URL(urlString);
+        var patientId = url.searchParams.get("id");
+        var patientName = "";     
+
+        //get patients name
+        $.post("/backend/medical-record", {type: "getDetails", patientId: patientId})
+        .done(function(data) {
+            console.log(data);
+            if(data === "none") {
+                $(".name").text("An unexpected error occurred");
+                $(".name").addClass("error");
+            } else {
+                let firstName = data.firstName;
+                let middleNames = data.middleNames;
+                let lastName = data.lastName;
+                let name = `${firstName} ${middleNames} ${lastName}`;
+
+                $(".name").text(name);
+            }
+            
+
+        })
+     })
+    
+     $("#aande-admission-form-link").click(function() {
+         //add time and date to form when link clicked
+        //create todays date and time to add to form inputs
+        var todaysDate = new Date();
+        //converts date to string formatted to html date input https://stackoverflow.com/questions/3066586/get-string-in-yyyymmdd-format-from-js-date-object
+        var dateNow = todaysDate.toISOString().slice(0,10);
+        //get time now
+        var timeNow = todaysDate.toISOString().slice(11,16);
+        $('#aande-arrival-time').val(timeNow);
+        $('#aande-arrival-date').val(dateNow);
+    });
+
+    //show hidden fields if value of medicine is changed
+    $("#medication").change(function() {
+        let value = $(this).find(":selected").val();
+        if(value !== "none") {
+            //if medicine selected, show other input fields
+            $("#hidden-medicine-name").show();
+            $("#hidden-medicine-amount").show();
+        } else {
+            //if none selected, hide other input fields
+            $("#hidden-medicine-name").hide();
+            $("#hidden-medicine-amount").hide();
+        }
+    })
 
 </script>
 </body>
