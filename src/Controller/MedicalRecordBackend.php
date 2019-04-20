@@ -63,7 +63,6 @@ class MedicalRecordBackend extends AbstractController {
                         $patient->setPriority($priority);
                         $entityManager->persist($patient);
                     }
-
                     //set a and e record data
                     $aAndERecord = new AAndERecord();
 
@@ -93,10 +92,13 @@ class MedicalRecordBackend extends AbstractController {
                     $entityManager->flush();
 
                     return new Response("success");
-                    break;            
-
+                    break; 
+                
+                case "createRadiologyRecord":
                     
-            }
+                    return new Response("Cool");
+                    break;
+            } //end switch
         } //end if/else
 
         return new Response("none"); 

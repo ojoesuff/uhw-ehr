@@ -82,7 +82,7 @@
                             <option value="opioids">Opioids</option>                         
                             <option value="stimulants">Stimulants</option>     
                             <option value="other">Other</option>                
-                            </select>                      
+                        </select>                      
                     </div>                      
                 </div>
                 <div class="flex-container">
@@ -154,9 +154,144 @@
             </div>                
         </form>
           
-    </div>
+    </div> 
     
-</div> 
+</div> <!-- end a and e form-->
+
+<div data-role="page" data-dialog="true" id="radiology-admission">
+    <div data-role="header">
+        <h4 class="light-grey light-text">Radiology</h4>   
+        <h4 class="light-grey light-text">General Admission</h4>   
+        <h4 class="light-grey light-text name"></h4>      
+    </div>
+    <div data-role="content">
+        <form id="radiology-admission-form" method="post">
+            <div class="flex-container">
+                <div class="flex-item-small-form">
+                    <label for="xray-area" class="green">Area for X-Ray</label>
+                    <p id="xray-area-error"></p>
+                    <select name="xray-area" id="xray-area" data-mini="true">
+                        <option value="none" selected disabled>Choose one</option>
+                        <optgroup label="Spine">
+                            <option value="Cervical Spine">Cervical Spine</option>
+                            <option value="Lumbar Spine">Lumbar Spine</option>
+                            <option value="Sacrum">Sacrum</option>
+                        </optgroup>
+                        <optgroup label="Head/Neck">
+                            <option value="Head">Head</option>
+                            <option value="Neck">Neck</option>
+                            <option value="Orbit">Orbit</option>
+                            <option value="Sinus">Sinus</option>
+                            <option value="Parotid">Parotid</option>
+                        </optgroup>    
+                        <optgroup label="Extremity">
+                            <option value="Shoulder">Shoulder</option>
+                            <option value="Humerus">Humerus</option>
+                            <option value="Elbow">Elbow</option>
+                            <option value="Finger">Finger</option>
+                            <option value="Hip">Hip</option>
+                        </optgroup>
+                        <optgroup label="Body/Abdomen">
+                            <option value="Cardiac">Cardiac</option>
+                            <option value="Chest">Chest</option>
+                            <option value="Abdomen">Abdomen</option>
+                            <option value="Pelvis">Pelvis</option>
+                        </optgroup>
+                    </select>                           
+                </div>
+                <div class="flex-item-small-form">
+                    <label for="xray-type" class="green">Type of X-Ray</label>
+                    <p id="xray-type-error"></p>
+                    <select name="xray-type" id="xray-type" data-mini="true">
+                        <option value="none" selected disabled>Choose one</option>
+                        <option value="MRI">MRI</option>
+                        <option value="MRA">MRA</option>
+                        <option value="MRV">MRV</option>
+                    </select>
+                </div>
+            </div>
+            <div class="flex-container">
+                <div class="flex-item-small-form">
+                    <fieldset data-theme="e" data-role="controlgroup" name="contrast" id="contrast" data-type="horizontal">
+                        <legend class="green">Contrast</legend>
+                        <p id="contrast-error"></p>
+                        <input type="radio" name="contrast" id="contrast-yes" value="yes">
+                        <label for="contrast-yes">Yes</label>
+                        <input type="radio" name="contrast" id="contrast-no" value="no">
+                        <label for="contrast-no">No</label>
+                    </fieldset>   
+                </div>
+                <div class="flex-item-small-form">
+                    <div id="hidden-side" hidden>
+                        <fieldset data-theme="e" data-role="controlgroup" name="side" id="side" data-type="horizontal">
+                            <legend class="green">Side</legend>
+                            <p id="side-error"></p>
+                            <input type="radio" name="side" id="side-left" value="Left">
+                            <label for="side-left">Left</label>
+                            <input type="radio" name="side" id="side-right" value="Right">
+                            <label for="side-right">Right</label>
+                            <input type="radio" name="side" id="side-bi" value="Bi">
+                            <label for="side-bi">Bi</label>
+                        </fieldset>
+                    </div>
+                </div>
+            </div>
+            <div class="flex-container">
+                <div class="flex-item-small-form">
+                    <fieldset data-theme="e" data-role="controlgroup" name="pacemaker" id="pacemaker" data-type="horizontal">
+                        <legend class="green">Pacemaker</legend>
+                        <p id="pacemaker-error"></p>
+                        <input type="radio" name="pacemaker" id="pacemaker-yes" value="yes">
+                        <label for="pacemaker-yes">Yes</label>
+                        <input type="radio" name="pacemaker" id="pacemaker-no" value="no">
+                        <label for="pacemaker-no">No</label>
+                    </fieldset>
+                </div>
+                <div class="flex-item-small-form">
+                    <fieldset data-theme="e" data-role="controlgroup" name="sedation" id="sedation" data-type="horizontal">
+                        <legend class="green">Sedation</legend>
+                        <p id="sedation-error"></p>
+                        <input type="radio" name="sedation" id="sedation-yes" value="yes">
+                        <label for="sedation-yes">Yes</label>
+                        <input type="radio" name="sedation" id="sedation-no" value="no">
+                        <label for="sedation-no">No</label>
+                    </fieldset>
+                </div>
+            </div>
+            <div class="flex-container">                
+                <div class="flex-item-small-form">
+                    <fieldset data-theme="e" data-role="controlgroup" name="claustrophobia" id="claustrophobia" data-type="horizontal">
+                        <legend class="green">Claustrophobia</legend>
+                        <p id="claustrophobia-error"></p>
+                        <input type="radio" name="claustrophobia" id="claustrophobia-yes" value="yes">
+                        <label for="claustrophobia-yes">Yes</label>
+                        <input type="radio" name="claustrophobia" id="claustrophobia-no" value="no">
+                        <label for="claustrophobia-no">No</label>
+                    </fieldset>
+                </div>
+                <div class="flex-item-small-form">
+                    <fieldset data-theme="e" data-role="controlgroup" name="metal" id="metal" data-type="horizontal">
+                        <legend class="green">Metal in Body</legend>
+                        <p id="metal-error"></p>
+                        <input type="radio" name="metal" id="metal-yes" value="yes">
+                        <label for="metal-yes">Yes</label>
+                        <input type="radio" name="metal" id="metal-no" value="no">
+                        <label for="metal-no">No</label>
+                    </fieldset>
+                </div>
+            </div>
+            <div id="hidden-metal-area" hidden>
+                <p class="green">Metal Area</p>
+                <p id="metal-area-error"></p>
+                <input type="text" id="metal-area">
+            </div>
+            <p class="green">Notes</p>
+            <textarea id="radiology-notes"></textarea>
+            <p id="radiology-submit-error"></p>
+            <button id="radiology-admission-button" data-theme="e" data-inline="true">SUBMIT</button>
+        </form>
+    </div>
+</div>
 <script>
 
     
@@ -193,12 +328,10 @@
 
         }); //end post
 
-     $("#aande-admission-form").submit(function(event) {
-        event.preventDefault();     
+     $("#aande-admission-form").submit(function(event) {   
         event.preventDefault(); 
         //remove all previous errors
-        removeError(".error");      
-
+        removeError(".error");  
          //get details from inputs
          let locationOccurred = $("#aande-location").val();
          let description = $("#injury-description").val();
@@ -268,7 +401,92 @@
              }
          })
         } //end if
-     })
+     }) //end form submission
+
+     $("#radiology-admission-form").submit(function(event) {   
+        event.preventDefault(); 
+        //remove all previous errors
+        removeError(".error");  
+         //get details from inputs
+         let area = $("#xray-area").find(":selected").text();
+         let xrayType = $("#xray-type").find(":selected").text();
+         let contrast = $("#contrast").find(":checked").val();  
+         let side = $("#side").find(":checked").val();  
+         let pacemaker = $("#pacemaker").find(":checked").val();  
+         let sedation = $("#sedation").find(":checked").val();  
+         let claustrophobia = $("#claustrophobia").find(":checked").val();  
+         let metal = $("#metal").find(":checked").val();  
+         let metalArea = $("#metal-area").val();
+         let notes = $("#radiology-notes").val();
+
+         //form validation
+        if(area === "Choose one") {
+            addError("#xray-area-error", "Please pick an area");
+        } else {
+            removeError("#xray-area-error");
+        }
+        if(xrayType === "Choose one") {
+            addError("#xray-type-error", "Please pick a type");
+        } else {
+            removeError("#xray-type-error");
+        }        
+        if(!contrast) {
+            addError("#contrast-error", "Please specify if required");
+        } else {
+            removeError("#contrast-error");
+        }
+        //only validate side if not hidden
+        if(!$("#hidden-side").is(":hidden")) {
+            if(!side) {
+                addError("#side-error", "Please specify side");
+            } else {
+                removeError("#side-error");
+            }
+        }
+        if(!pacemaker) {
+            addError("#pacemaker-error", "Please select");
+        } else {
+            removeError("#pacemaker-error");
+        }
+        if(!sedation) {
+            addError("#sedation-error", "Please select");
+        } else {
+            removeError("#sedation-error");
+        }
+        if(!claustrophobia) {
+            addError("#claustrophobia-error", "Please select");
+        } else {
+            removeError("#claustrophobia-error");
+        }
+        if(!metal) {
+            addError("#metal-error", "Please select");
+        } else {
+            removeError("#metal-error");
+        }
+        //only validate metal area if not hidden
+        if(!$("#hidden-metal-area").is(":hidden")) {
+            if(metalArea === "") {
+                addError("#metal-area-error", "Please specify area");
+            } else {
+                removeError("#metal-area-error");
+            }
+        }
+        //post to backend only if no errors exist
+        if(!($(".error").length)) {
+         $.post("/backend/medical-record", {type: "createRadiologyRecord", patientId:patientId, 
+         area:area, xrayType:xrayType, contrast:contrast, side:side, pacemaker:pacemaker, 
+         sedation:sedation, claustrophobia:claustrophobia, metal:metal, 
+         metalArea:metalArea, notes:notes})
+         .done(function(data) {
+             console.log(data);
+             if(data === "success") {
+                 window.location = `/patient/medical-record/create?id=${patientId}&msg=success`;
+             } else {
+                 addError("#radiology-submit-error", "An unexpected error occurred");
+             }
+         })
+        } //end if
+     }) //end form submission
     
      $("#aande-admission-form-link").click(function() {
          //add time and date to form when link clicked
@@ -293,6 +511,32 @@
             //if none selected, hide other input fields
             $("#hidden-medicine-name").hide();
             $("#hidden-medicine-amount").hide();
+        }
+    })
+
+    //show hidden side field if certain body area is selected
+    $("#xray-area").change(function() {
+        let value = $(this).find(":selected").val();
+        
+        if(value === "Shoulder" || value === "Humerus" || value === "Elbow" || 
+        value === "Finger" || value === "Hip") {
+            //if ceratin areas selected, show side of body selection
+            $("#hidden-side").show();
+        } else {
+            //if none selected, hide 
+            $("#hidden-side").hide();
+        }
+    })
+
+    //show hidden field if value of metal is changed
+    $("#metal").change(function() {
+        let value = $(this).find(":checked").val();
+        if(value === "yes") {
+            //if yes selected, show other area input field
+            $("#hidden-metal-area").show();
+        } else {
+            //if no selected, hide other area
+            $("#hidden-metal-area").hide();
         }
     })
 
