@@ -2,146 +2,158 @@
 <body>
 <div data-role="page">    
     {% include './sidenav/sidenav.html.twig' %} 
-    <div data-role="content" class="width-960"> 
+    <div data-role="content" class="width-960">         
         <h2 class="inline name"></h2>
-        <p class="patientId"></p>
+        <p id="patientId"></p>
         <h2>New Medical Record</h2>
+        <p id="update-successful" class="green"></p>
         <div data-role="collapsible">
             <h4>Accident and Emergency</h4>
             <div class="input-style-dark">
-                <a class="medical-record-link" id="aande-admission-form-link" href="#aande-admission-form" class="ui-shadow ui-btn ui-corner-all ui-btn-inline" data-transition="pop"><p>General Admission</p></a>
+                <a class="medical-record-link" id="aande-admission-form-link" href="#aande-admission" class="ui-shadow ui-btn ui-corner-all ui-btn-inline" data-transition="pop"><p>General Admission</p></a>
             </div>            
         </div>
         <div data-role="collapsible" data-theme="c">
             <h4>Radiology</h4>
             <div class="input-style-dark">
-                <a class="medical-record-link" href="#radiology-admission-form" class="ui-shadow ui-btn ui-corner-all ui-btn-inline" data-transition="pop"><p>General Admission</p></a>
+                <a class="medical-record-link" href="#radiology-admission" class="ui-shadow ui-btn ui-corner-all ui-btn-inline" data-transition="pop"><p>General Admission</p></a>
             </div>   
         </div>
         <div data-role="collapsible">
             <h4>Eye</h4>
             <div class="input-style-dark">
-                <a class="medical-record-link" href="#macular-clinic-form" class="ui-shadow ui-btn ui-corner-all ui-btn-inline" data-transition="pop"><p>Macular Clinic</p></a>
+                <a class="medical-record-link" href="#macular-clinic" class="ui-shadow ui-btn ui-corner-all ui-btn-inline" data-transition="pop"><p>Macular Clinic</p></a>
             </div> 
         </div>
     </div>
 </div>
 
-<div data-role="page" data-dialog="true" id="aande-admission-form">
+<div data-role="page" data-dialog="true" id="aande-admission">
     <div data-role="header">
         <h4 class="light-grey light-text">Accident and Emergency</h4>   
         <h4 class="light-grey light-text">General Admission</h4>   
         <h4 class="light-grey light-text name"></h4>      
     </div>
     <div data-role="content">
-        <div class="flex-container">                               
-            <div class="flex-item-small-form">
-                <p class="green">Location Incident Occurred</p>
-                <input type="text" id="aande-location">                       
-            </div> 
-        </div>   
-        <p class="green">Description of Injury</p>
-        <textarea id="injury-description"></textarea>
-        <div class="flex-container">
-            <div class="flex-item-small-form">
-                <p class="green">Injury Area</p>
-                <input type="text" id="injury-area">                       
-            </div>                      
-            <div class="flex-item-small-form">
-                <label for="injury-type" class="green">Type of Injury</label>
-                <select name="injury-type" id="injury-type" data-mini="true">
-                    <option value="" disabled selected>Choose one</option>
-                    <option value="concussion">Concussion</option>
-                    <option value="dislocation">Dislocation</option> 
-                    <option value="fracture">Fracture</option> 
-                    <option value="laceration">Laceration</option>                    
-                    <option value="sprain">Sprain</option> 
-                </select>
-            </div> 
-        </div> 
-                       
-            <div class="flex-container">
+        <form id="aande-admission-form" method="post">
+            <div class="flex-container">                               
                 <div class="flex-item-small-form">
-                    <label for="medication" class="green">Medication Taken</label>
-                    <select name="medication" id="medication" data-mini="true">
-                        <option value="none" selected>None</option>
-                        <option value="androgens">Androgens</option> 
-                        <option value="antacids">Antacids</option>
-                        <option value="antibiotics">Antibiotics</option> 
-                        <option value="antihistamines">Antihistamines</option> 
-                        <option value="asprin">Asprin</option> 
-                        <option value="anxiolytics">Anxiolytics</option>
-                        <option value="cytoprotectants">Cytoprotectants</option> 
-                        <option value="laxatives">Laxatives</option> 
-                        <option value="mydriatics">Mydriatics</option>
-                        <option value="opioids">Opioids</option>                         
-                        <option value="stimulants">Stimulants</option>     
-                        <option value="other">Other</option>                
-                     </select>                      
-                </div>                      
-            </div>
-            <div class="flex-container">
-                <div class="flex-item-small-form" hidden id="hidden-medicine-name">
-                    <p class="green">Medicine Name</p>
-                    <input type="text" id="medicine-name">                       
-                </div> 
-                <div class="flex-item-small-form" hidden id="hidden-medicine-amount">
-                    <p class="green">Amount</p>
-                    <input type="text" id="medicine-amount">                       
-                </div>                  
-            </div> 
-            <div class="flex-container">
-                <div class="flex-item-small-form">
-                    <fieldset data-theme="e" data-role="controlgroup" name="xray-required" id="xray-required" data-type="horizontal">
-                        <legend class="green">X-ray Required</legend>
-                        <input type="radio" name="xray-required" id="xray-yes" value="yes">
-                        <label for="xray-yes">Yes</label>
-                        <input type="radio" name="xray-required" id="xray-no" value="no">
-                        <label for="xray-no">No</label>
-                    </fieldset>                       
-                </div>                      
-                <div class="flex-item-small-form">
-                    <fieldset data-inline="true" data-theme="e" data-role="controlgroup" name="vomitting" id="vomitting" data-type="horizontal">
-                        <legend class="green">Vomitting</legend>
-                        <input type="radio" name="vomitting" id="vomitting-yes" value="yes">
-                        <label for="vomitting-yes">Yes</label>
-                        <input type="radio" name="vomitting" id="vomitting-no" value="no">
-                        <label for="vomitting-no">No</label>
-                    </fieldset>                       
-                </div> 
-            </div> 
-            <div class="flex-container">
-                <div class="flex-item-small-form">
-                    <label for="priority" class="green">Priority</label>
-                    <select name="priority" id="priority" data-mini="true">
-                        <option value="low" selected>Low</option>
-                        <option value="medium">Medium</option>    
-                        <option value="high">High</option>     
-                    </select>      
-                </div>                      
-                <div class="flex-item-small-form">
-                    <fieldset data-inline="true" data-theme="e" data-role="controlgroup" name="surgery-required" id="vomitting" data-type="horizontal">
-                        <legend class="green">Surgery Required</legend>
-                        <input type="radio" name="surgery-required" id="surgery-yes" value="yes">
-                        <label for="surgery-yes">Yes</label>
-                        <input type="radio" name="surgery-required" id="surgery-no" value="no">
-                        <label for="surgery-no">No</label>
-                    </fieldset>                       
-                </div> 
-            </div>
-            <div class="flex-container">
-                <div class="flex-item-small-form">
-                    <p class="green">Arrival Date</p>
-                    <input type="date" id="aande-arrival-date">                       
-                </div> 
-                <div class="flex-item-small-form">
-                    <p class="green">Arrival Time</p>
-                    <input type="time" id="aande-arrival-time">                       
+                    <p class="green">Location Incident Occurred</p>
+                    <p id="aande-location-error"></p>  
+                    <input type="text" id="aande-location">                       
                 </div> 
             </div>   
-            <p class="green">Notes</p> 
-            <textarea id="aande-notes"></textarea>          
-        </div>        
+            <p class="green">Description of Injury</p>
+            <p id="injury-description-error"></p> 
+            <textarea id="injury-description"></textarea>
+            <div class="flex-container">
+                <div class="flex-item-small-form">
+                    <p class="green">Injury Area</p>
+                    <p id="injury-area-error"></p>
+                    <input type="text" id="injury-area">                       
+                </div>                      
+                <div class="flex-item-small-form">
+                    <label for="injury-type" class="green">Type of Injury</label>
+                    <p id="injury-type-error"></p>
+                    <select name="injury-type" id="injury-type" data-mini="true">
+                        <option value="" disabled selected>Choose one</option>
+                        <option value="concussion">Concussion</option>
+                        <option value="dislocation">Dislocation</option> 
+                        <option value="fracture">Fracture</option> 
+                        <option value="laceration">Laceration</option>                    
+                        <option value="sprain">Sprain</option> 
+                    </select>
+                </div> 
+            </div>                             
+                <div class="flex-container">
+                    <div class="flex-item-small-form">
+                        <label for="medication" class="green">Medication Taken</label>
+                        <select name="medication" id="medication" data-mini="true">
+                            <option value="none" selected>None</option>
+                            <option value="androgens">Androgens</option> 
+                            <option value="antacids">Antacids</option>
+                            <option value="antibiotics">Antibiotics</option> 
+                            <option value="antihistamines">Antihistamines</option> 
+                            <option value="asprin">Asprin</option> 
+                            <option value="anxiolytics">Anxiolytics</option>
+                            <option value="cytoprotectants">Cytoprotectants</option> 
+                            <option value="laxatives">Laxatives</option> 
+                            <option value="mydriatics">Mydriatics</option>
+                            <option value="opioids">Opioids</option>                         
+                            <option value="stimulants">Stimulants</option>     
+                            <option value="other">Other</option>                
+                            </select>                      
+                    </div>                      
+                </div>
+                <div class="flex-container">
+                    <div class="flex-item-small-form" hidden id="hidden-medicine-name">
+                        <p class="green">Medicine Name</p>
+                        <input type="text" id="medicine-name">                       
+                    </div> 
+                    <div class="flex-item-small-form" hidden id="hidden-medicine-amount">
+                        <p class="green">Amount</p>
+                        <input type="text" id="medicine-amount">                       
+                    </div>                  
+                </div> 
+                <div class="flex-container">
+                    <div class="flex-item-small-form">
+                        <fieldset data-theme="e" data-role="controlgroup" name="xray-required" id="xray-required" data-type="horizontal">
+                            <legend class="green">X-ray Required</legend>
+                            <p id="xray-required-error"></p>
+                            <input type="radio" name="xray-required" id="xray-yes" value="yes">
+                            <label for="xray-yes">Yes</label>
+                            <input type="radio" name="xray-required" id="xray-no" value="no">
+                            <label for="xray-no">No</label>
+                        </fieldset>                       
+                    </div>                      
+                    <div class="flex-item-small-form">
+                        <fieldset data-inline="true" data-theme="e" data-role="controlgroup" name="vomitting" id="vomitting" data-type="horizontal">
+                            <legend class="green">Vomitting</legend>
+                            <p id="vomitting-error"></p>
+                            <input type="radio" name="vomitting" id="vomitting-yes" value="yes">
+                            <label for="vomitting-yes">Yes</label>
+                            <input type="radio" name="vomitting" id="vomitting-no" value="no">
+                            <label for="vomitting-no">No</label>
+                        </fieldset>                       
+                    </div> 
+                </div> 
+                <div class="flex-container">
+                    <div class="flex-item-small-form">
+                        <label for="priority" class="green">Priority</label>
+                        <select name="priority" id="priority" data-mini="true">
+                            <option value="low" selected>Low</option>
+                            <option value="medium">Medium</option>    
+                            <option value="high">High</option>     
+                        </select>      
+                    </div>                      
+                    <div class="flex-item-small-form">
+                        <fieldset data-inline="true" data-theme="e" data-role="controlgroup" name="surgery-required" id="vomitting" data-type="horizontal">
+                            <legend class="green">Surgery Required</legend>
+                            <p id="surgery-required-error"></p>
+                            <input type="radio" name="surgery-required" id="surgery-yes" value="yes">
+                            <label for="surgery-yes">Yes</label>
+                            <input type="radio" name="surgery-required" id="surgery-no" value="no">
+                            <label for="surgery-no">No</label>
+                        </fieldset>                       
+                    </div> 
+                </div>
+                <div class="flex-container">
+                    <div class="flex-item-small-form">
+                        <p class="green">Arrival Date</p>
+                        <input type="date" id="aande-arrival-date">                       
+                    </div> 
+                    <div class="flex-item-small-form">
+                        <p class="green">Arrival Time</p>
+                        <input type="time" id="aande-arrival-time" name="aande-arrival-time">                       
+                    </div> 
+                </div>   
+                <p class="green">Notes</p> 
+                <textarea id="aande-notes"></textarea>     
+                <p id="aande-submit-error"></p>
+                <button data-inline="true" id="aande-form-button" data-theme="e">SUBMIT</button>       
+            </div>                
+        </form>
+          
     </div>
     
 </div> 
@@ -150,17 +162,23 @@
     
      
 
-     $(document).ready(function() {   
+  
          //get parameter from URL seen at https://www.w3docs.com/snippets/javascript/how-to-get-current-url-in-javascript.html
         let urlString = window.location.href;
         let url = new URL(urlString);
         var patientId = url.searchParams.get("id");
+        $("#patientId").text(patientId);
+        let msg = url.searchParams.get("msg");
+        if(msg === "success") {
+            $("#update-successful").text("Medical Record Successfully Added");
+        } else {
+            $("#update-successful").text("");
+        }
         var patientName = "";     
 
         //get patients name
         $.post("/backend/medical-record", {type: "getDetails", patientId: patientId})
         .done(function(data) {
-            console.log(data);
             if(data === "none") {
                 $(".name").text("An unexpected error occurred");
                 $(".name").addClass("error");
@@ -171,10 +189,85 @@
                 let name = `${firstName} ${middleNames} ${lastName}`;
 
                 $(".name").text(name);
-            }
-            
+            } //end if/else            
 
-        })
+        }); //end post
+
+     $("#aande-admission-form").submit(function(event) {
+        event.preventDefault();     
+        event.preventDefault(); 
+        //remove all previous errors
+        removeError(".error");      
+
+         //get details from inputs
+         let locationOccurred = $("#aande-location").val();
+         let description = $("#injury-description").val();
+         let injuryArea = $("#injury-area").val();
+         let typeOfInjury = $("#injury-type").find(":selected").text();
+         let medication = $("#medication").find(":selected").text();
+         let medicationName = $("#medicine-name").val();
+         let medicationAmount = $("#medicine-amount").val();
+         let xrayRequired = $("input[name='xray-required']:checked").val();
+         let vomitting = $("input[name='vomitting']:checked").val();
+         let priority = $("#priority").find(":selected").text();
+         let surgery = $("input[name='surgery-required']:checked").val();
+         let date = $("#aande-arrival-date").val();
+         let time = $("input[name='aande-arrival-time']").val();
+         let arrivalDate = `${date} ${time}`;
+         let notes = $("notes").val();
+
+         //form validation
+        if(locationOccurred === "") {
+            addError("#aande-location-error", "Please enter a location");
+        } else {
+            removeError("#aande-location-error");
+        }
+        if(description === "") {
+            addError("#injury-description-error", "Please describe injury");
+        } else {
+            removeError("#injury-description-error");
+        }
+        if(injuryArea === "") {
+            addError("#injury-area-error", "Please specify area");
+        } else {
+            removeError("#injury-area-error");
+        }
+        if(typeOfInjury === "Choose one") {
+            addError("#injury-type-error", "Please select type");
+        } else {
+            removeError("#injury-type-error");
+        }
+        if(!xrayRequired) {
+            addError("#xray-required-error", "Please specify if required");
+        } else {
+            removeError("#xray-required-error");
+        }
+        if(!vomitting) {
+            addError("#vomitting-error", "Please specify if required");
+        } else {
+            removeError("#vomitting-error");
+        }
+        if(!surgery) {
+            addError("#surgery-required-error", "Please specify if required");
+        } else {
+            removeError("#surgery-required-error");
+        }
+
+        //post to backend only if no errors exist
+        if(!($(".error").length)) {
+         $.post("/backend/medical-record", {type: "createAAndERecord", patientId:patientId,
+         locationOccurred:locationOccurred, description:description, injuryArea:injuryArea,
+         typeOfInjury:typeOfInjury, medication:medication, medicationName:medicationName,
+         medicationAmount:medicationAmount, xrayRequired:xrayRequired, vomitting:vomitting,
+         priority:priority, surgery:surgery, arrivalDate:arrivalDate, notes:notes})
+         .done(function(data) {
+             if(data === "success") {
+                 window.location = `/patient/medical-record/create?id=${patientId}&msg=success`;
+             } else {
+                 addError("#aande-submit-error", "An unexpected error occurred");
+             }
+         })
+        } //end if
      })
     
      $("#aande-admission-form-link").click(function() {
@@ -202,6 +295,18 @@
             $("#hidden-medicine-amount").hide();
         }
     })
+
+    //removes error classe
+    function removeError(target) {
+        $(target).text("");
+        $(target).removeClass(); 
+    }
+
+    //add error class and message
+    function addError(target, msg) {
+        $(target).addClass("error");
+        $(target).text(msg);
+    }
 
 </script>
 </body>

@@ -63,44 +63,6 @@
         $(target).addClass("error");
         $(target).text(msg);
     }
-    /*$(document).ready(function() {  
-        //jQuery form validator plugin
-        $("#login-form").validate({
-            //custom rules for each element
-            rules: {
-                username: 'required',
-                password: 'required'
-            },
-            //custom error messages for each element
-            messages: {
-                username: 'Username is required',
-                password: 'Password is required',
-            },
-            errorPlacement: function(error, element) {
-                //insert error outside of input div
-                error.insertBefore(element.parent());                
-            },
-            //handles the submit only if form is valid
-            submitHandler: function(form) {
-                form.submit();
-                let username = $("#username").val();
-                let password = $("#password").val();
-                console.log(username + " " + password);
-                $.post("../backend/staff/login", {username:username, password:password})        
-                .done(function(data) {
-                    //redirect to dashboard 
-                    alert(data);
-                    if(data === "true") {
-                        window.location = "/dashboard"; 
-                    } else {
-                        alert("Username and password incorrect");
-                    }
-                    
-                });
-            },
-            
-        });
-    });*/
-
+    
 
 </script> 

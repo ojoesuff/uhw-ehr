@@ -88,6 +88,11 @@ class AAndERecord
      */
     private $surgery;
 
+    /**
+     * @ORM\Column(type="string", length=100, nullable=true)
+     */
+    private $medicationName;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -257,6 +262,18 @@ class AAndERecord
     public function setSurgery(bool $surgery): self
     {
         $this->surgery = $surgery;
+
+        return $this;
+    }
+
+    public function getMedicationName(): ?string
+    {
+        return $this->medicationName;
+    }
+
+    public function setMedicationName(?string $medicationName): self
+    {
+        $this->medicationName = $medicationName;
 
         return $this;
     }
