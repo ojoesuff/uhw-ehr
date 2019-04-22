@@ -1,0 +1,108 @@
+{% include './header/header.html.twig' %}
+<body>
+<div data-role="page">  
+    {% include './sidenav/sidenav.html.twig' %} 
+    <div data-role="content" class="width-720"> 
+        <h2 class="inline name"></h2>
+        <p id="patientId"></p>
+        <h2>View Medical Records</h2>
+        <input="hidden" id="records-insert-before">
+    </div>
+</div>
+{% include './medical-records/macular-record.html.twig' %}
+
+<script>
+     //get parameter from URL seen at https://www.w3docs.com/snippets/javascript/how-to-get-current-url-in-javascript.html
+     let urlString = window.location.href;
+     let url = new URL(urlString);
+     var patientId = url.searchParams.get("id");
+     $("#patientId").text(patientId);
+
+     function updatePatientsName() {
+        //get patients name
+        $.post("/backend/medical-record", {type: "getDetails", patientId: patientId})
+        .done(function(data) {
+            if(data === "none") {
+                $(".name").text("An unexpected error occurred");
+                $(".name").addClass("error");
+            } else {
+                let firstName = data.firstName;
+                let middleNames = data.middleNames;
+                let lastName = data.lastName;
+                let name = `${firstName} ${middleNames} ${lastName}`;
+
+                $(".name").text(name);
+            } //end if/else  
+        }); //end post
+     } // end updatePatientsName
+
+     function getPatientsMedicalRecords(patientId) {
+        $.post("/backend/medical-record", {type:"getMedicalRecords", patientId: patientId})
+        .done(function(data) {
+            if(data === "none") {
+                $(".name").text("An unexpected error occurred");
+                $(".name").addClass("error");
+            } else {
+                console.log(data);
+                //if json object has items in it
+                if(Object.keys(data).length > 0) {
+                    //get records from JSON response
+                    let macularRecords = data.macularRecords; 
+                    let radiologyRecords = data.radiologyRecords;                    
+                    let aAndERecords = data.aAndERecords;       
+                    
+                    //update the DOM with data fro each type of record
+                    if(macularRecords) {
+                        updateRecordsInDOM(macularRecords, "Ophthalmology", "ophthalmology", "Macular");       
+                    }
+                    if(radiologyRecords) {
+                    updateRecordsInDOM(radiologyRecords, "Radiology", "radiology", "Macular");       
+                    }
+                    if(aAndERecords) {
+                        updateRecordsInDOM(aAndERecords, "Accident and Emergency", "aande", "Macular");       
+                    }                   
+                } else {
+                    //show no records to display 
+                }
+                
+            }
+        })
+     }
+
+     //updates DOM using the records array, department name, id for tagging HTML id and recordType
+     //for calling individual functions
+     function updateRecordsInDOM(records, department, id, recordType) {
+        let htmlString = 
+        `<div>
+        <h2 class='green'>${department}</h2> 
+        <hr>
+        <input type='hidden' id='${id}-insert-after'>
+        </div>`;
+
+        $(htmlString).insertBefore("#records-insert-before");
+
+        records.forEach(function(record) {
+            let recordId = record.recordId;
+            let staffName = record.staffName;
+            let date = record.date;
+            let time = record.time;
+            let htmlString = `<a class='medical-record-link' href='#macular-clinic-record' 
+            onmousedown='updateView${recordType}Record(${recordId})' data-transition='pop'>
+            <p class="input-style-dark">${department}, Dr. ${staffName}, ${date}, ${time}</p></a>`;
+
+            $(htmlString).insertAfter(`#${id}-insert-after`);
+        });
+    }
+
+     updatePatientsName();
+
+     if(patientId) {
+        getPatientsMedicalRecords(patientId);
+     }
+     
+
+     
+
+</script>
+</body>
+</html>

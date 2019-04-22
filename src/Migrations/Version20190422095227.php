@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20190420095729 extends AbstractMigration
+final class Version20190422095227 extends AbstractMigration
 {
     public function getDescription() : string
     {
@@ -22,7 +22,9 @@ final class Version20190420095729 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('ALTER TABLE aand_erecord ADD medication_name VARCHAR(100) DEFAULT NULL');
+        $this->addSql('ALTER TABLE department ADD a_and_erecord_id INT NOT NULL');
+        $this->addSql('ALTER TABLE department ADD CONSTRAINT FK_CD1DE18A186C185E FOREIGN KEY (a_and_erecord_id) REFERENCES aand_erecord (id)');
+        $this->addSql('CREATE INDEX IDX_CD1DE18A186C185E ON department (a_and_erecord_id)');
     }
 
     public function down(Schema $schema) : void
@@ -30,6 +32,8 @@ final class Version20190420095729 extends AbstractMigration
         // this down() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('ALTER TABLE aand_erecord DROP medication_name');
+        $this->addSql('ALTER TABLE department DROP FOREIGN KEY FK_CD1DE18A186C185E');
+        $this->addSql('DROP INDEX IDX_CD1DE18A186C185E ON department');
+        $this->addSql('ALTER TABLE department DROP a_and_erecord_id');
     }
 }

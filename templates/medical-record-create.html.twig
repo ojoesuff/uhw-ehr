@@ -20,7 +20,7 @@
             </div>   
         </div>
         <div data-role="collapsible">
-            <h4>Eye</h4>
+            <h4>Ophthalmology</h4>
             <div class="input-style-dark">
                 <a class="medical-record-link" href="#macular-clinic" class="ui-shadow ui-btn ui-corner-all ui-btn-inline" data-transition="pop"><p>Macular Clinic</p></a>
             </div> 
@@ -291,11 +291,59 @@
             <button id="radiology-admission-button" data-theme="e" data-inline="true">SUBMIT</button>
         </form>
     </div>
-</div>
-<script>
+</div> <!-- end radiology record-->
 
-    
-     
+<div data-role="page" data-dialog="true" id="macular-clinic">
+    <div data-role="header">
+        <h4 class="light-grey light-text">Ophthalmology</h4>   
+        <h4 class="light-grey light-text">Macular Clinic</h4>   
+        <h4 class="light-grey light-text name"></h4>      
+    </div>
+    <div data-role="content">
+        <form id="macular-clinic-form" method="post">
+            <p class="green">LVA/Contact Lens/Orthoptic Range</p>
+            <div class="flex-container">
+                <div class="flex-item-small-form">
+                    <p class="green">Weeks</p>
+                    <p id="lva-range-weeks-error"></p>
+                    <input type="number" id="lva-range-weeks">
+                </div>
+                <div class="flex-item-small-form">
+                    <p class="green">Months</p>
+                    <p id="lva-range-months-error"></p>
+                    <input type="number" id="lva-range-months">
+                </div>
+            </div>
+            <div class="flex-container">
+                <div class="flex-item-small-form">
+                    <p class="green">Test Required</p>
+                    <p id="test-required-error"></p>
+                    <select name="test-required" id="test-required" data-mini="true">
+                        <option value="none" selected disabled>Choose one</option>
+                        <option value="OCT/FFA/Visual Fields">OCT/FFA/Visual Fields</option>
+                        <option value="Laser">Laser</option>
+                        <option value="Macular Injections">Macular Injections</option>
+                    </select>
+                </div>
+                <div class="flex-item-small-form">
+                    <fieldset data-theme="e" data-role="controlgroup" name="macular-surgery" id="macular-surgery" data-type="horizontal">
+                        <legend class="green">Surgery</legend>
+                        <p id="macular-surgery-error"></p>
+                        <input type="radio" name="macular-surgery" id="macular-surgery-urgent" value="urgent">
+                        <label for="macular-surgery-urgent">Urgent</label>
+                        <input type="radio" name="macular-surgery" id="macular-surgery-routine" value="routine">
+                        <label for="macular-surgery-routine">Routine</label>
+                    </fieldset>
+                </div>
+            </div>
+            <p class="green">Notes</p>
+            <textarea id="macular-notes"></textarea>
+            <p id="macular-submit-error"></p>
+            <button id="macular-clinic-submit-button" data-inline="true" data-theme="e">SUBMIT</button>
+        </form>
+    </div>
+</div> <!-- end macular record-->
+<script>    
 
   
          //get parameter from URL seen at https://www.w3docs.com/snippets/javascript/how-to-get-current-url-in-javascript.html
@@ -412,6 +460,10 @@
          let xrayType = $("#xray-type").find(":selected").text();
          let contrast = $("#contrast").find(":checked").val();  
          let side = $("#side").find(":checked").val();  
+         //set default value for side
+         if(!side) {
+             side = "";
+         }
          let pacemaker = $("#pacemaker").find(":checked").val();  
          let sedation = $("#sedation").find(":checked").val();  
          let claustrophobia = $("#claustrophobia").find(":checked").val();  
@@ -483,6 +535,65 @@
                  window.location = `/patient/medical-record/create?id=${patientId}&msg=success`;
              } else {
                  addError("#radiology-submit-error", "An unexpected error occurred");
+             }
+         })
+        } //end if
+     }) //end form submission
+
+     $("#macular-clinic-form").submit(function(event) {   
+        event.preventDefault(); 
+        //remove all previous errors
+        removeError(".error");  
+         //get details from inputs
+         let LVARangeWeeks = $("#lva-range-weeks").val();
+         let LVARangeMonths = $("#lva-range-months").val();
+         let testRequired = $("#test-required").find(":selected").text();
+         let surgery = $("#macular-surgery").find(":checked").val(); 
+         let notes = $("#macular-notes").val();
+         
+         //form validation
+        if(testRequired === "Choose one") {
+            addError("#test-required-error", "Please pick a test");
+        } else {
+            removeError("#test-required-error");
+        }
+        if(LVARangeWeeks === "") {
+            addError("#lva-range-weeks-error", "Please enter a number");
+        } else {
+            removeError("#lva-range-weeks-error");
+        }  
+        if(LVARangeWeeks < 0) {
+            addError("#lva-range-weeks-error", "Can not be negative value");
+        } else {
+            removeError("#lva-range-weeks-error");
+        }  
+        if(LVARangeMonths === "") {
+            addError("#lva-range-months-error", "Please enter a number");
+        } else {
+            removeError("#lva-range-months-error");
+        } 
+        if(LVARangeMonths < 0) {
+            addError("#lva-range-months-error", "Can not be negative value");
+        } else {
+            removeError("#lva-range-months-error");
+        }
+        if(!surgery) {
+            addError("#macular-surgery-error", "Please select");
+        } else {
+            removeError("#macular-surgery-error");
+        }
+
+        //post to backend only if no errors exist
+        if(!($(".error").length)) {
+         $.post("/backend/medical-record", {type: "createMacularRecord", patientId:patientId, 
+         LVARangeWeeks:LVARangeWeeks, LVARangeMonths:LVARangeMonths, testRequired:testRequired, 
+         surgery:surgery, notes:notes})
+         .done(function(data) {
+             console.log(data);
+             if(data === "success") {
+                 window.location = `/patient/medical-record/create?id=${patientId}&msg=success`;
+             } else {
+                 addError("#macular-submit-error", "An unexpected error occurred");
              }
          })
         } //end if
