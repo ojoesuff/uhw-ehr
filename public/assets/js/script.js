@@ -17,5 +17,6 @@ function booleanToString(data) {
 
 //converts yes or no to boolean 
 function stringToBoolean(text) {
-    return (text == "Yes") ? true : false;
+    //return 1 or 0 for DB
+    return (text == "Yes") ? 1 : 0;
 }

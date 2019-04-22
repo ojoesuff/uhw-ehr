@@ -11,6 +11,7 @@
 </div>
 {% include './medical-records/macular-record.html.twig' %}
 {% include './medical-records/radiology-record.html.twig' %}
+{% include './medical-records/aande-record.html.twig' %}
 
 <script>
      //get parameter from URL seen at https://www.w3docs.com/snippets/javascript/how-to-get-current-url-in-javascript.html
@@ -59,7 +60,7 @@
                     updateRecordsInDOM(radiologyRecords, "Radiology", "radiology", "Radiology");       
                     }
                     if(aAndERecords) {
-                        updateRecordsInDOM(aAndERecords, "Accident and Emergency", "aande", "Macular");       
+                        updateRecordsInDOM(aAndERecords, "Accident and Emergency", "aande", "AandE");       
                     }                   
                 } else {
                     //show no records to display 

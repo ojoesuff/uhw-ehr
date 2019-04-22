@@ -76,12 +76,7 @@
         </div>
         <div class="flex-container">
             <div class="box flex-item-1">
-                <div data-role="collapsible">
-                    <h4>Medical Records</h4>
-                    <p class="input-style-dark">Cardiology, Dr. Murphy, 25 Mar 2019, 14:00</p> 
-                    <p class="input-style-dark">Orthapedics, Dr. Hoffstedder, 23 May 2018, 14:00</p> 
-                    <p class="input-style-dark">Cardiology, Dr. Murphy, 25 Mar 2019, 14:00</p> 
-                </div>                
+                <button id="view-medical-records">View Records</button>               
             </div>
             <div class="box flex-item-1">
                 <div data-role="collapsible" id="appointment-history">
@@ -733,6 +728,10 @@
             
         }); //end post/done
     }); // end mouseup
+
+    $("#view-medical-records").click(function() {
+        window.location = `./medical-record/view?id=${patientId}`;
+    });
 
 </script>
 </body>

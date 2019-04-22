@@ -5,7 +5,6 @@
         <h4 class="light-grey light-text name"></h4>      
     </div>
     <div data-role="content"> 
-        <form id="edit-radiology-clinic-form" method="post">
         <div class="flex-container">
             <div class="flex-item-small-form">
                 <p id="radiology-record-error"></p>
@@ -67,10 +66,124 @@
             <p class="green">Notes</p>
             <p class="input-style-light" id="view-radiology-notes"></p>
             <p id="radiology-submit-error"></p>
-            <button id="edit-radiology-submit-button" data-theme="e" data-inline="true">UPDATE</button>        
-        </form>
+            <a id="edit-radiology-record-button" href="#edit-radiology-record" class="ui-shadow ui-btn ui-corner-all ui-btn-inline" data-transition="pop">EDIT</a>        
+        
     </div>
-</div> <!--end edit-macular-record-->
+</div> <!--end edit-radiology-record-->
+
+<div data-role="page" id="edit-radiology-record" data-dialog="true">
+    <div data-role="header">
+            <h4 class="light-grey light-text">Radiology</h4>   
+            <h4 class="light-grey light-text">General Admission</h4>   
+            <h4 class="light-grey light-text name"></h4>      
+        </div>
+        <div data-role="content"> 
+            <form id="edit-radiology-clinic-form" method="post">
+                <div class="flex-container">           
+                    <div class="flex-item-small-form">
+                        <label for="edit-xray-area" class="green">Area for X-Ray</label>
+                        <select name="edit-xray-area" id="edit-xray-area" data-mini="true">
+                            <optgroup label="Spine">
+                                <option value="Cervical Spine">Cervical Spine</option>
+                                <option value="Lumbar Spine">Lumbar Spine</option>
+                                <option value="Sacrum">Sacrum</option>
+                            </optgroup>
+                            <optgroup label="Head/Neck">
+                                <option value="Head">Head</option>
+                                <option value="Neck">Neck</option>
+                                <option value="Orbit">Orbit</option>
+                                <option value="Sinus">Sinus</option>
+                                <option value="Parotid">Parotid</option>
+                            </optgroup>    
+                            <optgroup label="Extremity">
+                                <option value="Shoulder">Shoulder</option>
+                                <option value="Humerus">Humerus</option>
+                                <option value="Elbow">Elbow</option>
+                                <option value="Finger">Finger</option>
+                                <option value="Hip">Hip</option>
+                            </optgroup>
+                            <optgroup label="Body/Abdomen">
+                                <option value="Cardiac">Cardiac</option>
+                                <option value="Chest">Chest</option>
+                                <option value="Abdomen">Abdomen</option>
+                                <option value="Pelvis">Pelvis</option>
+                            </optgroup>
+                        </select>                           
+                    </div>
+                    <div class="flex-item-small-form">
+                        <label for="edit-xray-type" class="green">Type of X-Ray</label>
+                        <select name="edit-xray-type" id="edit-xray-type" data-mini="true">
+                            <option value="MRI">MRI</option>
+                            <option value="MRA">MRA</option>
+                            <option value="MRV">MRV</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="flex-container">
+                    <div class="flex-item-small-form">
+                        <label for="edit-contrast" class="green">Contrast</label>
+                        <select name="edit-contrast" id="edit-contrast" data-mini="true">
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+                        </select> 
+                    </div>                
+                    <div class="flex-item-small-form">
+                        <div id="edit-hidden-side" hidden>
+                            <p id="edit-side-error"></p>
+                            <label for="edit-side" class="green">Side</label>
+                            <select name="edit-side" id="edit-side" data-mini="true">
+                                <option value="Left">Left</option>
+                                <option value="Right">Right</option>
+                                <option value="Bi">Bi</option>
+                            </select> 
+                        </div>
+                    </div>
+                </div>
+                <div class="flex-container">
+                    <div class="flex-item-small-form">
+                        <label for="edit-pacemaker" class="green">Pacemaker</label>
+                        <select name="edit-pacemaker" id="edit-pacemaker" data-mini="true">
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+                        </select> 
+                    </div>
+                    <div class="flex-item-small-form">
+                        <label for="edit-sedation" class="green">Sedation</label>
+                        <select name="edit-sedation" id="edit-sedation" data-mini="true">
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="flex-container">                
+                    <div class="flex-item-small-form">
+                        <label for="edit-claustrophobia" class="green">Claustrophobia</label>
+                        <select name="edit-claustrophobia" id="edit-claustrophobia" data-mini="true">
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+                        </select>
+                    </div>
+                    <div class="flex-item-small-form">
+                        <label for="edit-metal" class="green">Metal in Body</label>
+                        <select name="edit-metal" id="edit-metal" data-mini="true">
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="edit-hidden-metal-area" hidden>
+                    <p class="green">Metal Area</p>
+                    <p id="edit-metal-area-error"></p>
+                    <input type="text" id="edit-metal-area">
+                </div>
+                <p class="green">Notes</p>
+                <textarea id="edit-radiology-notes"></textarea>
+                <p id="edit-radiology-submit-error"></p>
+                <button id="edit-radiology-submit-button" data-theme="e" data-inline="true">UPDATE</button>        
+            </form>
+        </div>
+    </div>
+</div>
 <script>
 
     var recordId;
@@ -86,7 +199,7 @@
             if(data === "none") {
                 addError("#radiology-record-error", "An unexpected error occurred");
             } else {
-                removeError("#radiology-clinic-record-error");
+                removeError("#radiology-record-error");
                 //get data from response
                 let dateCreated = data.dateCreated;
                 let createdBy = data.createdBy;
@@ -96,9 +209,11 @@
                 area === "Finger" || area === "Hip") {
                     //if ceratin areas selected, show side of body selection
                     $("#view-hidden-side").show();
+                    $("#edit-hidden-side").show();
                 } else {
                     //if none selected, hide 
                     $("#view-hidden-side").hide();
+                    $("#edit-hidden-side").hide();
                 }
                 let xrayType = data.xrayType;
                 let contrast = booleanToString(data.contrast);
@@ -107,12 +222,14 @@
                 let sedation = booleanToString(data.sedation);
                 let claustrophobia = booleanToString(data.claustrophobia);
                 let metal = booleanToString(data.metal);
-                if(metal) {
+                if(metal === "Yes") {
                     //if yes selected, show other area input field
                     $("#view-hidden-metal-area").show();
+                    $("#edit-hidden-metal-area").show();
                 } else {
                     //if no selected, hide other area
                     $("#view-hidden-metal-area").hide();
+                    $("#edit-hidden-metal-area").hide();
                 }
                 let metalArea = data.metalArea;
                 let notes = data.notes;
@@ -133,73 +250,90 @@
                 $("#view-metal-area").text(metalArea);
                 $("#view-radiology-notes").text(notes);
                 
-                
-                $("#edit-created-by-radiology").val();
-                $("#edit-created-date-radiology").val();
-                $("#edit-xray-area").val();
-                $("#edit-xray-type").val();
-                $("#edit-contrast").val();
-                $("#edit-side").val();
-                $("#edit-pacemaker").val();
-                $("#edit-sedation").val();
-                $("#edit-claustrophobia").val();
-                $("#edit-metal").val();
-                $("#edit-metal-area").val();
-                $("#edit-radiology-notes").val();
-
+                $("#edit-xray-area").val(area);
+                $("#edit-xray-type").val(xrayType);
+                $("#edit-contrast").val(contrast);
+                $("#edit-side").val(side);
+                $("#edit-pacemaker").val(pacemaker);
+                $("#edit-sedation").val(sedation);
+                $("#edit-claustrophobia").val(claustrophobia);
+                $("#edit-metal").val(metal);
+                $("#edit-metal-area").val(metalArea);
+                $("#edit-radiology-notes").val(notes);
         
             }
         
         });// end post */
     } //updateViewRadiologyRecord
 
-    $("#edit-radiology-submit-button").click(function() {
+    $("#edit-radiology-submit-button").click(function(event) {
+        event.preventDefault()
         //remove all previous errors
         removeError(".error");  
-        //remove success message
-        $("#macular-record-success").remove();
          //get details from inputs
-         let LVARangeWeeks = $("#edit-lva-range-weeks").val();
-         let LVARangeMonths = $("#edit-lva-range-months").val();
-         let testRequired = $("#edit-test-required").find(":selected").text();
-         let surgery = $("#edit-macular-surgery").find(":checked").val(); 
-         let notes = $("#edit-macular-notes").val();
+        let area = $("#edit-xray-area").val();
+        let xrayType = $("#edit-xray-type").val();
+        let contrast = stringToBoolean($("#edit-contrast").val());
+        let side = $("#edit-side").val();
+        let pacemaker = stringToBoolean($("#edit-pacemaker").val());
+        let sedation = stringToBoolean($("#edit-sedation").val());
+        let claustrophobia = stringToBoolean($("#edit-claustrophobia").val());
+        let metal = stringToBoolean($("#edit-metal").val());
+        let metalArea = $("#edit-metal-area").val();
+        let notes = $("#edit-radiology-notes").val();
          
          //form validation
-        if(LVARangeWeeks === "") {
-            addError("#edit-lva-range-weeks-error", "Please enter a number");
+        if(metalArea === "") {
+            addError("#edit-metal-area-error", "Please enter an area");
         } else {
-            removeError("#edit-lva-range-weeks-error");
-        }  
-        if(LVARangeWeeks < 0) {
-            addError("#edit-lva-range-weeks-error", "Can not be negative value");
-        } else {
-            removeError("#edit-lva-range-weeks-error");
-        }  
-        if(LVARangeMonths === "") {
-            addError("#edit-lva-range-months-error", "Please enter a number");
-        } else {
-            removeError("#edit-lva-range-months-error");
+            removeError("#edit-metal-area-error");
         } 
-        if(LVARangeMonths < 0) {
-            addError("#edit-lva-range-months-error", "Can not be negative value");
-        } else {
-            removeError("#edit-lva-range-months-error");
+        //only validate side if not hidden
+        if(!$("#edit-hidden-side").is(":hidden")) {
+            if(!side) {
+                addError("#edit-side-error", "Please specify side");
+            } else {
+                removeError("#edit-side-error");
+            }
         }
-
         //post to backend only if no errors exist
         if(!($(".error").length)) {
-         $.post("/backend/medical-record", {type: "updateMacularRecord", patientId:patientId, recordId:recordId,
-         LVARangeWeeks:LVARangeWeeks, LVARangeMonths:LVARangeMonths, testRequired:testRequired, 
-         surgery:surgery, notes:notes})
+         $.post("/backend/medical-record", {type: "updateRadiologyRecord", patientId:patientId, recordId:recordId,
+         area:area, xrayType:xrayType, contrast:contrast, side:side, pacemaker:pacemaker,
+         sedation:sedation, claustrophobia:claustrophobia, metal:metal, metalArea:metalArea, notes:notes})
          .done(function(data) {
              console.log(data);
              if(data === "success") {
                  window.location = `/patient/profile/?id=${patientId}&msg=success`;
              } else {
-                 addError("#edit-macular-submit-error", "An unexpected error occurred");
+                 addError("#edit-radiology-submit-error", "An unexpected error occurred");
              }
          })
         } //end if
-    })
+    }) //end post
+
+    //show hidden side field if certain body area is selected
+    $("#edit-xray-area").change(function() {
+        let value = $(this).find(":selected").val();
+        
+        if(value === "Shoulder" || value === "Humerus" || value === "Elbow" || 
+        value === "Finger" || value === "Hip") {
+            //if ceratin areas selected, show side of body selection
+            $("#edit-hidden-side").show();
+        } else {
+            //if none selected, hide 
+            $("#edit-hidden-side").hide();
+        }
+    });
+
+    $("#edit-metal").change(function() {
+        let value = $(this).find(":checked").val();
+        if(value === "Yes") {
+            //if yes selected, show other area input field
+            $("#edit-hidden-metal-area").show();
+        } else {
+            //if no selected, hide other area
+            $("#edit-hidden-metal-area").hide();
+        }
+    });
 </script>

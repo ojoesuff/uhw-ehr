@@ -136,7 +136,8 @@
         });
     } //updateViewMacularRecord
 
-    $("#edit-macular-clinic-submit-button").click(function() {
+    $("#edit-macular-clinic-submit-button").click(function(event) {
+        event.preventDefault();
         //remove all previous errors
         removeError(".error");  
         //remove success message

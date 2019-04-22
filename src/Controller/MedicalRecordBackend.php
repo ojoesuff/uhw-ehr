@@ -234,7 +234,6 @@ class MedicalRecordBackend extends AbstractController {
                     $testRequired = $request->get("testRequired");
                     $surgery = $request->get("surgery");
                     $notes = $request->get("notes");
-                    $dateCreated = date_create();
 
                     $record = $entityManager->getRepository(MacularClinicRecord::class)->findOneBy([
                         "id" => $recordId
@@ -296,7 +295,150 @@ class MedicalRecordBackend extends AbstractController {
                     } 
 
                     break;
-                        
+
+                case "updateRadiologyRecord":
+
+                    $recordId = $request->get("recordId");
+
+                    $area = $request->get("area");
+                    $xrayType = $request->get("xrayType");
+                    $contrast = $request->get("contrast");
+                    $side = $request->get("side");
+                    $pacemaker = $request->get("pacemaker");
+                    $sedation = $request->get("sedation");
+                    $claustrophobia = $request->get("claustrophobia");
+                    $metal = $request->get("metal");
+                    $metalArea = $request->get("metalArea");
+                    $notes = $request->get("notes");
+
+                    $record = $entityManager->getRepository(RadiologyRecord::class)->findOneBy([
+                        "id" => $recordId
+                    ]);
+
+                    if($record) {
+                        //set values and update DB
+                        $record->setArea($area);
+                        $record->setXrayType($xrayType);
+                        $record->setContrast($contrast);
+                        $record->setSide($side);
+                        $record->setPacemaker($pacemaker);
+                        $record->setSedation($sedation);
+                        $record->setClaustrophobia($claustrophobia);
+                        $record->setMetal($metal);
+                        $record->setMetalArea($metalArea);
+                        $record->setNotes($notes);
+
+                        $entityManager->flush();
+
+                        return new Response("success");
+                    } else {
+                        return new Response("error");
+                    }
+
+                    break;
+
+                case "viewAandERecord" :
+
+                    $recordId = $request->get("recordId");
+
+                    $record = $entityManager->getRepository(AAndERecord::class)->findOneBy([
+                        "id" => $recordId
+                    ]);
+
+                    if($record) {
+                        $date = $record->getDateCreated();
+                        $dateCreated = $date->format("d M Y, H:i");
+                        $staff = $record->getStaffId();
+                        $firstName = $staff->getFirstName();
+                        $lastName = $staff->getLastName();
+                        $createdBy = $firstName." ".$lastName;
+                        $notes = $record->getNotes();
+                        if(!$notes) {
+                            $notes = "";
+                        }
+                        $date = $record->getArrivalDate();
+                        $arrivalDate = $date->format("d M Y");
+                        $formattedArrivalDate = $date->format("Y-m-d");
+                        $arrivalTime = $date->format("H:i");
+                        $locationOccurred = $record->getLocationOccurred();
+                        $description = $record->getDescription();
+                        $injuryArea = $record->getInjuryArea();
+                        $typeOfInjury = $record->getTypeOfInjury();
+                        $xrayRequired = $record->getXrayRequired();
+                        $vomitting = $record->getVomitting();
+                        $medication = $record->getMedication();
+                        $medicationAmount = $record->getMedicationAmount();
+                        if(!$medicationAmount) {
+                            $medicationAmount = "";
+                        }
+                        $medicationName = $record->getMedicationName(); 
+                        if(!$medicationName) {
+                            $medicationName = "";
+                        }                      
+                        $surgery = $record->getSurgery();
+                        $priority = $patient->getPriority();
+
+                        $recordArray = array("dateCreated" => $dateCreated,
+                        "createdBy" => $createdBy, "notes" => $notes, "formattedArrivalDate" => $formattedArrivalDate,
+                        "arrivalDate" => $arrivalDate, "arrivalTime" => $arrivalTime,
+                        "locationOccurred" => $locationOccurred, "description" => $description,
+                        "injuryArea" => $injuryArea, "typeOfInjury" => $typeOfInjury, "medicationName" => $medicationName,
+                        "xrayRequired" => $xrayRequired, "vomitting" => $vomitting, "priority" => $priority,
+                        "medication" => $medication, "medicationAmount" => $medicationAmount, "surgery" => $surgery
+                        );
+
+                        return new JsonResponse($recordArray);                        
+                    } 
+
+                    break;
+
+                case "updateAAndERecord" :
+
+                    $recordId = $request->get("recordId");
+
+                    $locationOccurred = $request->get("locationOccurred");
+                    $description = $request->get("description");
+                    $injuryArea = $request->get("injuryArea");
+                    $typeOfInjury = $request->get("typeOfInjury");
+                    $medication = $request->get("medication");
+                    $medicationName = $request->get("medicationName");
+                    $medicationAmount = $request->get("medicationAmount");
+                    $xrayRequired = $request->get("xrayRequired");
+                    $vomitting = $request->get("vomitting");
+                    $priority = $request->get("priority");
+                    $surgery = $request->get("surgery");
+                    $formattedArrivalDate = date_create($request->get("formattedArrivalDate"));
+                    $notes = $request->get("notes");
+
+                    $record = $entityManager->getRepository(AAndERecord::class)->findOneBy([
+                        "id" => $recordId
+                    ]);
+
+                    if($record) {
+                        //set values and update DB
+                        $record->setLocationOccurred($locationOccurred);
+                        $record->setDescription($description);
+                        $record->setInjuryArea($injuryArea);
+                        $record->setTypeOfInjury($typeOfInjury);
+                        $record->setMedication($medication);
+                        $record->setMedicationName($medicationName);
+                        $record->setMedicationAmount($medicationAmount);
+                        $record->setXrayRequired($xrayRequired);
+                        $record->setVomitting($vomitting);
+                        $record->setSurgery($surgery);
+                        $record->setArrivalDate($formattedArrivalDate);
+                        $record->setNotes($notes);
+                        $patient->setPriority($priority);
+
+                        $entityManager->flush();
+
+                        return new Response("success");
+                    } else {
+                        return new Response("error");
+                    }
+
+                    break;
+
 
             } //end switch
         } //end if/else
