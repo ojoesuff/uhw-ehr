@@ -10,6 +10,7 @@
     </div>
 </div>
 {% include './medical-records/macular-record.html.twig' %}
+{% include './medical-records/radiology-record.html.twig' %}
 
 <script>
      //get parameter from URL seen at https://www.w3docs.com/snippets/javascript/how-to-get-current-url-in-javascript.html
@@ -43,7 +44,6 @@
                 $(".name").text("An unexpected error occurred");
                 $(".name").addClass("error");
             } else {
-                console.log(data);
                 //if json object has items in it
                 if(Object.keys(data).length > 0) {
                     //get records from JSON response
@@ -56,7 +56,7 @@
                         updateRecordsInDOM(macularRecords, "Ophthalmology", "ophthalmology", "Macular");       
                     }
                     if(radiologyRecords) {
-                    updateRecordsInDOM(radiologyRecords, "Radiology", "radiology", "Macular");       
+                    updateRecordsInDOM(radiologyRecords, "Radiology", "radiology", "Radiology");       
                     }
                     if(aAndERecords) {
                         updateRecordsInDOM(aAndERecords, "Accident and Emergency", "aande", "Macular");       
@@ -86,7 +86,7 @@
             let staffName = record.staffName;
             let date = record.date;
             let time = record.time;
-            let htmlString = `<a class='medical-record-link' href='#macular-clinic-record' 
+            let htmlString = `<a class='medical-record-link' href='#edit-${recordType}-record' 
             onmousedown='updateView${recordType}Record(${recordId})' data-transition='pop'>
             <p class="input-style-dark">${department}, Dr. ${staffName}, ${date}, ${time}</p></a>`;
 

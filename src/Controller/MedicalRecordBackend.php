@@ -193,6 +193,7 @@ class MedicalRecordBackend extends AbstractController {
 
                     return new JsonResponse($recordsArray);
                     break;
+
                 case "viewMacularRecord":
                     
                     $recordId = $request->get("recordId");
@@ -203,7 +204,7 @@ class MedicalRecordBackend extends AbstractController {
 
                     if($record) {
                         $date = $record->getDateCreated();
-                        $dateCreated = $date->format("d M Y, h:m");
+                        $dateCreated = $date->format("d M Y, H:i");
                         $staff = $record->getStaffId();
                         $firstName = $staff->getFirstName();
                         $lastName = $staff->getLastName();
@@ -214,15 +215,88 @@ class MedicalRecordBackend extends AbstractController {
                         $surgery = $record->getSurgery();
                         $notes = $record->getNotes();
 
-                        $recordArray = array("dateCreated" => $dateCreated, "dateCreated" => $dateCreated,
+                        $recordArray = array("dateCreated" => $dateCreated,
                         "createdBy" => $createdBy, "LVARangeWeeks" => $LVARangeWeeks,
                         "LVARangeMonths" => $LVARangeMonths, "testRequired" => $testRequired,
                         "surgery" => $surgery, "notes" => $notes);
 
-                        return new JsonResponse($recordArray);
-                        
+                        return new JsonResponse($recordArray);                        
                     } 
 
+                    break;
+                
+                case "updateMacularRecord" :
+                    
+                    $recordId = $request->get("recordId");
+
+                    $LVARangeWeeks = $request->get("LVARangeWeeks");
+                    $LVARangeMonths = $request->get("LVARangeMonths");
+                    $testRequired = $request->get("testRequired");
+                    $surgery = $request->get("surgery");
+                    $notes = $request->get("notes");
+                    $dateCreated = date_create();
+
+                    $record = $entityManager->getRepository(MacularClinicRecord::class)->findOneBy([
+                        "id" => $recordId
+                    ]);
+
+                    if($record) {
+                        //set values and update DB
+                        $record->setLVARangeWeeks($LVARangeWeeks);
+                        $record->setLVARangeMonths($LVARangeWeeks);
+                        $record->setTestRequired($testRequired);
+                        $record->setSurgery($surgery);
+                        $record->setNotes($notes);
+
+                        $entityManager->flush();
+
+                        return new Response("success");
+                    } else {
+                        return new Response("error");
+                    }
+
+                    break;
+
+                case "viewRadiologyRecord":
+                    
+                    $recordId = $request->get("recordId");
+
+                    $record = $entityManager->getRepository(RadiologyRecord::class)->findOneBy([
+                        "id" => $recordId
+                    ]);
+
+                    if($record) {
+                        $date = $record->getDateCreated();
+                        $dateCreated = $date->format("d M Y, H:i");
+                        $staff = $record->getStaffId();
+                        $firstName = $staff->getFirstName();
+                        $lastName = $staff->getLastName();
+                        $createdBy = $firstName." ".$lastName;
+
+                        $area = $record->getArea();
+                        $xrayType = $record->getXrayType();
+                        $contrast = $record->getContrast();
+                        $side = $record->getSide();
+                        $pacemaker = $record->getPacemaker();
+                        $sedation = $record->getSedation();
+                        $claustrophobia = $record->getClaustrophobia();
+                        $metal = $record->getMetal();
+                        $metalArea = $record->getMetalArea();
+                        $notes = $record->getNotes();
+
+                        $recordArray = array("dateCreated" => $dateCreated,
+                        "createdBy" => $createdBy, "area" => $area,
+                        "xrayType" => $xrayType, "contrast" => $contrast,
+                        "side" => $side, "pacemaker" => $pacemaker,
+                        "sedation" => $sedation, "claustrophobia" => $claustrophobia,
+                        "metal" => $metal, "notes" => $notes, "metalArea" => $metalArea
+                        );
+
+                        return new JsonResponse($recordArray);                        
+                    } 
+
+                    break;
+                        
 
             } //end switch
         } //end if/else

@@ -1,0 +1,205 @@
+<div data-role="page" data-dialog="true" id="edit-Radiology-record">
+    <div data-role="header">
+        <h4 class="light-grey light-text">Radiology</h4>   
+        <h4 class="light-grey light-text">General Admission</h4>   
+        <h4 class="light-grey light-text name"></h4>      
+    </div>
+    <div data-role="content"> 
+        <form id="edit-radiology-clinic-form" method="post">
+        <div class="flex-container">
+            <div class="flex-item-small-form">
+                <p id="radiology-record-error"></p>
+                <p class="green">Created by</p>
+                <p class="input-style-light" id="view-created-by-radiology"></p>
+            </div>
+            <div class="flex-item-small-form">
+                <p class="green">Date Created</p>
+                <p class="input-style-light" id="view-created-date-radiology"></p>
+            </div>
+        </div>
+        <div class="flex-container">           
+                <div class="flex-item-small-form">
+                    <p class="green">Area for X-Ray</p>
+                    <p class="input-style-light" id="view-xray-area"></p>                                       
+                </div>
+                <div class="flex-item-small-form">
+                    <p class="green">Type of X-Ray</p>
+                    <p class="input-style-light" id="view-xray-type"></p> 
+                </div>
+            </div>
+            <div class="flex-container">
+                <div class="flex-item-small-form">
+                    <p class="green">Contrast</p>
+                    <p class="input-style-light" id="view-contrast"></p>
+                </div>                
+                <div class="flex-item-small-form">
+                    <div id="view-hidden-side" hidden>
+                        <p class="green">Side</p>
+                        <p class="input-style-light" id="view-side"></p>
+                    </div>
+                </div>
+            </div>
+            <div class="flex-container">
+                <div class="flex-item-small-form">
+                    <p class="green">Pacemaker</p>
+                    <p class="input-style-light" id="view-pacemaker"></p>
+                </div>
+                <div class="flex-item-small-form">
+                    <p class="green">Sedation</p>
+                    <p class="input-style-light" id="view-sedation"></p>
+                </div>
+            </div>
+            <div class="flex-container">                
+                <div class="flex-item-small-form">
+                    <p class="green">Claustrophobia</p>
+                    <p class="input-style-light" id="view-claustrophobia"></p>
+                </div>
+                <div class="flex-item-small-form">
+                    <p class="green">Metal in Body</p>
+                    <p class="input-style-light" id="view-metal"></p>
+                </div>
+            </div>
+            <div id="view-hidden-metal-area" hidden>
+                <p class="green">Metal Area</p>
+                <p id="metal-area-error"></p>
+                <p class="input-style-light" id="view-metal-area"></p>
+            </div>
+            <p class="green">Notes</p>
+            <p class="input-style-light" id="view-radiology-notes"></p>
+            <p id="radiology-submit-error"></p>
+            <button id="edit-radiology-submit-button" data-theme="e" data-inline="true">UPDATE</button>        
+        </form>
+    </div>
+</div> <!--end edit-macular-record-->
+<script>
+
+    var recordId;
+
+    function updateViewRadiologyRecord(recordId) {
+
+        this.recordId = recordId;
+        
+        $.post("/backend/medical-record", {type: "viewRadiologyRecord", patientId:patientId,
+        recordId:recordId})
+        .done(function(data) {
+            console.log(data);
+            if(data === "none") {
+                addError("#radiology-record-error", "An unexpected error occurred");
+            } else {
+                removeError("#radiology-clinic-record-error");
+                //get data from response
+                let dateCreated = data.dateCreated;
+                let createdBy = data.createdBy;
+                let area = data.area;
+                //show side data if certain value for area
+                if(area === "Shoulder" || area === "Humerus" || area === "Elbow" || 
+                area === "Finger" || area === "Hip") {
+                    //if ceratin areas selected, show side of body selection
+                    $("#view-hidden-side").show();
+                } else {
+                    //if none selected, hide 
+                    $("#view-hidden-side").hide();
+                }
+                let xrayType = data.xrayType;
+                let contrast = booleanToString(data.contrast);
+                let side = data.side;
+                let pacemaker = booleanToString(data.pacemaker);
+                let sedation = booleanToString(data.sedation);
+                let claustrophobia = booleanToString(data.claustrophobia);
+                let metal = booleanToString(data.metal);
+                if(metal) {
+                    //if yes selected, show other area input field
+                    $("#view-hidden-metal-area").show();
+                } else {
+                    //if no selected, hide other area
+                    $("#view-hidden-metal-area").hide();
+                }
+                let metalArea = data.metalArea;
+                let notes = data.notes;
+                if(!notes) {
+                    notes = "";
+                }
+                //update DOM with data 
+                $("#view-created-by-radiology").text(createdBy);
+                $("#view-created-date-radiology").text(dateCreated);
+                $("#view-xray-area").text(area);
+                $("#view-xray-type").text(xrayType);
+                $("#view-contrast").text(contrast);
+                $("#view-side").text(side);
+                $("#view-pacemaker").text(pacemaker);
+                $("#view-sedation").text(sedation);
+                $("#view-claustrophobia").text(claustrophobia);
+                $("#view-metal").text(metal);
+                $("#view-metal-area").text(metalArea);
+                $("#view-radiology-notes").text(notes);
+                
+                
+                $("#edit-created-by-radiology").val();
+                $("#edit-created-date-radiology").val();
+                $("#edit-xray-area").val();
+                $("#edit-xray-type").val();
+                $("#edit-contrast").val();
+                $("#edit-side").val();
+                $("#edit-pacemaker").val();
+                $("#edit-sedation").val();
+                $("#edit-claustrophobia").val();
+                $("#edit-metal").val();
+                $("#edit-metal-area").val();
+                $("#edit-radiology-notes").val();
+
+        
+            }
+        
+        });// end post */
+    } //updateViewRadiologyRecord
+
+    $("#edit-radiology-submit-button").click(function() {
+        //remove all previous errors
+        removeError(".error");  
+        //remove success message
+        $("#macular-record-success").remove();
+         //get details from inputs
+         let LVARangeWeeks = $("#edit-lva-range-weeks").val();
+         let LVARangeMonths = $("#edit-lva-range-months").val();
+         let testRequired = $("#edit-test-required").find(":selected").text();
+         let surgery = $("#edit-macular-surgery").find(":checked").val(); 
+         let notes = $("#edit-macular-notes").val();
+         
+         //form validation
+        if(LVARangeWeeks === "") {
+            addError("#edit-lva-range-weeks-error", "Please enter a number");
+        } else {
+            removeError("#edit-lva-range-weeks-error");
+        }  
+        if(LVARangeWeeks < 0) {
+            addError("#edit-lva-range-weeks-error", "Can not be negative value");
+        } else {
+            removeError("#edit-lva-range-weeks-error");
+        }  
+        if(LVARangeMonths === "") {
+            addError("#edit-lva-range-months-error", "Please enter a number");
+        } else {
+            removeError("#edit-lva-range-months-error");
+        } 
+        if(LVARangeMonths < 0) {
+            addError("#edit-lva-range-months-error", "Can not be negative value");
+        } else {
+            removeError("#edit-lva-range-months-error");
+        }
+
+        //post to backend only if no errors exist
+        if(!($(".error").length)) {
+         $.post("/backend/medical-record", {type: "updateMacularRecord", patientId:patientId, recordId:recordId,
+         LVARangeWeeks:LVARangeWeeks, LVARangeMonths:LVARangeMonths, testRequired:testRequired, 
+         surgery:surgery, notes:notes})
+         .done(function(data) {
+             console.log(data);
+             if(data === "success") {
+                 window.location = `/patient/profile/?id=${patientId}&msg=success`;
+             } else {
+                 addError("#edit-macular-submit-error", "An unexpected error occurred");
+             }
+         })
+        } //end if
+    })
+</script>

@@ -329,9 +329,9 @@
                     <fieldset data-theme="e" data-role="controlgroup" name="macular-surgery" id="macular-surgery" data-type="horizontal">
                         <legend class="green">Surgery</legend>
                         <p id="macular-surgery-error"></p>
-                        <input type="radio" name="macular-surgery" id="macular-surgery-urgent" value="urgent">
+                        <input type="radio" name="macular-surgery" id="macular-surgery-urgent" value="Urgent">
                         <label for="macular-surgery-urgent">Urgent</label>
-                        <input type="radio" name="macular-surgery" id="macular-surgery-routine" value="routine">
+                        <input type="radio" name="macular-surgery" id="macular-surgery-routine" value="Routine">
                         <label for="macular-surgery-routine">Routine</label>
                     </fieldset>
                 </div>
@@ -650,18 +650,6 @@
             $("#hidden-metal-area").hide();
         }
     })
-
-    //removes error classe
-    function removeError(target) {
-        $(target).text("");
-        $(target).removeClass(); 
-    }
-
-    //add error class and message
-    function addError(target, msg) {
-        $(target).addClass("error");
-        $(target).text(msg);
-    }
 
 </script>
 </body>

@@ -1,4 +1,4 @@
-<div data-role="page" data-dialog="true" id="macular-clinic-record">
+<div data-role="page" data-dialog="true" id="edit-Macular-record">
     <div data-role="header">
         <h4 class="light-grey light-text">Ophthalmology</h4>   
         <h4 class="light-grey light-text">Macular Clinic</h4>   
@@ -6,49 +6,183 @@
     </div>
     <div data-role="content">         
         <div class="flex-container">
+            
             <div class="flex-item-small-form">
+                <p id="macular-clinic-record-error"></p>
                 <p class="green">Created by</p>
-                <p class="input-style-light" id="view-created-by">Peter Smith</p>
+                <p class="input-style-light" id="view-created-by-macular"></p>
             </div>
             <div class="flex-item-small-form">
                 <p class="green">Date Created</p>
-                <p class="input-style-light" id="view-lva-range-months">25 May 1986, 15:30</p>
+                <p class="input-style-light" id="view-created-date-macular"></p>
             </div>
         </div>
         <p class="green">LVA/Contact Lens/Orthoptic Range</p>
         <div class="flex-container">
             <div class="flex-item-small-form">
                 <p class="green">Weeks</p>
-                <p class="input-style-light" id="view-lva-range-weeks">20</p>
+                <p class="input-style-light" id="view-lva-range-weeks"></p>
             </div>
             <div class="flex-item-small-form">
                 <p class="green">Months</p>
-                <p class="input-style-light" id="view-lva-range-months">20</p>
+                <p class="input-style-light" id="view-lva-range-months"></p>
             </div>
         </div>
         <div class="flex-container">
             <div class="flex-item-small-form">
                 <p class="green">Test Required</p>
-                <p class="input-style-light" id="view-test-required">OCT/FFA/Visual Fields</p>
+                <p class="input-style-light" id="view-test-required"></p>
             </div>
             <div class="flex-item-small-form">
                 <p class="green">Surgery</p>
-                <p class="input-style-light" id="view-macular-surgery">Urgent</p>
+                <p class="input-style-light" id="view-macular-surgery"></p>
             </div>
         </div>
         <p class="green">Notes</p>
-        <p class="input-style-light" id="view-macular-notes"><p></p>     
-        <button id="macular-clinic-record-edit" data-inline="true">EDIT</button>   
+        <p class="input-style-light" id="view-macular-notes"><p></p>  
+        <a id="edit-macular-record-button" href="#edit-macular-record" class="ui-shadow ui-btn ui-corner-all ui-btn-inline" data-transition="pop">EDIT</a>
     </div>
-</div>
+</div><!--end macular-clinic-record-->
+
+<div data-role="page" data-dialog="true" id="edit-macular-record">
+    <div data-role="header">
+        <h4 class="light-grey light-text">Ophthalmology</h4>   
+        <h4 class="light-grey light-text">Macular Clinic</h4>   
+        <h4 class="light-grey light-text name"></h4>      
+    </div>
+    <div data-role="content">  
+        <form id="macular-clinic-form" method="post">
+            <p id="macular-record-success"></p>
+            <p class="green">LVA/Contact Lens/Orthoptic Range</p>
+            <div class="flex-container">
+                <div class="flex-item-small-form">
+                    <p class="green">Weeks</p>
+                    <p id="edit-lva-range-weeks-error"></p>
+                    <input type="number" id="edit-lva-range-weeks">
+                </div>
+                <div class="flex-item-small-form">
+                    <p class="green">Months</p>
+                    <p id="edit-lva-range-months-error"></p>
+                    <input type="number" id="edit-lva-range-months">
+                </div>
+            </div>
+            <div class="flex-container">
+                <div class="flex-item-small-form">
+                    <p class="green">Test Required</p>
+                    <select name="edit-test-required" id="edit-test-required" data-mini="true">
+                        <option value="none" selected disabled>Choose one</option>
+                        <option value="OCT/FFA/Visual Fields">OCT/FFA/Visual Fields</option>
+                        <option value="Laser">Laser</option>
+                        <option value="Macular Injections">Macular Injections</option>
+                    </select>
+                </div>
+                <div class="flex-item-small-form">
+                    <p class="green">Surgery</p>
+                    <select name="edit-macular-surgery" id="edit-macular-surgery" data-mini="true">
+                        <option value="Urgent">Urgent</option>
+                        <option value="Routine">Routine</option>
+                    </select>
+                </div>
+            </div>
+            <p class="green">Notes</p>
+            <textarea id="edit-macular-notes"></textarea>
+            <p id="edit-macular-submit-error"></p>
+            <button id="edit-macular-clinic-submit-button" data-inline="true" data-theme="e">UPDATE</button>
+        </form>
+    </div>
+</div> <!--end edit-macular-record-->
 <script>
 
+    var recordId;
+
     function updateViewMacularRecord(recordId) {
+
+        this.recordId = recordId;
         
         $.post("/backend/medical-record", {type: "viewMacularRecord", patientId:patientId,
         recordId:recordId})
         .done(function(data) {
-            console.log(data);
-        })
-    }
+            if(data === "none") {
+                addError("#macular-clinic-record-error", "An unexpected error occurred");
+            } else {
+                removeError("#macular-clinic-record-error");
+                //get data from response
+                let dateCreated = data.dateCreated;
+                let createdBy = data.createdBy;
+                let LVARangeWeeks = data.LVARangeWeeks;
+                let LVARangeMonths = data.LVARangeMonths;
+                let testRequired = data.testRequired;
+                let surgery = data.surgery;
+                let notes = data.notes;
+                if(!notes) {
+                    notes = "";
+                }
+                //update DOM with data
+                $("#view-created-by-macular").text(createdBy);
+                $("#view-created-date-macular").text(dateCreated);
+                $("#view-lva-range-weeks").text(LVARangeWeeks);
+                $("#view-lva-range-months").text(LVARangeMonths);
+                $("#view-test-required").text(testRequired);
+                $("#view-macular-surgery").text(surgery);
+                $("#view-macular-notes").text(notes); 
+
+                $("#edit-lva-range-weeks").val(LVARangeWeeks);
+                $("#edit-lva-range-months").val(LVARangeMonths);
+                $("#edit-test-required").val(testRequired);
+                $("#edit-macular-surgery").val(surgery);
+                $("#edit-macular-notes").val(notes);
+            }
+        
+        });
+    } //updateViewMacularRecord
+
+    $("#edit-macular-clinic-submit-button").click(function() {
+        //remove all previous errors
+        removeError(".error");  
+        //remove success message
+        $("#macular-record-success").remove();
+         //get details from inputs
+         let LVARangeWeeks = $("#edit-lva-range-weeks").val();
+         let LVARangeMonths = $("#edit-lva-range-months").val();
+         let testRequired = $("#edit-test-required").find(":selected").text();
+         let surgery = $("#edit-macular-surgery").find(":checked").val(); 
+         let notes = $("#edit-macular-notes").val();
+         
+         //form validation
+        if(LVARangeWeeks === "") {
+            addError("#edit-lva-range-weeks-error", "Please enter a number");
+        } else {
+            removeError("#edit-lva-range-weeks-error");
+        }  
+        if(LVARangeWeeks < 0) {
+            addError("#edit-lva-range-weeks-error", "Can not be negative value");
+        } else {
+            removeError("#edit-lva-range-weeks-error");
+        }  
+        if(LVARangeMonths === "") {
+            addError("#edit-lva-range-months-error", "Please enter a number");
+        } else {
+            removeError("#edit-lva-range-months-error");
+        } 
+        if(LVARangeMonths < 0) {
+            addError("#edit-lva-range-months-error", "Can not be negative value");
+        } else {
+            removeError("#edit-lva-range-months-error");
+        }
+
+        //post to backend only if no errors exist
+        if(!($(".error").length)) {
+         $.post("/backend/medical-record", {type: "updateMacularRecord", patientId:patientId, recordId:recordId,
+         LVARangeWeeks:LVARangeWeeks, LVARangeMonths:LVARangeMonths, testRequired:testRequired, 
+         surgery:surgery, notes:notes})
+         .done(function(data) {
+             console.log(data);
+             if(data === "success") {
+                 window.location = `/patient/profile/?id=${patientId}&msg=success`;
+             } else {
+                 addError("#edit-macular-submit-error", "An unexpected error occurred");
+             }
+         })
+        } //end if
+    })
 </script>

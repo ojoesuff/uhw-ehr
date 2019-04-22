@@ -6,6 +6,7 @@
         <h2 class="inline" id="name"></h2>
         <a href="#edit-profile" class="ui-shadow ui-btn ui-corner-all ui-btn-inline" data-transition="pop">EDIT</a>
         <p id="patientId"></p>
+        <h4 id="updated-success"></h4>
         <div class="width-240">
             <button>NEW RECORD</button>
         </div>
@@ -459,6 +460,12 @@
         let urlString = window.location.href;
         let url = new URL(urlString);
         var patientId = url.searchParams.get("id");
+        var msg = url.searchParams.get("msg");
+        if(msg === "success") {
+            $("#updated-success").text("Record successfully updated");
+        } else {
+            $("#updated-success").text("");
+        }
 
         getPatientDetails(patientId);
         getPatientOutstandingAppoint(patientId);
