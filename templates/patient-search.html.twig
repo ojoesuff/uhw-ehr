@@ -60,6 +60,7 @@
         <h3 class="light-grey light-text">Advanced Search Results</h3>        
     </div>
     <div data-role="content">
+        {% include './pagination/pagination.html.twig' %} 
         <input type="hidden" id="advanced-search-insert"> 
     </div>
 </div>
@@ -107,50 +108,7 @@
         }
     });
 
-    function advancedSearch(event) {
-        event.preventDefault();
-        let firstName = $("#first-name").val();
-        let middleNames = $("#middle-names").val();
-        let lastName = $("#last-name").val();
-        let dob = $("#dob").val();
-        let addressLine1 = $("#address-line1").val();
-        let addressLine2 = $("#address-line2").val();
-        let addressLine3 = $("#address-line3").val();
-        let email = $("#email").val();
-        let patientId = $("#patient-id").val();
-
-        $.post("/backend/search", {type: "advancedSearch", firstName: firstName,
-        middleNames:middleNames, lastName: lastName, dob: dob, addressLine1: addressLine1,
-        addressLine2: addressLine2, addressLine3: addressLine3, email: email, patientId: patientId})
-        .done(function(data) {
-            console.log(data);
-            $(".advanced-search-result").remove();
-            if(data === "none") {
-                $("<div class='advanced-search-result' data-theme='c'><h4>No results found</h4></div>").insertBefore("#advanced-search-insert");
-            } else {
-                data.forEach(function(patient) {
-                    let id = patient.id;
-                    let firstName = patient.firstName;
-                    let middleNames = patient.middleNames;
-                    let lastName = patient.lastName;
-                    let name = `${firstName}${middleNames ? " " + middleNames + " " : " " }${lastName ? " " + lastName + " " : " "}`;
-                    let address = patient.address;
-                    let addressLine1 = address[0];
-                    let addressLine2 = address[1];
-                    let addressLine3 = address[2];
-                    let county = patient.county;
-                    //change to blank string if no option selected
-                    if(county === "Choose option") {
-                        county = "";
-                    }
-                    let fullAddress = `${addressLine1} ${addressLine2} ${addressLine3} ${county}`;                        
-
-                    $(`<div class='advanced-search-result'><a class='search-result-link' onclick="window.location = '/patient/profile?id=${id}'" href='#'><p>${name}, ${fullAddress}, ${id}</p></a><hr></div>`)
-                    .insertBefore("#advanced-search-insert");
-                });
-            } 
-        })
-    }
+    
 </script>
 </body>
 </html>

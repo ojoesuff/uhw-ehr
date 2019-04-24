@@ -22,59 +22,53 @@ class PatientSearchBackend extends AbstractController {
 
         $type = $request->request->get("type");
 
-        if($type === "quickSearch") {
+        switch($type) {
 
-            $search = $request->request->get("search");
+            case "quickSearch":
 
-            $patients = $entityManager->getRepository(Patient::class)->findPatientsByName($search);
+                $search = $request->request->get("search");
 
-            if($patients) {
+                $patients = $entityManager->getRepository(Patient::class)->findPatientsByName($search);
 
-                $patientsArray = $this->filterPatientSearch($patients);
-
-                return new JsonResponse($patientsArray);
-            } else {
-                return new Response("none");
-            }           
-        }
-
-        if($type === "advancedSearch") {
-
-            $firstName = $request->request->get('firstName');
-            $middleNames = $request->request->get('middleNames');
-            $lastName = $request->request->get('lastName');
-            $email = $request->request->get('email');
-            $addressLine1 = $request->request->get('addressLine1');
-            $addressLine2 = $request->request->get('addressLine2');
-            $addressLine3 = $request->request->get('addressLine3');
-            //convert to DateTime object
-            $dob = date_create($request->request->get('dob')); 
-            $dobDefault = date_create("1000-01-01");
-            $patientId = $request->request->get("patientId");
-
-            //check if any fields have a value in them before quering DB
-            if(!empty($firstName) or !empty($middleNames) or !empty($lastName) or !empty($email) or !empty($patientId)
-            or !empty($addressLine1) or !empty($addressLine2) or !empty($addressLine3) or $dob > $dobDefault) {
-                
-                $patients = $entityManager->getRepository(Patient::class)->findPatientsAdvanced($firstName, 
-                $middleNames, $lastName, $email, $addressLine1, $addressLine2, $addressLine3, $dob, $patientId);
-
-                 if($patients) {
+                if($patients) {
 
                     $patientsArray = $this->filterPatientSearch($patients);
 
                     return new JsonResponse($patientsArray);
-                } else {
-                    return new Response("none");
-                } 
-            } else {
-                return new Response("none");
-            }
+                }
+                break;
+            case "advancedSearch": 
 
+                $firstName = $request->request->get('firstName');
+                $middleNames = $request->request->get('middleNames');
+                $lastName = $request->request->get('lastName');
+                $email = $request->request->get('email');
+                $addressLine1 = $request->request->get('addressLine1');
+                $addressLine2 = $request->request->get('addressLine2');
+                $addressLine3 = $request->request->get('addressLine3');
+                //convert to DateTime object
+                $dob = date_create($request->request->get('dob')); 
+                $dobDefault = date_create("1000-01-01");
+                $patientId = $request->request->get("patientId");
+
+                //check if any fields have a value in them before quering DB
+                if(!empty($firstName) or !empty($middleNames) or !empty($lastName) or !empty($email) or !empty($patientId)
+                or !empty($addressLine1) or !empty($addressLine2) or !empty($addressLine3) or $dob > $dobDefault) {
+                    
+                    $patients = $entityManager->getRepository(Patient::class)->findPatientsAdvanced($firstName, 
+                    $middleNames, $lastName, $email, $addressLine1, $addressLine2, $addressLine3, $dob, $patientId);
+
+                    if($patients) {
+
+                        $patientsArray = $this->filterPatientSearch($patients);
+
+                        return new JsonResponse($patientsArray);
+                    } 
+                }
             
         }
 
-        return new Response("default");
+        return new Response("none");
 
      }
 

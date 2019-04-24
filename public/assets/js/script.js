@@ -1,4 +1,4 @@
-//removes error classe
+//removes error class
 function removeError(target) {
     $(target).text("");
     $(target).removeClass(); 

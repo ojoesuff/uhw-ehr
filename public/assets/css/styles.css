@@ -38,7 +38,7 @@ amber = #FFAE56
     margin: 0 auto;
 }
 
-.box {
+.box {    
     background: #f9f9f9;
     box-shadow: 5px 5px 2px #c5c5c9;
     margin-top: 5rem;
@@ -46,7 +46,12 @@ amber = #FFAE56
     padding: 1rem;
     padding-bottom: 2rem;
 }
-
+.dark-green-box {
+    background: #387f5b;
+    color: white;
+    box-shadow: 5px 5px 2px #c5c5c9;
+    border-radius: 0.2rem;
+}
 #quick-search-results {
     background: #f9f9f9;
     margin: 0;
@@ -210,7 +215,15 @@ ul {
     color: #595959;
 }
 
+.float-left {
+    float:left;
+    margin: 0;
+}
 
+.float-right {
+    float:right;
+    margin: 0;
+}
 
 p {
     margin: 0.5vw;
@@ -237,6 +250,13 @@ p {
     color: #387f5b!important;
     text-decoration: none;
     font-weight: normal;
+}
+
+.page-change-link a, .page-change-link:link {
+    color: white!important;
+    text-decoration: none;
+    font-size: 1.4em;
+
 }
 
 

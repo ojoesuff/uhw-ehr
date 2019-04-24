@@ -1,0 +1,135 @@
+<div class="dark-green-box">
+    <div>
+        <select id="items-per-page" data-mini="true" data-role="none" class="inline float-left">
+                <option value="15">15</option>
+                <option value="25">25</option>
+                <option value="50">50</option>
+            </select>
+            <p class="inline">per page</p>
+            <p class="inline float-right"><span id="first-item">0</span>-<span id="last-item">0</span> of <span id="total-items">0</span></p>   
+    </div>  
+    <p></p>
+    <div>
+        <a class="page-change-link" id="previous-page" href="#"><p class="inline " >&lt;</p></a>
+        <p class="inline"><span id="current-page">0</span> of <span id="total-pages">0</span></p>
+        <a class="page-change-link" id="next-page" href="#"><p class="inline" >&gt;</p></a>
+    </div>         
+</div>
+<script>  
+    
+    var patientSearchResults;
+    var currentPage = 1;
+    var totalPages;
+
+    function advancedSearch(event) {
+        event.preventDefault();
+        let firstName = $("#first-name").val();
+        let middleNames = $("#middle-names").val();
+        let lastName = $("#last-name").val();
+        let dob = $("#dob").val();
+        let addressLine1 = $("#address-line1").val();
+        let addressLine2 = $("#address-line2").val();
+        let addressLine3 = $("#address-line3").val();
+        let email = $("#email").val();
+        let patientId = $("#patient-id").val();
+
+        $.post("/backend/search", {type: "advancedSearch", firstName: firstName,
+        middleNames:middleNames, lastName: lastName, dob: dob, addressLine1: addressLine1,
+        addressLine2: addressLine2, addressLine3: addressLine3, email: email, patientId: patientId})
+        .done(function(data) {
+            patientSearchResults = data;
+            $(".advanced-search-result").remove();
+            if(data === "none") {
+                $("<div class='advanced-search-result' data-theme='c'><h4>No results found</h4></div>").insertBefore("#advanced-search-insert");
+            } else {
+                updatePaginationItems();
+            } 
+        })
+    }
+    function updatePaginationItems() {
+        //remove previous results
+        $(".advanced-search-result").remove();
+        let totalItems = patientSearchResults.length;   
+        let stringItemsPerPage = $("#items-per-page").find(":selected").text();
+        let itemsPerPage = parseInt(stringItemsPerPage);
+        let firstItem = 1 + (itemsPerPage * (currentPage - 1));
+        let lastItem = (firstItem + itemsPerPage) - 1;
+        if(lastItem >= totalItems) {
+            lastItem = totalItems;
+        }
+        totalPages = Math.ceil(totalItems / itemsPerPage);
+        console.log(`total items: ${totalItems}, items per page: ${itemsPerPage},
+        first item: ${firstItem}, last item: ${lastItem}, current page: ${currentPage}, total pages: ${totalPages}`);
+
+        //update DOM with new information for pagination
+        $("#total-items").text(totalItems);
+        $("#first-item").text(firstItem);
+        $("#last-item").text(lastItem);
+        $("#current-page").text(currentPage);
+        $("#total-pages").text(totalPages);
+
+        //hide previous page button if current page is 1    
+        if(currentPage === 1) {
+            $("#previous-page").hide();
+        } else {
+            $("#previous-page").show();
+        }
+        //hide previous page button if current page is 1    
+        if(currentPage >= totalPages) {
+            $("#next-page").hide();
+        } else {
+            $("#next-page").show();
+        }
+
+        //display patients between first and last item, indexed
+        for(var i = (firstItem - 1); i < (firstItem + itemsPerPage) - 1; i++) {
+            if(i === totalItems) {
+                break;
+            }
+            let patient = patientSearchResults[i];
+            let id = patient.id;
+            let firstName = patient.firstName;
+            let middleNames = patient.middleNames;
+            let lastName = patient.lastName;
+            let name = `${firstName}${middleNames ? " " + middleNames + " " : " " }${lastName ? " " + lastName + " " : " "}`;
+            let address = patient.address;
+            let addressLine1 = address[0];
+            let addressLine2 = address[1];
+            let addressLine3 = address[2];
+            let county = patient.county;
+            //change to blank string if no option selected
+            if(county === "Choose option") {
+                county = "";
+            }
+            let fullAddress = `${addressLine1} ${addressLine2} ${addressLine3} ${county}`;                        
+
+            $(`<div class='advanced-search-result'><a class='search-result-link' onclick="window.location = '/patient/profile?id=${id}'" href='#'><p>${name}, ${fullAddress}, ${id}</p></a><hr></div>`)
+            .insertBefore("#advanced-search-insert");
+        }
+    }
+
+    //if number of items per page is changed, update items
+    $("#items-per-page").change(function() {
+        //reset current page to avoid unexpected results
+        currentPage = 1;        
+        updatePaginationItems();
+    });
+
+    //increment current page
+    $("#previous-page").click(function() {
+        currentPage--;
+        if(currentPage >= 1) {
+            updatePaginationItems();
+        }  
+              
+    });
+
+    //decrement current page
+    $("#next-page").click(function() {
+        currentPage++;
+        if(currentPage <= totalPages) {
+            updatePaginationItems();
+        }         
+    });
+
+</script>
