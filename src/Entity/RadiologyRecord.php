@@ -24,7 +24,7 @@ class RadiologyRecord
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\UserStaff", inversedBy="radiologyRecords")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $staffId;
 

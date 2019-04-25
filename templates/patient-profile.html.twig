@@ -3,10 +3,11 @@
 <div data-role="page">    
     {% include './sidenav/sidenav.html.twig' %} 
     <div data-role="content" class="width-960">        
-        <h2 class="inline" id="name"></h2>
+        <h2 class="inline name"></h2>
         <a href="#edit-profile" class="ui-shadow ui-btn ui-corner-all ui-btn-inline" data-transition="pop">EDIT</a>
+        <a href="#delete-profile" class="ui-shadow ui-btn ui-corner-all ui-btn-inline" data-transition="pop">DELETE</a>
         <p id="patientId"></p>
-        <h4 id="updated-success"></h4>
+        <h4 class="green" id="updated-success"></h4>
         <div class="width-240">
             <button>NEW RECORD</button>
         </div>
@@ -98,6 +99,7 @@
     <div data-role="content">
         <form method="post" id="update-patient-form">
         <p class="green">First Name</p>
+        <p id="edit-first-name-error"></p>
         <input type="text" class="input-style" id="edit-first-name" name="editfirstname">
         <p class="green">Middle Name(s)</p>
         <input type="text" class="input-style" id="edit-middle-names">
@@ -106,6 +108,7 @@
         <div class="flex-container">
             <div class="flex-item-small-form">
                 <p class="green">Date of Birth</p>
+                <p id="edit-dob-error"></p>
                 <input type="date" class="input-style" id="edit-dob" name="editdob">                      
             </div>                      
             <div class="flex-item-small-form">
@@ -447,28 +450,39 @@
     </div>
 
 </div><!-- /all-completed-appointments-->
+<div data-role="page" data-dialog="true" id="delete-profile">
+    <div data-role="header">
+        <h3>Delete <span class="name"></span></h3>
+    </div>
+    <div data-role="content">
+        <p>Are you sure you want to delete <span class="name"></span>?</p>
+        <p id="delete-patient-error"></p>
+        <a id="delete-patient-yes" class="ui-shadow ui-btn ui-corner-all ui-btn-inline" data-transition="pop">YES</a>
+        <a id="delete-patient-no" data-rel="back" class="ui-shadow ui-btn ui-corner-all ui-btn-inline" data-transition="pop">NO</a>
+    </div>
+</div> <!--/delete profile-->
 
 <script>         
     
 
-         //get parameter from URL seen at https://www.w3docs.com/snippets/javascript/how-to-get-current-url-in-javascript.html
-        let urlString = window.location.href;
-        let url = new URL(urlString);
-        var patientId = url.searchParams.get("id");
-        var msg = url.searchParams.get("msg");
-        if(msg === "success") {
-            $("#updated-success").text("Record successfully updated");
-        } else {
-            $("#updated-success").text("");
-        }
+        //get parameter from URL seen at https://www.w3docs.com/snippets/javascript/how-to-get-current-url-in-javascript.html
+    let urlString = window.location.href;
+    let url = new URL(urlString);
+    var patientId = url.searchParams.get("id");
+    var msg = url.searchParams.get("msg");
+    if(msg === "success") {
+        $("#updated-success").text("Record successfully updated");
+    } else {
+        $("#updated-success").text("");
+    }
 
-        getPatientDetails(patientId);
-        getPatientOutstandingAppoint(patientId);
-        //add todays date to date input when page loads
-        var todaysDate = new Date();
-        //converts date to string formatted to html date input https://stackoverflow.com/questions/3066586/get-string-in-yyyymmdd-format-from-js-date-object
-        var todaysDateFormat = todaysDate.toISOString().slice(0,10);
-        $('#appointment-date').val(todaysDateFormat);
+    getPatientDetails(patientId);
+    getPatientOutstandingAppoint(patientId);
+    //add todays date to date input when page loads
+    var todaysDate = new Date();
+    //converts date to string formatted to html date input https://stackoverflow.com/questions/3066586/get-string-in-yyyymmdd-format-from-js-date-object
+    var todaysDateFormat = todaysDate.toISOString().slice(0,10);
+    $('#appointment-date').val(todaysDateFormat);
 
 
     function getAppointments(event) {
@@ -535,7 +549,7 @@
             let email = details.email;
 
             //update html file with data
-            $("#name").text(name);
+            $(".name").text(name);
             $("#patientId").text(patientId);
             $("#priority").text(priority);
             //set background colour of priority
@@ -637,60 +651,51 @@
         }); //end post/done
 
     } //end getPatientCompleteAppoint
-    
-    //form validator for updating patients details
-    $(document).ready(function() {  
-        //jQuery form validator plugin
-        $("#update-patient-form").validate({
-            //custom rules for each element
-            rules: {
-                editfirstname: 'required',
-                editdob: 'required'
-            },
-            //custom error messages for each element
-            messages: {
-                editfirstname: 'First name is required',
-                editdob: 'Date of birth is required',
-            },
-            errorPlacement: function(error, element) {
-                //insert error outside of input div
-                error.insertBefore(element.parent());                
-            },
-            //handles the submit only if form is valid
-            submitHandler: function(form) {
-                //form.submit();
-                let id = patientId;
-                let firstName = $("#edit-first-name").val();
-                let middleName = $("#edit-middle-names").val();
-                let lastName = $("#edit-last-name").val();
-                let email = $("#edit-email").val();
-                let address = [$("#edit-address-line1").val(), 
-                $("#edit-address-line2").val(), $("#edit-address-line3").val()];
-                let county = $('#edit-county').find(":selected").text();
-                let eircode = $("#edit-eircode").val(); 
-                let country = $('#edit-country').find(":selected").text();
-                let dateOfBirth = $("#edit-dob").val(); 
-                let telNo = $("#edit-telNo").val(); 
-                let mobileNo = $("#edit-mobileNo").val(); 
-                let department = $('#edit-department').find(":selected").text(); 
 
-                $.post("/backend/patient", {type:"updateDetails", patientId:id, firstName:firstName, 
-                middleName:middleName, lastName:lastName, email:email, address:address,
-                county:county, eircode:eircode, country:country, dateOfBirth:dateOfBirth,
-                telNo:telNo, mobileNo:mobileNo, department:department})
-                .done(function(data) {
-                    //if successful, redirect / else show error
-                    if(data === "success") {
-                        alert("Patient details successfully updated");
-                        window.location = "/patient/profile";
-                    } else {
-                        alert("Patient details not found");
-                    }                   
-                });
-            },
-            
-        }); //end validate
-    }); // end document ready
+    $("#update-patient-form").submit(function(event) {
+        event.preventDefault();
+        let id = patientId;
+        let firstName = $("#edit-first-name").val();
+        let middleName = $("#edit-middle-names").val();
+        let lastName = $("#edit-last-name").val();
+        let email = $("#edit-email").val();
+        let address = [$("#edit-address-line1").val(), 
+        $("#edit-address-line2").val(), $("#edit-address-line3").val()];
+        let county = $('#edit-county').find(":selected").text();
+        let eircode = $("#edit-eircode").val(); 
+        let country = $('#edit-country').find(":selected").text();
+        let dateOfBirth = $("#edit-dob").val(); 
+        let telNo = $("#edit-telNo").val(); 
+        let mobileNo = $("#edit-mobileNo").val(); 
+        let department = $('#edit-department').find(":selected").text(); 
+
+        //form validation
+        if(firstName === "") {
+            addError("#edit-first-name-error", "Please enter a first name");
+        } else {
+            removeError("#edit-first-name-error");
+        }  
+        if(dateOfBirth === "") {
+            addError("#edit-dob-error", "Please enter a date of birth");
+        } else {
+            removeError("#edit-dob-error");
+        }  
+        //post to backend only if no errors exist
+        if(!($(".error").length)) {
+            $.post("/backend/patient", {type:"updateDetails", patientId:id, firstName:firstName, 
+            middleName:middleName, lastName:lastName, email:email, address:address,
+            county:county, eircode:eircode, country:country, dateOfBirth:dateOfBirth,
+            telNo:telNo, mobileNo:mobileNo, department:department})
+            .done(function(data) {
+                //if successful, redirect / else show error
+                if(data === "success") {
+                    window.location = `/patient/profile?id=${patientId}&msg=success`;
+                } else {
+                    alert("Patient details not found");
+                }                   
+            }); //end post
+        } //end if
+    }); //end submit event
 
     //handles the event if the collapsible is expanded
     $("#appointment-history").collapsible({
@@ -732,6 +737,20 @@
     $("#view-medical-records").click(function() {
         window.location = `./medical-record/view?id=${patientId}`;
     });
+
+    //delete patient
+    $("#delete-patient-yes").click(function() {
+        $.post("/backend/patient", {type: "deletePatient", patientId:patientId})
+        .done(function(data) {
+            console.log(data);
+           if(data === "none") {
+               addError("#delete-patient-error", "An unexpected error occurred");
+           } else {
+               removeError("#delete-patient-error");
+               window.location = "./search?msg=deleted";
+           }
+        }); //end post        
+    }); //end click event
 
 </script>
 </body>

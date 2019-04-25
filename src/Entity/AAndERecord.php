@@ -18,7 +18,7 @@ class AAndERecord
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\UserStaff", inversedBy="aAndERecords")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $staffId;
 

@@ -80,4 +80,15 @@ class UserStaffRepository extends ServiceEntityRepository
             ->getResult();
 
     } //end findStaffAdvanced
+
+    public function findOneByNotId($username, $staffId) {
+
+        return $this->createQueryBuilder('s')
+            ->andWhere('s.username = :username')
+            ->setParameter('username', $username)
+            ->andWhere('s.id != :staffId')
+            ->setParameter('staffId', $staffId)
+            ->getQuery()
+            ->getResult();
+    }
 }

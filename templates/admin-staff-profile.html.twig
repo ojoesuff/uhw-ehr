@@ -3,10 +3,12 @@
 <div data-role="page">    
     {% include './sidenav/sidenav.html.twig' %} 
     <div data-role="content" class="width-720 box">  
-        <h2 class="inline" id="name"></h2>
-        <a href="#edit-profile" class="ui-shadow ui-btn ui-corner-all ui-btn-inline" data-transition="pop"><p>EDIT</p></a>
-        <a href="#delete-profile" class="ui-shadow ui-btn ui-corner-all ui-btn-inline" data-transition="pop"><p>DELETE</p></a>
+        <p id="success-msg" class="green"></p>
+        <h2 class="inline name"></h2>
+        <a href="#edit-profile" class="ui-shadow ui-btn ui-corner-all ui-btn-inline" data-transition="pop">EDIT</a>
+        <a href="#delete-profile" class="ui-shadow ui-btn ui-corner-all ui-btn-inline" data-transition="pop">DELETE</a>
         <p id="staffId"></p>
+        
         <div class="flex-container">
             <div class="flex-item-small-form">
                 <p class="green">First Name</p>
@@ -55,11 +57,27 @@
         </form>
     </div>
 </div> <!-- end edit-profile-->
+
+<div data-role="page" data-dialog="true" id="delete-profile">
+    <div data-role="header">
+        <h3>Delete <span class="name"></span></h3>
+    </div>
+    <div data-role="content">
+        <p>Are you sure you want to delete <span class="name"></span>?</p>
+        <p id="delete-staff-error"></p>
+        <a id="delete-staff-yes" class="ui-shadow ui-btn ui-corner-all ui-btn-inline" data-transition="pop">YES</a>
+        <a id="delete-staff-no" data-rel="back" class="ui-shadow ui-btn ui-corner-all ui-btn-inline" data-transition="pop">NO</a>
+    </div>
+</div> <!--/delete profile-->
 <script>
      //get parameter from URL seen at https://www.w3docs.com/snippets/javascript/how-to-get-current-url-in-javascript.html
      let urlString = window.location.href;
      let url = new URL(urlString);
      var staffId = url.searchParams.get("id");
+     var msg = url.searchParams.get("msg");
+     if(msg === "success") {
+         $("#success-msg").text("Record updated successfully");
+     }
 
      getStaffDetails();
 
@@ -77,7 +95,7 @@
                 let staffType = data.staffType;
 
                 $("#staffId").text(staffId);
-                $("#name").text(name);
+                $(".name").text(name);
                 $("#staff-first-name").text(firstName);
                 $("#staff-last-name").text(lastName);
                 $("#staff-username").text(username);
@@ -90,6 +108,75 @@
             } //end if/else
          }) //end post
      } //end getStaffDetails
+
+     $("#edit-staff-form").submit(function(event) {
+        event.preventDefault();
+        let firstName = $("#edit-staff-first-name").val();
+        let lastName = $("#edit-staff-last-name").val();
+        let username = $("#edit-staff-username").val();
+        let staffType = $("#edit-staff-type").val();
+
+        //used https://regexr.com/ to generate regex pattern
+        //no white space or digits
+        let regexWhitespace = /[^\S*$]/;
+        let regexDigits = /[^\D*$]/;
+
+        //form validation
+        if(firstName === "") {
+            addError("#edit-staff-first-name-error", "Please enter a first name");
+        } else {
+            removeError("#edit-staff-first-name-error");
+        }    
+        if(username === "") {
+            addError("#edit-staff-username-error", "Please enter a username");
+        } else {
+            //test username against reg expressions
+            if(regexWhitespace.test(username) || regexDigits.test(username)) {
+                addError("#edit-staff-username-error", "Username must not contain digits or spaces");
+            } else {
+                removeError("#edit-staff-username-error");
+            }     
+        }
+        //post to backend only if no errors exist
+        if(!($(".error").length)) {
+            $.post("/backend/staff", {type:"updateStaff", staffId:staffId, 
+            firstName: firstName, lastName:lastName,
+            username:username, staffType:staffType})
+            .done(function(data) {
+                console.log(data); 
+                //remove previous errors
+                removeError("#staff-username-error");
+                removeError("#staff-submit-error");            
+                switch(data) {
+                    //if username exists, display error
+                    case "error":
+                        addError("#edit-staff-username-error", "Username already exists");
+                        break;
+                    case "success":
+                        window.location = `profile?id=${staffId}&msg=success`;
+                        break;
+                    case "none":
+                        addError("#edit-staff-submit-error", "An unexpected error occurred");
+                        break;
+                }
+            }); //end post
+        } //end if
+
+     }); //end submit event
+
+     $("#delete-staff-yes").click(function() {
+         $.post("/backend/staff", {type: "deleteStaff", staffId:staffId})
+         .done(function(data) {
+             console.log(data);
+            if(data === "none") {
+                addError("#delete-staff-error", "An unexpected error occurred");
+            } else {
+                removeError("#delete-staff-error");
+                window.location = "./search?msg=deleted";
+            }
+         }); //end post
+         
+     }); //end click event
 
 </script>
 </body>

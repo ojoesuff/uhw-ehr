@@ -5,12 +5,12 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route; 
 
-class AdminCreateController extends AbstractController {
+class AdminCreateStaffController extends AbstractController {
     /**
-     * @Route("/admin/create", name="admin-create")
+     * @Route("/admin/create/staff", name="admin-create-staff")
      */
 
      public function create() {
-         return $this->render('admin-create.html.twig');
+         return $this->render('admin-create-staff.html.twig');
      }
 }

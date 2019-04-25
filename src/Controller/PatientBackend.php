@@ -7,6 +7,9 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Patient;
 use App\Entity\Department;
 use App\Entity\Appointment;
+use App\Entity\AAndERecord;
+use App\Entity\MacularClinicRecord;
+use App\Entity\RadiologyRecord;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse; 
 use Symfony\Component\HttpFoundation\Response; 
@@ -26,6 +29,44 @@ class PatientBackend extends AbstractController {
          $entityManager = $this->getDoctrine()->getManager();
 
          $patientId = $request->request->get('patientId');
+
+         if($type === "deletePatient") {
+            $patient = $entityManager->getRepository(Patient::class)->findOneBy([
+               "id" => $patientId
+            ]);
+
+            if($patient) {
+               //get all records associated with patient and delete them
+               $aAndERecords = $entityManager->getRepository(AAndERecord::class)->findBy([
+                  "patientId" => $patient
+               ]);
+               foreach($aAndERecords as $record) {
+                  $entityManager->remove($record);
+               }
+               $macularRecords = $entityManager->getRepository(MacularClinicRecord::class)->findBy([
+                  "patientId" => $patient
+               ]);
+               foreach($macularRecords as $record) {
+                  $entityManager->remove($record);
+               }
+               $radiologyRecords = $entityManager->getRepository(RadiologyRecord::class)->findBy([
+                  "patientId" => $patient
+               ]);
+               foreach($radiologyRecords as $record) {
+                  $entityManager->remove($record);
+               }
+               $appointments = $entityManager->getRepository(Appointment::class)->findBy([
+                  "patient" => $patient
+               ]);
+               foreach($appointments as $record) {
+                  $entityManager->remove($record);
+               }
+               $entityManager->remove($patient);
+               $entityManager->flush();
+
+               return new Response("success");
+            }
+         }
 
          if($type === "details") {                 
 

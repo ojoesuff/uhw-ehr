@@ -1,37 +1,5 @@
 {% include './header/header.html.twig' %}
 <body>
-<div data-role="page" id="staff">    
-    {% include './sidenav/sidenav.html.twig' %}   
-    <div data-role="content" class="width-800">
-        <h2>Create User Account</h2>
-        <form method="post" id="create-staff-form">
-            <p class="green">First Name</p>
-            <p id="staff-first-name-error"></p>
-            <input id="staff-first-name">
-            <p class="green">Last Name</p>
-            <p id="staff-last-name-error"></p>
-            <input id="staff-last-name">
-            <p class="green">Username</p>
-            <p id="staff-username-error"></p>
-            <input type="text" id="staff-username">
-            <p class="green">Password</p>
-            <p id="staff-password-error"></p>
-            <input type="password" id="staff-password">
-            <fieldset data-role="controlgroup" name="staff-type" id="staff-type" data-theme="d" data-type="horizontal">
-                <legend class="green">Staff Type</legend>
-                <p id="staff-type-error"></p>
-                <input type="radio" name="staff-type" id="doctor" value="ROLE-DOCTOR">
-                <label for="doctor">Doctor</label>
-                <input type="radio" name="staff-type" id="nurse" value="ROLE-NURSE">
-                <label for="nurse">Nurse</label>
-                <input type="radio" name="staff-type" id="clerical" value="ROLE-CLERICAL">
-                <label for="clerical">Clerical</label>
-            </fieldset>     
-            <p id="staff-submit-error"></p>   
-            <input type="submit" id="staff-create-button" data-inline="true" value="CREATE" data-theme="a">
-        </form>
-    </div>   
-</div> <!-- end staff-->
 <div data-role="page" id="patient"> 
     {% include './sidenav/sidenav.html.twig' %}
     <div data-role="content" class="width-800">
@@ -366,108 +334,14 @@
             <p id="patient-submit-error"></p>                             
             <input type="submit" id="patient-create-button" data-inline="true" value="Create">               
         </form>
-    </div>           
-    
-</div> 
+    </div>        
+</div> <!--end patient--> 
 </body>
 </html>
 
 
 <script>
-    $("#create-staff-form").submit(function(event) {
-        event.preventDefault();
-        let firstName = $("#staff-first-name").val();
-        let lastName = $("#staff-last-name").val();
-        let username = $("#staff-username").val();
-        let password = $("#staff-password").val();
-        let staffType = $("input[name='staff-type']:checked").val(); //get radio button value thats checked
-
-        //used https://regexr.com/ to generate regex pattern
-        //no white space or digits
-        let regexWhitespace = /[^\S*$]/;
-        let regexDigits = /[^\D*$]/;
-        let regexPassword = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/
-
-        //form validation
-        if(firstName === "") {
-            addError("#staff-first-name-error", "Please enter a first name");
-        } else {
-            removeError("#staff-first-name-error");
-        }    
-        if(username === "") {
-            addError("#staff-username-error", "Please enter a username");
-        } else {
-            //test username against reg expressions
-            if(regexWhitespace.test(username) || regexDigits.test(username)) {
-                addError("#staff-username-error", "Username must not contain digits or spaces");
-            } else {
-                removeError("#staff-username-error");
-            }     
-        }
-        if(password === "") {
-            addError("#staff-password-error", "Please enter a password");
-        } else {
-            //test password is min 8, at least one character and digit
-            if(!regexPassword.test(password)) {
-                addError("#staff-password-error", "Password minimum 8 character with at least one digit");
-            } else {
-                removeError("#staff-password-error");
-            }            
-        }
-        if(!staffType) {
-            addError("#staff-type-error", "Please select a staff type");
-        } else {
-            removeError("#staff-type-error");
-        } 
-        //post to backend only if no errors exist
-        if(!($(".error").length)) {
-        $.post("/backend/admin/create", {type:"staff", firstName: firstName, lastName:lastName,
-        username:username, password:password, staffType:staffType})
-        .done(function(data) {
-            console.log(data); 
-            //remove previous errors
-            removeError("#staff-username-error");
-            removeError("#staff-submit-error");            
-            switch(data) {
-                //if username exists, display error
-                case "error":
-                    addError("#staff-username-error", "Username already exists");
-                    break;
-                case "success":
-                    //redirect
-                    break;
-                case "none":
-                    addError("#staff-submit-error", "An unexpected error occurred");
-                    break;
-            }
-        }); //end post
-        } //end if
-    });
-
-    //update the username field with suggested username from first and last name
-    function createSuggestedUsername() {
-        let firstName = $("#staff-first-name").val();
-        let lastName = $("#staff-last-name").val();
-
-        //if no last name, use first name as username
-        if(firstName !== "" && lastName === "") {
-            $("#staff-username").val(firstName.toLowerCase());
-        } else if (firstName !== "" && lastName !== "") {
-            //get first character of first name
-            let char = firstName[0];
-            let suggestedUsername = (char + lastName).toLowerCase();
-            $("#staff-username").val(suggestedUsername);
-        }        
-    }
-
-    //suggests username after first name or last name input loses focus
-    $("#staff-first-name").focusout(function() {
-        createSuggestedUsername();
-    });
-    $("#staff-last-name").focusout(function() {
-        createSuggestedUsername();
-    });
-
+    
     $("#create-patient-form").submit(function(event) {
         event.preventDefault();
         let firstName = $("#patient-first-name").val();
@@ -534,7 +408,7 @@
                     addError("#patient-email-error", "Email already exists");
                     break;
                 case "success":
-                    //redirect
+                    window.location = "/dashboard?msg=success";
                     break;
                 case "none":
                     addError("#patient-submit-error", "An unexpected error occurred");

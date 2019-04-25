@@ -1,12 +1,14 @@
 {% include './header/header.html.twig' %}
+<body>
 <div data-role="page" id="admin">
     {% include './sidenav/sidenav.html.twig' %} 
     <div data-role="content" class="width-720">
+        <p id="success-msg" class="green"></p>
         <h3>Welcome Name</h3>
         <h2>Staff</h2>
         <div class="flex-container width-80p">
             <div class="dark-green-box drop-shadow flex-item-small-form dashboard-link">
-                <a href="/admin/create"><p>+ Create</p></a>
+                <a href="/admin/create/staff"><p>+ Create</p></a>
             </div>
             <div class="green-box drop-shadow flex-item-small-form dashboard-link">
                     <a href="/admin/staff/search"><p>Search</p></a>
@@ -15,7 +17,7 @@
         <h2>Patient</h2>
         <div class="flex-container width-80p">
             <div class="dark-green-box drop-shadow flex-item-small-form dashboard-link">
-                <a href="/admin/create"><p>+ Create</p></a>
+                <a href="/admin/create/patient"><p>+ Create</p></a>
             </div>
             <div class="green-box drop-shadow flex-item-small-form dashboard-link">
                     <a href="/patient/search"><p>Search</p></a>
@@ -23,3 +25,13 @@
         </div>
     </div>
 </div>
+<script>
+    let urlString = window.location.href;
+    let url = new URL(urlString);
+    var msg = url.searchParams.get("msg");
+    if(msg === "success") {
+        $("#success-msg").text("Record created successfully");
+    }
+</script>
+</body>
+</html>

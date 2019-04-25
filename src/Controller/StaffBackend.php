@@ -21,10 +21,11 @@ class StaffBackend extends AbstractController {
         $entityManager = $this->getDoctrine()->getManager();
 
         $type = $request->request->get("type");
+        
+        $staffId = $request->get("staffId");
 
         switch($type) {
             case "getStaffDetails" :
-                $staffId = $request->get("staffId");
                 $staff = $entityManager->getRepository(UserStaff::class)->findOneBy([
                     "id" => $staffId
                 ]);
@@ -39,8 +40,52 @@ class StaffBackend extends AbstractController {
                     "username" => $username, "staffType" => $staffType);
 
                     return new JsonResponse($staffArray);
+                } //end if
+            case "updateStaff":
+                $firstName = $request->request->get('firstName');
+                $lastName = $request->request->get('lastName');
+                if($lastName === null) {
+                    $lastName = "";
                 }
-        }
+                $username = $request->request->get('username');
+                $staffType = $request->request->get('staffType');
+
+                //get user with given username that doesn't match current staff id
+                $existingUser = $entityManager->getRepository(UserStaff::class)->findOneByNotId($username, $staffId);
+                //if username already exists, send error
+                if($existingUser) {
+                    return new Response("error");
+                } else {
+                    $userStaff = $entityManager->getRepository(UserStaff::class)->findOneBy([
+                        "id" => $staffId
+                    ]);
+
+                    if($userStaff) {
+                        $userStaff->setFirstName($firstName);
+                        $userStaff->setLastName($lastName);
+                        $userStaff->setUsername($username);
+                        $userStaff->setStaffType($staffType);
+    
+                        $entityManager->flush();
+                        
+                        return new Response("success");
+                    }
+                    
+                }  //end if/else             
+                break;
+            case "deleteStaff":
+                $staff = $entityManager->getRepository(UserStaff::class)->findOneBy([
+                    "id" => $staffId
+                ]);
+
+                if($staff) {
+                    $entityManager->remove($staff);
+                    $entityManager->flush();
+
+                    return new Response("success");
+                }
+
+        } //end switch
 
         return new Response ("none");
 

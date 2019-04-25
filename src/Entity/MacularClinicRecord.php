@@ -49,7 +49,7 @@ class MacularClinicRecord
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\UserStaff", inversedBy="macularClinicRecords")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $staffId;
 

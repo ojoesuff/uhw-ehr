@@ -3,6 +3,7 @@
 <div data-role="page">    
     {% include './sidenav/sidenav.html.twig' %} 
     <div data-role="content" class="width-640">
+        <p id="success-msg" class="green"></p>
         <h2>Staff Search</h2>
         <form method="post" id="update-patient-form">
             <div class="flex-container">
@@ -42,7 +43,13 @@
     </div>
 </div>
 <script>
-    
+    //get parameter from URL seen at https://www.w3docs.com/snippets/javascript/how-to-get-current-url-in-javascript.html
+    let urlString = window.location.href;
+    let url = new URL(urlString);
+    var msg = url.searchParams.get("msg");
+    if(msg === "deleted") {
+        $("#success-msg").text("Record deleted successfully");
+    }
 </script>
 </body>
 </html>

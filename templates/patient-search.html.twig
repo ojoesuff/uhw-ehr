@@ -3,6 +3,7 @@
 <div data-role="page">    
     {% include './sidenav/sidenav.html.twig' %} 
     <div data-role="content" class="width-640">
+        
         <h2>Patient Search</h2>
         <div id="quick-search">
             <input type="text" name="search-box" id="search-box" placeholder="Enter first or last name">
@@ -65,6 +66,16 @@
     </div>
 </div>
 <script>
+
+    //get parameter from URL seen at https://www.w3docs.com/snippets/javascript/how-to-get-current-url-in-javascript.html
+    let urlString = window.location.href;
+    let url = new URL(urlString);
+    var msg = url.searchParams.get("msg");
+    if(msg === "deleted") {
+        $("#patient-search-success").text("Record successfully deleted");
+    } else {
+        $("#patient-search-success").remove();
+    }
 
     //quick search executes on keyup and posts to backend when 
     //a minimum number of characters are entered
