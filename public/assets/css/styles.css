@@ -39,7 +39,7 @@ amber = #FFAE56
 }
 
 .box {    
-    background: #f9f9f9;
+    background: #f9f9f9!important;
     box-shadow: 5px 5px 2px #c5c5c9;
     margin-top: 5rem;
     border-radius: 0.6rem;

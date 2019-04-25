@@ -1,0 +1,96 @@
+{% include './header/header.html.twig' %}
+<body>
+<div data-role="page">    
+    {% include './sidenav/sidenav.html.twig' %} 
+    <div data-role="content" class="width-720 box">  
+        <h2 class="inline" id="name"></h2>
+        <a href="#edit-profile" class="ui-shadow ui-btn ui-corner-all ui-btn-inline" data-transition="pop"><p>EDIT</p></a>
+        <a href="#delete-profile" class="ui-shadow ui-btn ui-corner-all ui-btn-inline" data-transition="pop"><p>DELETE</p></a>
+        <p id="staffId"></p>
+        <div class="flex-container">
+            <div class="flex-item-small-form">
+                <p class="green">First Name</p>
+                <p class="input-style" id="staff-first-name">
+            </div>
+            <div class="flex-item-small-form">
+                <p class="green">Last Name</p>
+                <p class="input-style" id="staff-last-name">
+            </div>
+        </div>  
+        <div class="flex-container">
+            <div class="flex-item-small-form">
+                <p class="green">Username</p>
+                <p class="input-style" id="staff-username"></p>
+            </div>     
+            <div class="flex-item-small-form">
+                <p class="green">Staff Type</p>
+                <p class="input-style" id="staff-type"></p>
+            </div>
+        </div> 
+    </div>
+</div>
+
+<div data-role="page" data-dialog="true" id="edit-profile">
+    <div data-role="header">
+        <h2>Edit Profile</h2>
+    </div>
+    <div data-role="content">
+        <form method="post" id="edit-staff-form">
+            <p class="green">First Name</p>
+            <p id="edit-staff-first-name-error"></p>
+            <input id="edit-staff-first-name">
+            <p class="green">Last Name</p>
+            <input id="edit-staff-last-name">
+            <p class="green">Username</p>
+            <p id="edit-staff-username-error"></p>
+            <input type="text" id="edit-staff-username">
+            <p class="green">Staff Type</p>
+            <select id="edit-staff-type" data-mini="true">
+                <option value="ROLE-DOCTOR">Doctor</option>
+                <option value="ROLE-NURSE">Nurse</option>
+                <option value="ROLE-CLERICAL">Clerical</option>
+            </select>
+            <p id="edit-staff-submit-error"></p>   
+            <input type="submit" id="edit-staff-button" data-inline="true" value="UPDATE" data-theme="a">
+        </form>
+    </div>
+</div> <!-- end edit-profile-->
+<script>
+     //get parameter from URL seen at https://www.w3docs.com/snippets/javascript/how-to-get-current-url-in-javascript.html
+     let urlString = window.location.href;
+     let url = new URL(urlString);
+     var staffId = url.searchParams.get("id");
+
+     getStaffDetails();
+
+     function getStaffDetails() {
+         $.post("/backend/staff", {type: "getStaffDetails", staffId:staffId})
+         .done(function(data) {
+            if(data === "none") {
+                addError("#staffId", "Staff record not found");
+            } else {
+                removeError("#staffId");
+                let firstName = data.firstName;
+                let lastName = data.lastName;
+                let name = `${firstName} ${lastName}`
+                let username = data.username;
+                let staffType = data.staffType;
+
+                $("#staffId").text(staffId);
+                $("#name").text(name);
+                $("#staff-first-name").text(firstName);
+                $("#staff-last-name").text(lastName);
+                $("#staff-username").text(username);
+                $("#staff-type").text(staffType);
+
+                $("#edit-staff-first-name").val(firstName);
+                $("#edit-staff-last-name").val(lastName);
+                $("#edit-staff-username").val(username);
+                $("#edit-staff-type").val(staffType);
+            } //end if/else
+         }) //end post
+     } //end getStaffDetails
+
+</script>
+</body>
+</html>

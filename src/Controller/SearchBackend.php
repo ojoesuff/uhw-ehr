@@ -5,6 +5,7 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Patient;
+use App\Entity\UserStaff;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response; 
 use Symfony\Component\HttpFoundation\JsonResponse; 
@@ -67,7 +68,23 @@ class SearchBackend extends AbstractController {
                 } //end if
 
                 case "staffAdvancedSearch":
-                
+                    $firstName = $request->request->get('firstName');
+                    $lastName = $request->request->get('lastName');
+                    $username = $request->request->get('username');
+                    $staffType = $request->request->get('staffType');
+
+                    //check if any fields have a value in them before quering DB
+                    if(!empty($firstName) or !empty($lastName) or !empty($username) or !empty($staffType)) {
+
+                        $staff = $entityManager->getRepository(UserStaff::class)->findStaffAdvanced(
+                            $firstName, $lastName, $username, $staffType);
+
+                        if($staff) {
+                            $staffArray = $this->filterStaffSearch($staff);
+
+                            return new JsonResponse($staffArray);
+                        }
+                    } //end if
             
         } //end switch
 
@@ -75,6 +92,7 @@ class SearchBackend extends AbstractController {
 
      }
 
+     //get details from each record found
      public function filterPatientSearch($patients) {
 
         $patientsArray = array();
@@ -93,10 +111,32 @@ class SearchBackend extends AbstractController {
             "address" => $address, "county" => $county);
 
             array_push($patientsArray, $onePatient);
-        }
+        } //end foreach
 
         return $patientsArray;
-     }
+     } // end filterPatientSearch
+
+     //get details from each record found
+     public function filterStaffSearch($staff) {
+
+        $staffArray = array();
+
+        foreach($staff as $st) {
+            
+            $id = $st->getId();
+            $firstName = $st->getFirstName();
+            $lastName = $st->getLastName();
+            $username = $st->getUsername();
+            $staffType = $st->getStaffType();
+            
+            $oneStaff = array("id" => $id, "firstName" => $firstName,  "lastName" => $lastName, 
+            "username" => $username, "staffType" => $staffType);
+
+            array_push($staffArray, $oneStaff);
+        }
+
+        return $staffArray;
+     } //filterStaffSearch
 
 
 }

@@ -57,6 +57,7 @@
         $.post("/backend/search", backendJSONData)
         .done(function(data) {
             searchResults = data;
+            console.log(data);
             $(".advanced-search-result").remove();
             if(data === "none") {
                 $("<div class='advanced-search-result' data-theme='c'><h4>No results found</h4></div>").insertBefore("#advanced-search-insert");
@@ -73,6 +74,7 @@
         let itemsPerPage = parseInt(stringItemsPerPage);
         let firstItem = 1 + (itemsPerPage * (currentPage - 1));
         let lastItem = (firstItem + itemsPerPage) - 1;
+        //set last item to total items if its greater than total
         if(lastItem >= totalItems) {
             lastItem = totalItems;
         }
@@ -100,31 +102,52 @@
             $("#next-page").show();
         }
 
-        //display patients between first and last item, indexed
-        for(var i = (firstItem - 1); i < (firstItem + itemsPerPage) - 1; i++) {
-            if(i === totalItems) {
-                break;
-            }
-            let patient = searchResults[i];
-            let id = patient.id;
-            let firstName = patient.firstName;
-            let middleNames = patient.middleNames;
-            let lastName = patient.lastName;
-            let name = `${firstName}${middleNames ? " " + middleNames + " " : " " }${lastName ? " " + lastName + " " : " "}`;
-            let address = patient.address;
-            let addressLine1 = address[0];
-            let addressLine2 = address[1];
-            let addressLine3 = address[2];
-            let county = patient.county;
-            //change to blank string if no option selected
-            if(county === "Choose option") {
-                county = "";
-            }
-            let fullAddress = `${addressLine1} ${addressLine2} ${addressLine3} ${county}`;                        
+        if(searchType === "patient") {
+            //display patients between first and last item, indexed
+            for(var i = (firstItem - 1); i < (firstItem + itemsPerPage) - 1; i++) {
+                if(i === totalItems) {
+                    break;
+                }
+                let patient = searchResults[i];
+                let id = patient.id;
+                let firstName = patient.firstName;
+                let middleNames = patient.middleNames;
+                let lastName = patient.lastName;
+                let name = `${firstName}${middleNames ? " " + middleNames + " " : " " }${lastName ? " " + lastName + " " : " "}`;
+                let address = patient.address;
+                let addressLine1 = address[0];
+                let addressLine2 = address[1];
+                let addressLine3 = address[2];
+                let county = patient.county;
+                //change to blank string if no option selected
+                if(county === "Choose option") {
+                    county = "";
+                }
+                let fullAddress = `${addressLine1} ${addressLine2} ${addressLine3} ${county}`;     
+                
+                let htmlString = `<div class='advanced-search-result'><a class='search-result-link' onclick="window.location = '/patient/profile?id=${id}'" href='#'><p>${name}, ${fullAddress}, ${id}</p></a><hr></div>`;
 
-            $(`<div class='advanced-search-result'><a class='search-result-link' onclick="window.location = '/patient/profile?id=${id}'" href='#'><p>${name}, ${fullAddress}, ${id}</p></a><hr></div>`)
-            .insertBefore("#advanced-search-insert");
-        }
+                $(htmlString).insertBefore("#advanced-search-insert");
+            } //end for
+        } else if (searchType === "staff") {
+            for(var i = (firstItem - 1); i < (firstItem + itemsPerPage) - 1; i++) {
+                if(i === totalItems) {
+                    break;
+                }
+                let staff = searchResults[i];
+                let firstName = staff.firstName;
+                let lastName = staff.lastName;
+                let name = `${firstName} ${lastName}`;
+                let username = staff.username;
+                let id = staff.id;
+
+                let htmlString = `<div class='advanced-search-result'><a class='search-result-link' onclick="window.location = './profile?id=${id}'" href='#'><p>${name}, ${username}, ${id}</p></a><hr></div>`
+
+                $(htmlString).insertBefore("#advanced-search-insert");
+                
+            } //end for
+        } //end if/else
+        
     }
 
     //if number of items per page is changed, update items

@@ -47,4 +47,37 @@ class UserStaffRepository extends ServiceEntityRepository
         ;
     }
     */
+
+    public function findStaffAdvanced($firstName, $lastName, 
+    $username, $staffType) {
+
+        //starts query builder
+        $queryBuilder = $this->createQueryBuilder('s');
+        //only add query parameters if fields are not empty or default
+        if(!empty($firstName)) {
+            $queryBuilder
+                ->andWhere('s.firstName LIKE :firstName')
+                ->setParameter('firstName', '%'.$firstName.'%');
+        }
+        if(!empty($lastName)) {
+            $queryBuilder
+                ->andWhere('s.lastName LIKE :lastName')
+                ->setParameter('lastName', '%'.$lastName.'%');
+        }
+        if(!empty($username)) {
+            $queryBuilder
+                ->andWhere('s.username = :username')
+                ->setParameter('username', $username);
+        }
+        if(!empty($staffType)) {
+            $queryBuilder
+                ->andWhere('s.staffType = :staffType')
+                ->setParameter('staffType', $staffType);
+        }
+        
+        return $queryBuilder
+            ->getQuery()
+            ->getResult();
+
+    } //end findStaffAdvanced
 }
