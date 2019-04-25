@@ -1,0 +1,17 @@
+{% include './header/header.html.twig' %}
+<body>
+<div data-role="page">  
+    {% include './sidenav/sidenav.html.twig' %} 
+    <div data-role="content" class="width-720"> 
+        
+    </div>
+</div>
+<script>
+    //get parameter from URL seen at https://www.w3docs.com/snippets/javascript/how-to-get-current-url-in-javascript.html
+    let urlString = window.location.href;
+    let url = new URL(urlString);
+    var patientId = url.searchParams.get("id");
+    
+</script>
+</body>
+</html>

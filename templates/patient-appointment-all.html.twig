@@ -1,0 +1,41 @@
+{% include './header/header.html.twig' %}
+<body>
+<div data-role="page">  
+    {% include './sidenav/sidenav.html.twig' %} 
+    <div data-role="content" class="width-720"> 
+        <div class="box">
+            <h3 class="green">All Upcoming Appointments</h3>
+            <input type="hidden" id="upcoming-appointments-insert-before">
+        </div>
+        <div class="box">
+            <h3 class="green">All Previous Appointments</h3>
+            <input type="hidden" id="previous-appointments-insert-before">
+        </div>
+        
+    </div>
+</div>
+<script>
+    //get parameter from URL seen at https://www.w3docs.com/snippets/javascript/how-to-get-current-url-in-javascript.html
+    let urlString = window.location.href;
+    let url = new URL(urlString);
+    var patientId = url.searchParams.get("id");
+
+    getUpcomingAppointments();
+
+    function getUpcomingAppointments() {
+        $.post("/backend/appointment", {type: "getUpcomingAppointments", patientId:patientId})
+        .done(function(data) {
+            console.log(data);
+            $(".upcoming-appointments").remove();
+            if(data === "none") {
+                $("<p class='upcoming-appointments'>No upcoming appointments</p>").insertBefore("#upcoming-appointments-insert-before");
+            } else {
+                /*("appointmentId" => $appointmentId, "departmentName" => $departmentName,
+                "date" => $date, "time" => $time, "staffName"=> $staffName, "staffType" => $staffType)*/
+            }
+        });
+    }
+    
+</script>
+</body>
+</html>

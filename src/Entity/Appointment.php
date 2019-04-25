@@ -17,11 +17,6 @@ class Appointment
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=50)
-     */
-    private $medicalStaff = "General";
-
-    /**
      * @ORM\Column(type="datetime")
      */
     private $date;
@@ -48,21 +43,14 @@ class Appointment
      */
     private $department;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\UserStaff", inversedBy="appointments")
+     */
+    private $staffId;
+
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getMedicalStaff(): ?string
-    {
-        return $this->medicalStaff;
-    }
-
-    public function setMedicalStaff(string $medicalStaff): self
-    {
-        $this->medicalStaff = $medicalStaff;
-
-        return $this;
     }
 
     public function getDate(): ?\DateTimeInterface
@@ -121,6 +109,18 @@ class Appointment
     public function setDepartment(?Department $department): self
     {
         $this->department = $department;
+
+        return $this;
+    }
+
+    public function getStaffId(): ?UserStaff
+    {
+        return $this->staffId;
+    }
+
+    public function setStaffId(?UserStaff $staffId): self
+    {
+        $this->staffId = $staffId;
 
         return $this;
     }

@@ -67,11 +67,17 @@ class UserStaff
      */
     private $aAndERecords;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Appointment", mappedBy="staffId")
+     */
+    private $appointments;
+
     public function __construct()
     {
         $this->macularClinicRecords = new ArrayCollection();
         $this->radiologyRecords = new ArrayCollection();
         $this->aAndERecords = new ArrayCollection();
+        $this->appointments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -246,6 +252,37 @@ class UserStaff
             // set the owning side to null (unless already changed)
             if ($aAndERecord->getStaffId() === $this) {
                 $aAndERecord->setStaffId(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Appointment[]
+     */
+    public function getAppointments(): Collection
+    {
+        return $this->appointments;
+    }
+
+    public function addAppointment(Appointment $appointment): self
+    {
+        if (!$this->appointments->contains($appointment)) {
+            $this->appointments[] = $appointment;
+            $appointment->setStaffId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAppointment(Appointment $appointment): self
+    {
+        if ($this->appointments->contains($appointment)) {
+            $this->appointments->removeElement($appointment);
+            // set the owning side to null (unless already changed)
+            if ($appointment->getStaffId() === $this) {
+                $appointment->setStaffId(null);
             }
         }
 

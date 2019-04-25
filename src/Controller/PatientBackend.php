@@ -125,10 +125,9 @@ class PatientBackend extends AbstractController {
                   $dueDate = $appointment->getDate();
                   $date = $dueDate->format("d M Y");
                   $time = $dueDate->format("H:i");
-                  $medicalStaff = $appointment->getMedicalStaff();
                   
                   $appointmentArray = array("appointmentId" => $appointmentId, "departmentName" => $departmentName,
-                  "date" => $date, "time" => $time, "medicalStaff" => $medicalStaff);
+                  "date" => $date, "time" => $time);
 
                   array_push($twoAppointments["outstandingAppointments"], $appointmentArray);
                   
