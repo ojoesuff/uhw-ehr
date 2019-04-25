@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response; 
 use Symfony\Component\HttpFoundation\JsonResponse; 
 
-class PatientSearchBackend extends AbstractController {
+class SearchBackend extends AbstractController {
     /**
      * @Route("/backend/search", name="backend_search")
      */
@@ -37,7 +37,7 @@ class PatientSearchBackend extends AbstractController {
                     return new JsonResponse($patientsArray);
                 }
                 break;
-            case "advancedSearch": 
+            case "patientAdvancedSearch": 
 
                 $firstName = $request->request->get('firstName');
                 $middleNames = $request->request->get('middleNames');
@@ -63,10 +63,13 @@ class PatientSearchBackend extends AbstractController {
                         $patientsArray = $this->filterPatientSearch($patients);
 
                         return new JsonResponse($patientsArray);
-                    } 
-                }
+                    }  //end if
+                } //end if
+
+                case "staffAdvancedSearch":
+                
             
-        }
+        } //end switch
 
         return new Response("none");
 

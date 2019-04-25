@@ -58,11 +58,19 @@ class AdminCreateBackend extends AbstractController {
                break;
             
             case "patient":
+               $email = $request->request->get('email');
+               //check if email address is unique
+               $existingUser = $entityManager->getRepository(Patient::class)->findOneBy([
+                  "email" => $email
+               ]);
+
+               if($existingUser) {
+                  return new Response("error");
+               }
                //get data from request
                $firstName = $request->request->get('firstName');
-               $middleName = $request->request->get('middleName');
+               $middleNames = $request->request->get('middleNames');
                $lastName = $request->request->get('lastName');
-               $email = $request->request->get('email');
                $address = $request->request->get('address');
                $county = $request->request->get('county');
                $eircode = $request->request->get('eircode');
@@ -83,7 +91,7 @@ class AdminCreateBackend extends AbstractController {
 
                $patient = new Patient();
                $patient->setFirstName($firstName);
-               $patient->setMiddleNames($middleName);
+               $patient->setMiddleNames($middleNames);
                $patient->setLastName($lastName);
                $patient->setEmail($email);
                $patient->setAddress($address);
@@ -95,14 +103,9 @@ class AdminCreateBackend extends AbstractController {
                $patient->setMobileNo($mobileNo);
                $patient->setDateCreated($dateCreated);            
 
-               //default value in entity being written as null when input is empty
-               //below solution found at https://stackoverflow.com/questions/3376881/default-value-in-doctrine
-               if ($patient->getStatus() === null) {
-                  $patient->setStatus('Pending');
-               }
-               if ($patient->getPriority() === null) {
-                  $patient->setPriority('Low');
-               }
+               //set default values
+               $patient->setStatus('Pending');        
+               $patient->setPriority('Low');
 
                $entityManager->persist($patient);
                $entityManager->flush(); 

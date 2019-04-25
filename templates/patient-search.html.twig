@@ -17,39 +17,39 @@
                 <div class="flex-container">
                     <div class="flex-item-small-form">
                         <p class="green">First Name</p>
-                        <input type="text" class="input-style" id="first-name">
+                        <input type="text" class="input-style" id="patient-first-name">
                     </div>
                     <div class="flex-item-small-form">
                         <p class="green">Middle Name(s)</p>
-                        <input type="text" class="input-style" id="middle-names">
+                        <input type="text" class="input-style" id="patient-middle-names">
                     </div>
                 </div>  
                 <div class="flex-container">
                     <div class="flex-item-small-form"> 
                         <p class="green">Last Name</p>
-                        <input type="text" class="input-style" id="last-name">
+                        <input type="text" class="input-style" id="patient-last-name">
                     </div>
                     <div class="flex-item-small-form">
                         <p class="green">Date of Birth</p>
-                        <input type="date" class="input-style" id="dob" value="1000-01-01"> 
+                        <input type="date" class="input-style" id="patient-dob" value="1000-01-01"> 
                     </div>
                 </div>  
                 <p class="green">Address</p>
-                <input type="text" class="input-style" id="address-line1">
-                <input type="text" class="input-style" id="address-line2">
-                <input type="text" class="input-style" id="address-line3">
+                <input type="text" class="input-style" id="patient-address-line1">
+                <input type="text" class="input-style" id="patient-address-line2">
+                <input type="text" class="input-style" id="patient-address-line3">
                 
                 <div class="flex-container">
                         <div class="flex-item-small-form"> 
                             <p class="green">Email</p>
-                            <input type="email" class="input-style" id="email"> 
+                            <input type="email" class="input-style" id="patient-email"> 
                         </div>
                         <div class="flex-item-small-form">
                             <p class="green">Patient Number</p>
                             <input type="number" class="input-style" id="patient-id">  
                         </div>
                     </div>                       
-                <a href="#advanced-search-results" data-inline="true" id="search-patient-button" onmousedown="advancedSearch(event)" 
+                <a href="#advanced-search-results" data-inline="true" id="search-patient-button" onmousedown="advancedSearch(event, 'patient')" 
                 class="ui-shadow ui-btn ui-corner-all ui-btn-inline" data-transition="pop" data-theme="d">Search</a>
             </form>
         </div>

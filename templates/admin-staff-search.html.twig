@@ -1,0 +1,48 @@
+{% include './header/header.html.twig' %}
+<body>
+<div data-role="page">    
+    {% include './sidenav/sidenav.html.twig' %} 
+    <div data-role="content" class="width-640">
+        <h2>Staff Search</h2>
+        <form method="post" id="update-patient-form">
+            <div class="flex-container">
+                <div class="flex-item-small-form">
+                    <p class="green">First Name</p>
+                    <input type="text" class="input-style" id="staff-first-name">
+                </div>
+                <div class="flex-item-small-form">
+                    <p class="green">Last Name</p>
+                    <input type="text" class="input-style" id="staff-last-name">
+                </div>
+            </div>  
+            <p class="green">Username</p>
+            <input type="text" class="input-style" id="staff-username">                 
+            <fieldset data-role="controlgroup" name="staff-type" id="staff-type" data-theme="d" data-type="horizontal">
+                <legend class="green">Staff Type</legend>
+                <p id="staff-type-error"></p>
+                <input type="radio" name="staff-type" id="doctor" value="ROLE-DOCTOR">
+                <label for="doctor">Doctor</label>
+                <input type="radio" name="staff-type" id="nurse" value="ROLE-NURSE">
+                <label for="nurse">Nurse</label>
+                <input type="radio" name="staff-type" id="clerical" value="ROLE-CLERICAL">
+                <label for="clerical">Clerical</label>
+            </fieldset>                      
+            <a href="#advanced-search-results" data-inline="true" id="search-staff-button" onmousedown="advancedSearch(event, 'staff')" 
+            class="ui-shadow ui-btn ui-corner-all ui-btn-inline" data-transition="pop" data-theme="d">Search</a>
+        </form>
+    </div>
+</div>
+<div data-role="page" id="advanced-search-results" data-dialog="true">
+    <div data-role="header">
+        <h3 class="light-grey light-text">Advanced Search Results</h3>        
+    </div>
+    <div data-role="content">
+        {% include './pagination/pagination.html.twig' %} 
+        <input type="hidden" id="advanced-search-insert"> 
+    </div>
+</div>
+<script>
+    
+</script>
+</body>
+</html>

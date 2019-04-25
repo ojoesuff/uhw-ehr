@@ -17,39 +17,58 @@
 </div>
 <script>  
     
-    var patientSearchResults;
+    var searchType;
+    var searchResults;
     var currentPage = 1;
     var totalPages;
 
-    function advancedSearch(event) {
+    function advancedSearch(event, type) {
+        searchType = type;
         event.preventDefault();
-        let firstName = $("#first-name").val();
-        let middleNames = $("#middle-names").val();
-        let lastName = $("#last-name").val();
-        let dob = $("#dob").val();
-        let addressLine1 = $("#address-line1").val();
-        let addressLine2 = $("#address-line2").val();
-        let addressLine3 = $("#address-line3").val();
-        let email = $("#email").val();
-        let patientId = $("#patient-id").val();
 
-        $.post("/backend/search", {type: "advancedSearch", firstName: firstName,
-        middleNames:middleNames, lastName: lastName, dob: dob, addressLine1: addressLine1,
-        addressLine2: addressLine2, addressLine3: addressLine3, email: email, patientId: patientId})
+        let backendJSONData;
+        //create different data for each type
+        if(type === "patient") {
+            let firstName = $("#patient-first-name").val();
+            let middleNames = $("#patient-middle-names").val();
+            let lastName = $("#patient-last-name").val();
+            let dob = $("#patient-dob").val();
+            let addressLine1 = $("#patient-address-line1").val();
+            let addressLine2 = $("#patient-address-line2").val();
+            let addressLine3 = $("#patient-address-line3").val();
+            let email = $("#patient-email").val();
+            let patientId = $("#patient-id").val();
+
+            backendJSONData = {type: "patientAdvancedSearch", firstName: firstName,
+            middleNames:middleNames, lastName: lastName, dob: dob, addressLine1: addressLine1,
+            addressLine2: addressLine2, addressLine3: addressLine3, email: email, patientId: patientId}
+
+        } else if (type === "staff") {
+            //get data for staff
+            let firstName = $("#staff-first-name").val();
+            let lastName = $("#staff-last-name").val();
+            let username = $("#staff-username").val();
+            let staffType = $("input[name='staff-type']:checked").val();
+
+            backendJSONData = {type: "staffAdvancedSearch", firstName: firstName,
+            lastName:lastName, username:username, staffType:staffType}
+        }
+        //post json data to backend
+        $.post("/backend/search", backendJSONData)
         .done(function(data) {
-            patientSearchResults = data;
+            searchResults = data;
             $(".advanced-search-result").remove();
             if(data === "none") {
                 $("<div class='advanced-search-result' data-theme='c'><h4>No results found</h4></div>").insertBefore("#advanced-search-insert");
             } else {
                 updatePaginationItems();
             } 
-        })
+        }); //end post
     }
     function updatePaginationItems() {
         //remove previous results
         $(".advanced-search-result").remove();
-        let totalItems = patientSearchResults.length;   
+        let totalItems = searchResults.length;   
         let stringItemsPerPage = $("#items-per-page").find(":selected").text();
         let itemsPerPage = parseInt(stringItemsPerPage);
         let firstItem = 1 + (itemsPerPage * (currentPage - 1));
@@ -86,7 +105,7 @@
             if(i === totalItems) {
                 break;
             }
-            let patient = patientSearchResults[i];
+            let patient = searchResults[i];
             let id = patient.id;
             let firstName = patient.firstName;
             let middleNames = patient.middleNames;
