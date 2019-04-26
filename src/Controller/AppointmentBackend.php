@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\UserStaff;
 use App\Entity\Appointment;
+use App\Entity\Department;
 use App\Entity\Patient;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response; 
@@ -36,7 +37,7 @@ class AppointmentBackend extends AbstractController {
                 if($patient) {
                     $appointments = $patient->getAppointments();
 
-                    if(sizeof($appointments) > 0) {                        
+                    if($appointments) {                        
                         $appointmentsArray = array("upcomingAppointments" => array(), 
                         "completedAppointments" => array());
                         foreach($appointments as $appointment) {
@@ -133,6 +134,84 @@ class AppointmentBackend extends AbstractController {
                     if($allStaff) {
                         return new JsonResponse($allStaff);
                     } //end if
+
+                case "updateAppointment":
+                    $appointmentId = $request->get("appointmentId");
+                    $appointment = $entityManager->getRepository(Appointment::class)->findOneBy([
+                        "id" => $appointmentId
+                    ]);
+
+                    if($appointment) {
+                        $staffId = $request->get("staffId");
+                        $complete = $request->get("complete");
+                        if($complete === "Pending") {
+                            $complete = 0;
+                        } else {
+                            $complete = 1;
+                        }
+                        //convert to DateTime object
+                        $date = date_create($request->get("formattedDate"));
+                        $status = $request->get("status");
+
+                        $staff = $entityManager->getRepository(UserStaff::class)->findOneBy([
+                            "id" => $staffId
+                        ]);
+
+                        if($staff) {
+                            $appointment->setStaffId($staff);
+                        }                         
+                        $appointment->setComplete($complete);
+                        $appointment->setDate($date);
+                        $appointment->setStatus($status);
+
+                        $entityManager->flush();
+
+                        return new Response("success");
+                    }
+                case "deleteAppointment":
+                    $appointmentId = $request->get("appointmentId");
+                    $appointment = $entityManager->getRepository(Appointment::class)->findOneBy([
+                        "id" => $appointmentId
+                    ]);
+
+                    if($appointment) {
+                        $entityManager->remove($appointment);
+                        $entityManager->flush();
+                        return new Response("success");
+                    } //end if
+
+                case "createAppointment":
+
+                    if($patient) {                        
+                        $date = date_create($request->get("formattedDate"));
+                        $status = $request->get("status");
+                        $staffId = $request->get("staffId");
+                        $staff = $entityManager->getRepository(UserStaff::class)->findOneBy([
+                            "id" => $staffId
+                        ]);
+                        $departmentName = $request->get("departmentName");
+                        $department = $entityManager->getRepository(Department::class)->findOneBy([
+                            "name" => $departmentName
+                        ]);
+
+                        $appointment = new Appointment();
+
+                        $appointment->setPatient($patient);
+                        $appointment->setDate($date);
+                        $appointment->setStatus($status);
+                        //if objects exist, set to appointment object
+                        if($staff) {
+                            $appointment->setStaffId($staff);
+                        }
+                        if($department) {
+                            $appointment->setDepartment($department);
+                        }
+
+                        $entityManager->persist($appointment);
+                        $entityManager->flush();
+
+                        return new Response("success");                        
+                    }
          
         } //end switch
 

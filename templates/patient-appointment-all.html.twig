@@ -4,6 +4,7 @@
     {% include './sidenav/sidenav.html.twig' %} 
     <div data-role="content" class="width-720"> 
         <div class="box">
+            <p class="green" id="appointment-success-msg"></p>
             <h3 class="green">All Upcoming Appointments</h3>
             <input type="hidden" id="upcoming-appointments-insert-before">
         </div>
@@ -18,6 +19,12 @@
     let urlString = window.location.href;
     let url = new URL(urlString);
     var patientId = url.searchParams.get("id");
+    let msg = url.searchParams.get("msg");
+    if(msg === "deleted") {
+        $("#appointment-success-msg").text("Appointment successfully deleted");
+    } else {
+        $("#appointment-success-msg").remove();
+    }
 
     getUpcomingAppointments();
 

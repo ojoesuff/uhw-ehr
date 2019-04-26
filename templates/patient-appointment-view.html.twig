@@ -5,6 +5,7 @@
     <div data-role="content" class="width-720 box"> 
         <h2 class="green">Appointment</h2>
         <h2 class="green" id="appointment-department"></h2>
+        <a id="appointment-delete-button" href="#delete-appointment" class="ui-shadow ui-btn ui-corner-all ui-btn-inline" data-transition="pop">DELETE</a>
         <p class="green">Staff Name</p>
         <p class="input-style" id="appointment-staff-name"></p>
         <div class="flex-container">
@@ -37,6 +38,7 @@
     <div data-role="content" class="width-720 box"> 
         <h3 class="green">Edit Appointment</h3>
         <label for="edit-appointment-staff-name" class="green">Staff Name</label>
+        <p id="edit-appointment-staff-name-error"></p>
         <select name="edit-appointment-staff-name" id="edit-appointment-staff-name" data-mini="true">
             <option value="" disabled selected>Choose one</option>
             <!--dynamically insert options from database-->
@@ -60,16 +62,30 @@
         <div class="flex-container">
             <div class="flex-item-small-form">
                 <p class="green">Date</p>
+                <p id="edit-appointment-date-error"></p>
                 <input type="date" id="edit-appointment-date">
             </div>
             <div class="flex-item-small-form">
                 <p class="green">Time</p>
+                <p id="edit-appointment-time-error"></p>
                 <input type="time" id="edit-appointment-time">
             </div>
         </div> 
+        <p id="appointment-update-error"></p>
         <a id="appointment-update-button" href="#" class="ui-shadow ui-btn ui-corner-all ui-btn-inline" data-transition="pop">UPDATE</a>
     </div> 
 </div> <!--/edit-appointment-->
+<div data-role="page" data-dialog="true" id="delete-appointment">
+    <div data-role="header">
+        <h3>Delete Appointment</span></h3>
+    </div>
+    <div data-role="content">
+        <p>Are you sure you want to delete this appointment?</p>
+        <p id="delete-appointment-error"></p>
+        <a id="delete-appointment-yes" class="ui-shadow ui-btn ui-corner-all ui-btn-inline" data-transition="pop">YES</a>
+        <a id="delete-appointment-no" data-rel="back" class="ui-shadow ui-btn ui-corner-all ui-btn-inline" data-transition="pop">NO</a>
+    </div>
+</div> <!--/delete profile-->
 <script>
     //get parameter from URL seen at https://www.w3docs.com/snippets/javascript/how-to-get-current-url-in-javascript.html
     let urlString = window.location.href;
@@ -138,6 +154,61 @@
 
             } //end if
         }); //end post
+    }); //end click event
+
+    //presist new values to DB
+    $("#appointment-update-button").click(function() {
+        //get form values        
+        let staffId = $("#edit-appointment-staff-name").find(":selected").val();
+        let complete = $("#edit-appointment-complete").find(":selected").val();
+        let time = $("#edit-appointment-time").val();
+        let date = $("#edit-appointment-date").val();
+        let formattedDate = `${date} ${time}`;
+        let status = $("#edit-appointment-status").find(":selected").val();
+        //form validation
+        if(staffId === "") {
+            addError("#edit-appointment-staff-name-error", "Please select a staff member");
+        } else {
+            removeError("#edit-appointment-staff-name-error");
+        }  
+        if(!date) {
+            addError("#edit-appointment-date-error", "Please enter a valid date");
+        } else {
+            removeError("#edit-appointment-date-error");
+        }  
+        if(!time) {
+            addError("#edit-appointment-time-error", "Please enter a valid time");
+        } else {
+            removeError("#edit-appointment-time-error");
+        } 
+        //post to backend only if no errors exist
+        if(!($(".error").length)) {
+            $.post("/backend/appointment", {type:"updateAppointment", patientId:patientId, appointmentId:appointmentId,
+            staffId:staffId, complete:complete, formattedDate:formattedDate, status:status})
+            .done(function(data) {
+                console.log(data);
+                if(data === "none") {
+                    addError("#appointment-update-error", "An unexpected error occurred");
+                } else {
+                    removeError("#appointment-update-error");
+                    window.location = `/patient/appointment/view?id=${patientId}&appoint=${appointmentId}`;
+                }
+            }); //end post
+        } //end if
+    }); //end click
+
+    //delete appointment
+    $("#delete-appointment-yes").click(function() {
+        $.post("/backend/appointment", {type: "deleteAppointment", patientId:patientId, appointmentId:appointmentId})
+        .done(function(data) {
+            console.log(data);
+           if(data === "none") {
+               addError("#delete-appointment-error", "An unexpected error occurred");
+           } else {
+               removeError("#delete-appointment-error");
+               window.location = `../../patient/appointment/all?id=${patientId}&msg=deleted`;
+           }
+        }); //end post        
     }); //end click event
     
 </script>

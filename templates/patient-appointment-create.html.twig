@@ -1,11 +1,150 @@
 {% include './header/header.html.twig' %}
 <body>
-<div data-role="page">  
-    {% include './sidenav/sidenav.html.twig' %} 
-    <div data-role="content" class="width-720"> 
-    </div>
-</div>
+    <div data-role="page" id="create-appointment"> 
+        {% include './sidenav/sidenav.html.twig' %} 
+        <div data-role="content" class="width-720 box"> 
+            <h3 class="green">Create Appointment</h3>
+            <label for="create-appointment-staff-name" class="green">Staff Name</label>
+            <p id="create-appointment-staff-name-error"></p>
+            <select name="create-appointment-staff-name" id="create-appointment-staff-name" data-mini="true">
+                <option value="" disabled selected>Choose one</option>
+                <!--dynamically insert options from database-->
+            </select>
+            <div class="flex-container">
+                <div class="flex-item-small-form">
+                    <label for="create-appointment-department" class="green">Department</label>
+                    <p id="create-appointment-department-error"></p>
+                    <select name="create-appointment-department" id="create-appointment-department">
+                        <option value="" disabled selected>Choose one</option>
+                        <option value="A And E">Accident and Emergency</option>
+                        <option value="Radiology">Radiology</option>
+                        <option value="Ophthalmology">Ophthalmology</option>
+                    </select>
+                </div>
+                <div class="flex-item-small-form">
+                    <label for="create-appointment-status" class="green">Type</label>
+                    <p id="create-appointment-status-error"></p>
+                    <select name="create-appointment-status" id="create-appointment-status">
+                        <option value="" disabled selected>Choose one</option>
+                        <option value="New">New</option>
+                        <option value="Reappointment">Reappointment</option>
+                    </select>
+                </div>
+            </div>
+            <div class="flex-container">
+                <div class="flex-item-small-form">
+                    <p class="green">Date</p>
+                    <p id="create-appointment-date-error"></p>
+                    <input type="date" id="create-appointment-date">
+                </div>
+                <div class="flex-item-small-form">
+                    <p class="green">Time</p>
+                    <p id="create-appointment-time-error"></p>
+                    <input type="time" id="create-appointment-time">
+                </div>
+            </div> 
+            <p id="appointment-create-error"></p>
+            <a id="appointment-create-button" href="#" class="ui-shadow ui-btn ui-corner-all ui-btn-inline" data-transition="pop">CREATE</a>
+        </div> 
+    </div> <!--/create-appointment-->
+
 <script>
+    //get parameter from URL seen at https://www.w3docs.com/snippets/javascript/how-to-get-current-url-in-javascript.html
+    let urlString = window.location.href;
+    let url = new URL(urlString);
+    var patientId = url.searchParams.get("id");
+
+    //create todays date and time to add to form inputs
+    var todaysDate = new Date();
+    //converts date to string formatted to html date input https://stackoverflow.com/questions/3066586/get-string-in-yyyymmdd-format-from-js-date-object
+    var dateNow = todaysDate.toISOString().slice(0,10);
+    //get time now
+    var timeNow = todaysDate.toISOString().slice(11,16);
+    $('#create-appointment-time').val(timeNow);
+    $('#create-appointment-date').val(dateNow);
+
+    //dynamically fetch medical staff members for staff select on create screen
+    $.post("/backend/appointment", {type:"getAllStaff", patientId:patientId})
+    .done(function(data) {
+        console.log(data);
+        if(data) {
+            data.forEach(function(staff) {
+                let lastName = staff.lastName;
+                let firstName = staff.firstName;
+                let staffName = `${lastName}, ${firstName}`;
+                let staffId = staff.id;
+
+                htmlString = `<option value=${staffId}>${staffName}</option>`;
+
+                $("#create-appointment-staff-name").append(htmlString);
+            }) //end forEach
+
+        } //end if
+    }); //end post
+
+    $("#appointment-create-button").click(function() {
+        //set parameters
+        let staffId = $("#create-appointment-staff-name").find(":selected").val();
+        let departmentName = $("#create-appointment-department").find(":selected").val();
+        let status = $("#create-appointment-status").find(":selected").val();
+        let date = $("#create-appointment-date").val();
+        let time = $("#create-appointment-time").val();
+        let formattedDate = `${date} ${time}`;
+        //form validation
+        if(staffId === "") {
+            addError("#create-appointment-staff-name-error", "Please select a staff member");
+        } else {
+            removeError("#create-appointment-staff-name-error");
+        }  
+        if(departmentName === "") {
+            addError("#create-appointment-department-error", "Please select a department");
+        } else {
+            removeError("#create-appointment-department-error");
+        } 
+        if(status === "") {
+            addError("#create-appointment-status-error", "Please select a status");
+        } else {
+            removeError("#create-appointment-status-error");
+        } 
+        if(!date) {
+            addError("#create-appointment-date-error", "Please enter a valid date");
+        } else {
+            removeError("#create-appointment-date-error");
+        }  
+        if(!time) {
+            addError("#create-appointment-time-error", "Please enter a valid time");
+        } else {
+            removeError("#create-appointment-time-error");
+        } 
+        //check if date is in future
+        if(date < dateNow) {
+            addError("#create-appointment-date-error", "Date must be in the future");
+        } else {
+            removeError("#create-appointment-date-error");
+        } 
+        //check if time is in the future if todays date is selected
+        if(date === dateNow) {
+            if(time <= timeNow) {
+                addError("#create-appointment-time-error", "Time must be in the future");
+            } else {
+                removeError("#create-appointment-time-error");
+            }
+        } 
+        //post to backend only if no errors exist
+        if(!($(".error").length)) {
+            $.post("/backend/appointment", {type:"createAppointment", patientId:patientId,
+            staffId:staffId, departmentName:departmentName, formattedDate:formattedDate, status:status})
+            .done(function(data) {
+                console.log(data);
+                if(data === "none") {
+                    addError("#appointment-create-error", "An unexpected error occurred");
+                } else {
+                    removeError("#appointment-create-error");
+                    window.location = `/patient/profile?id=${patientId}&msg=appoint`;
+                }
+            }); //end post
+        } //end if
+    }); //end click event
     
 </script>
 </body>

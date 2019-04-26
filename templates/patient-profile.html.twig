@@ -62,7 +62,7 @@
             </div>
             <div class="box flex-item-1">
                 <h3 class="green">Appointments</h3>
-                <a data-inline="true" class="ui-shadow ui-btn ui-corner-all ui-btn-inline" href="/patient/appointment/create">+ APPOINTMENT</a>
+                <a data-inline="true" class="ui-shadow ui-btn ui-corner-all ui-btn-inline" href="#" id="add-appointmnet-button">+ APPOINTMENT</a>
                 <div class="flex-container">
                     <input type="date" id="appointment-date">                
                     <form id="appointment-update-form" method="post" onsubmit="getAppointments(event);">
@@ -471,7 +471,10 @@
     var msg = url.searchParams.get("msg");
     if(msg === "success") {
         $("#updated-success").text("Record successfully updated");
-    } else {
+    } else if (msg === "appoint") {
+        $("#updated-success").text("Appointment successfully created");
+    }
+     else {
         $("#updated-success").text("");
     }
 
@@ -749,6 +752,11 @@
                window.location = "./search?msg=deleted";
            }
         }); //end post        
+    }); //end click event
+
+    //change window location if link clicked
+    $("#add-appointmnet-button").click(function() {
+        window.location = `/patient/appointment/create?id=${patientId}`;
     }); //end click event
 
 </script>
