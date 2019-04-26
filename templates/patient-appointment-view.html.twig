@@ -1,16 +1,144 @@
 {% include './header/header.html.twig' %}
 <body>
-<div data-role="page">  
+<div data-role="page" id="view-appointment">  
     {% include './sidenav/sidenav.html.twig' %} 
-    <div data-role="content" class="width-720"> 
-        
+    <div data-role="content" class="width-720 box"> 
+        <h2 class="green">Appointment</h2>
+        <h2 class="green" id="appointment-department"></h2>
+        <p class="green">Staff Name</p>
+        <p class="input-style" id="appointment-staff-name"></p>
+        <div class="flex-container">
+            <div class="flex-item-small-form">
+                <p class="green">Status</p>
+                <p class="input-style" id="appointment-complete"></p>
+            </div>
+            <div class="flex-item-small-form">
+                <p class="green">Type</p>
+                <p class="input-style" id="appointment-status"></p>
+            </div>
+        </div>
+        <div class="flex-container">
+            <div class="flex-item-small-form">
+                <p class="green">Date</p>
+                <p class="input-style" id="appointment-date"></p>
+            </div>
+            <div class="flex-item-small-form">
+                <p class="green">Time</p>
+                <p class="input-style" id="appointment-time"></p>
+            </div>
+        </div> 
+        <a id="appointment-edit-button" href="#edit-appointment" class="ui-shadow ui-btn ui-corner-all ui-btn-inline" data-transition="pop">EDIT</a>
     </div>
-</div>
+</div> <!--/view-appointment-->
+<div data-role="page" id="edit-appointment" data-dialog="true">  
+    <div data-role="header">
+        <h3>Edit</h3>
+    </div>
+    <div data-role="content" class="width-720 box"> 
+        <h3 class="green">Edit Appointment</h3>
+        <label for="edit-appointment-staff-name" class="green">Staff Name</label>
+        <select name="edit-appointment-staff-name" id="edit-appointment-staff-name" data-mini="true">
+            <option value="" disabled selected>Choose one</option>
+            <!--dynamically insert options from database-->
+        </select>
+        <div class="flex-container">
+            <div class="flex-item-small-form">
+                <label for="edit-appointment-complete" class="green">Status</label>
+                <select name="edit-appointment-complete" id="edit-appointment-complete">
+                    <option value="Pending">Pending</option>
+                    <option value="Complete">Complete</option>
+                </select>
+            </div>
+            <div class="flex-item-small-form">
+                <label for="edit-appointment-status" class="green">Type</label>
+                <select name="edit-appointment-status" id="edit-appointment-status">
+                    <option value="New">New</option>
+                    <option value="Reappointment">Reappointment</option>
+                </select>
+            </div>
+        </div>
+        <div class="flex-container">
+            <div class="flex-item-small-form">
+                <p class="green">Date</p>
+                <input type="date" id="edit-appointment-date">
+            </div>
+            <div class="flex-item-small-form">
+                <p class="green">Time</p>
+                <input type="time" id="edit-appointment-time">
+            </div>
+        </div> 
+        <a id="appointment-update-button" href="#" class="ui-shadow ui-btn ui-corner-all ui-btn-inline" data-transition="pop">UPDATE</a>
+    </div> 
+</div> <!--/edit-appointment-->
 <script>
     //get parameter from URL seen at https://www.w3docs.com/snippets/javascript/how-to-get-current-url-in-javascript.html
     let urlString = window.location.href;
     let url = new URL(urlString);
     var patientId = url.searchParams.get("id");
+    var appointmentId = url.searchParams.get("appoint");
+    //hide edit link by default
+    $("#appointment-edit-button").hide();
+
+    //used to update value of dynamic select list
+    var staffId;
+
+    $.post("/backend/appointment", {type:"getAppointment", patientId:patientId, appointmentId:appointmentId})
+    .done(function(data) {
+        console.log(data);
+        if(data === "none") {
+            addError("#appointment-department", "Appointment not found");
+        } else {
+            removeError("#appointment-department");
+            let complete = data.complete;
+            //if not complete, show edit button
+            if(!complete) {
+                $("#appointment-edit-button").show();
+            }
+            let completeText = (complete) ? "Complete" : "Pending";
+            let date = data.date;
+            let departmentName = data.departmentName;
+            let staffName = data.staffName;
+            let staffType = data.staffType;
+            let staffFullTitle = `${staffType}. ${staffName}`;
+            let time = data.time;
+            let status = data.status;
+            let formattedDate = data.formattedDate;
+            staffId = data.staffId;
+
+            $("#appointment-department").text(departmentName);
+            $("#appointment-date").text(date);
+            $("#appointment-complete").text(completeText);
+            $("#appointment-staff-name").text(staffFullTitle);
+            $("#appointment-time").text(time);
+            $("#appointment-status").text(status);
+
+            $("#edit-appointment-date").val(formattedDate);
+            $("#edit-appointment-complete").val(completeText);
+            $("#edit-appointment-time").val(time);
+            $("#edit-appointment-status").val(status);
+        }
+    }); //end post
+
+    //dynamically fetch medical staff members for staff select on edit screen
+    $("#appointment-edit-button").click(function() {
+        $.post("/backend/appointment", {type:"getAllStaff", patientId:patientId})
+        .done(function(data) {
+            console.log(data);
+            if(data) {
+                data.forEach(function(staff) {
+                    let lastName = staff.lastName;
+                    let firstName = staff.firstName;
+                    let staffName = `${lastName}, ${firstName}`;
+                    let staffId = staff.id;
+
+                    htmlString = `<option value=${staffId}>${staffName}</option>`;
+
+                    $("#edit-appointment-staff-name").append(htmlString);
+                }) //end forEach
+
+            } //end if
+        }); //end post
+    }); //end click event
     
 </script>
 </body>

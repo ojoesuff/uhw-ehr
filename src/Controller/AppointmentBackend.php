@@ -5,6 +5,7 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\UserStaff;
+use App\Entity\Appointment;
 use App\Entity\Patient;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response; 
@@ -36,7 +37,8 @@ class AppointmentBackend extends AbstractController {
                     $appointments = $patient->getAppointments();
 
                     if(sizeof($appointments) > 0) {                        
-                        $appointmentsArray = array();
+                        $appointmentsArray = array("upcomingAppointments" => array(), 
+                        "completedAppointments" => array());
                         foreach($appointments as $appointment) {
                             $appointmentId = $appointment->getId();
                             $department = $appointment->getDepartment();
@@ -61,18 +63,76 @@ class AppointmentBackend extends AbstractController {
                             }
                             $dueDate = $appointment->getDate();
                             $date = $dueDate->format("d M Y");
-                            $time = $dueDate->format("H:i");
+                            $time = $dueDate->format("H:i");                            
                             
                             $appointmentArray = array("appointmentId" => $appointmentId, "departmentName" => $departmentName,
                             "date" => $date, "time" => $time, "staffName"=> $staffName, "staffType" => $staffType);
 
-                            array_push($appointmentsArray, $appointmentArray);        
+                            //organise appointments based on complete status
+                            $completed = $appointment->getComplete();
+                            if($completed) {
+                                array_push($appointmentsArray["completedAppointments"], $appointmentArray); 
+                            } else {
+                                array_push($appointmentsArray["upcomingAppointments"], $appointmentArray);
+                            }
+                                   
                         } //end for each
 
                         return new JsonResponse($appointmentsArray);                    
                     } //end if
                 
             } //end if
+
+            case "getAppointment":
+                $appointmentId = $request->get("appointmentId");
+                $appointment = $entityManager->getRepository(Appointment::class)->findOneBy([
+                    "id" => $appointmentId
+                ]);
+
+                if($appointment) {
+                    $department = $appointment->getDepartment();
+                    $departmentName = $department->getName();
+                    $staff = $appointment->getStaffId();
+                    $staffId = $staff->getId();
+                    $staffFirstName = $staff->getFirstName();
+                    $staffLastName = $staff->getLastName();
+                    if(!$staffLastName) {
+                        $staffLastName = "";
+                    }
+                    $staffRole = $staff->getStaffType();
+                    switch($staffRole) {
+                        case "ROLE-NURSE":
+                            $staffType = "Nurse";
+                            break;
+                        case "ROLE-DOCTOR":
+                            $staffType = "Dr";
+                            break;
+                        default: 
+                            $staffType = "";
+                    }
+                    $staffName = $staffFirstName." ".$staffFirstName;
+                    $dueDate = $appointment->getDate();
+                    $date = $dueDate->format("d M Y");
+                    $formattedDate = $dueDate->format("Y-m-d");
+                    $time = $dueDate->format("H:i"); 
+                    $status = $appointment->getStatus();
+                    $complete = $appointment->getComplete();
+
+
+                    $appointmentArray = array("departmentName" => $departmentName, "staffType" => $staffType,
+                    "staffName" => $staffName, "date" => $date, "time" => $time, "staffId" => $staffId, 
+                    "status" => $status, "complete" => $complete, "formattedDate" => $formattedDate);
+
+                    return new JsonResponse($appointmentArray);
+                }
+
+                case "getAllStaff" :
+
+                    $allStaff = $entityManager->getRepository(UserStaff::class)->getAllMedicalStaffNames();
+
+                    if($allStaff) {
+                        return new JsonResponse($allStaff);
+                    } //end if
          
         } //end switch
 

@@ -81,6 +81,7 @@ class UserStaffRepository extends ServiceEntityRepository
 
     } //end findStaffAdvanced
 
+    //return user that matches the username but not id
     public function findOneByNotId($username, $staffId) {
 
         return $this->createQueryBuilder('s')
@@ -90,5 +91,18 @@ class UserStaffRepository extends ServiceEntityRepository
             ->setParameter('staffId', $staffId)
             ->getQuery()
             ->getResult();
+    }
+
+    //get all staff names for select input on edit appointment
+    public function getAllMedicalStaffNames() {
+        return $this->createQueryBuilder('s')
+        ->select("s.lastName" , "s.firstName", "s.id")
+        ->andWhere('s.staffType = :doctor')
+        ->setParameter('doctor', "ROLE-DOCTOR")
+        ->orWhere('s.staffType = :nurse')
+        ->setParameter('nurse', "ROLE-NURSE")
+        ->addOrderBy('s.lastName', 'ASC')        
+        ->getQuery()
+        ->getResult();
     }
 }

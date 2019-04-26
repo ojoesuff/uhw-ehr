@@ -64,7 +64,7 @@ amber = #FFAE56
 }
 
 .dark-green {
-    color: #387f5b;
+    color: #387f5b!important;
 }
 
 .width-xsmall {
@@ -269,9 +269,9 @@ p {
     margin-top: 40px;
 }
 
-.search-result a, .advanced-search-result a, .medical-record-link {
+.search-result a,  .advanced-search-result a, .medical-record-link, .upcoming-appointments {
     color: #387f5b!important;
-    text-decoration: none;
+    text-decoration: none!important;
     font-weight: normal;
 }
 
@@ -283,7 +283,8 @@ p {
 }
 
 
-.search-result p:hover, .advanced-search-result p:hover, .medical-record-link p:hover {
+.search-result p:hover, .advanced-search-result p:hover, 
+.medical-record-link p:hover, .upcoming-appointments p:hover {
     color: #5acc92;
 }
 
