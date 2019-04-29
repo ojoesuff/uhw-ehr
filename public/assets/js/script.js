@@ -10,13 +10,20 @@ function addError(target, msg) {
     $(target).text(msg);
 }
 
-//converts boolean to yes or no
+//converts 0 or 1 to yes or no
 function booleanToString(data) {    
     return (data) ? "Yes" : "No";
 }
 
-//converts yes or no to boolean 
+//converts yes or no to 0 or 1 
 function stringToBoolean(text) {
     //return 1 or 0 for DB
     return (text == "Yes") ? 1 : 0;
 }
+
+
+//used with node.js and jasmine to test JS functions
+module.exports = {
+    stringToBoolean: stringToBoolean,
+    booleanToString: booleanToString
+};

@@ -97,9 +97,9 @@ class UserRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('s')
         ->select("s.lastName" , "s.firstName", "s.id")
         ->andWhere('s.roles LIKE :doctor')
-        ->setParameter('doctor', "%ROLE-DOCTOR%")
+        ->setParameter('doctor', "%ROLE_DOCTOR%")
         ->orWhere('s.roles LIKE :nurse')
-        ->setParameter('nurse', "%ROLE-NURSE%")
+        ->setParameter('nurse', "%ROLE_NURSE%")
         ->addOrderBy('s.lastName', 'ASC')        
         ->getQuery()
         ->getResult();
