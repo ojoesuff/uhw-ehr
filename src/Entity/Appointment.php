@@ -44,7 +44,7 @@ class Appointment
     private $department;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\UserStaff", inversedBy="appointments")
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="appointments")
      */
     private $staffId;
 
@@ -113,12 +113,12 @@ class Appointment
         return $this;
     }
 
-    public function getStaffId(): ?UserStaff
+    public function getStaffId(): ?User
     {
         return $this->staffId;
     }
 
-    public function setStaffId(?UserStaff $staffId): self
+    public function setStaffId(?User $staffId): self
     {
         $this->staffId = $staffId;
 

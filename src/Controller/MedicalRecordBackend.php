@@ -8,7 +8,7 @@ use App\Entity\Patient;
 use App\Entity\AAndERecord;
 use App\Entity\MacularClinicRecord;
 use App\Entity\RadiologyRecord;
-use App\Entity\UserStaff;
+use App\Entity\User;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response; 
 use Symfony\Component\HttpFoundation\JsonResponse; 
@@ -82,7 +82,7 @@ class MedicalRecordBackend extends AbstractController {
                     $aAndERecord->setNotes($notes);
 
                     //placeholder staff id
-                    $staffId = $entityManager->getRepository(UserStaff::class)->findOneBy([
+                    $staffId = $entityManager->getRepository(User::class)->findOneBy([
                         "id" => 1
                     ]);
 
@@ -124,7 +124,7 @@ class MedicalRecordBackend extends AbstractController {
                     $record->setDateCreated($dateCreated);
                     $record->setPatientId($patient);
                     //placeholder staff id
-                    $staffId = $entityManager->getRepository(UserStaff::class)->findOneBy([
+                    $staffId = $entityManager->getRepository(User::class)->findOneBy([
                         "id" => 1
                     ]);
                     $record->setStaffId($staffId);
@@ -155,7 +155,7 @@ class MedicalRecordBackend extends AbstractController {
                     $record->setDateCreated($dateCreated);
                     $record->setPatientId($patient);
                     //placeholder staff id
-                    $staffId = $entityManager->getRepository(UserStaff::class)->findOneBy([
+                    $staffId = $entityManager->getRepository(User::class)->findOneBy([
                         "id" => 1
                     ]);
                     $record->setStaffId($staffId);

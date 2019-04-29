@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Entity\UserStaff;
+use App\Entity\User;
 use App\Entity\Appointment;
 use App\Entity\Department;
 use App\Entity\Patient;
@@ -51,16 +51,15 @@ class AppointmentBackend extends AbstractController {
                                 $staffLastName = "";
                             }
                             $staffName = $staffFirstName." ".$staffFirstName;
-                            $staffRole = $staff->getStaffType();
-                            switch($staffRole) {
-                                case "ROLE-NURSE":
-                                    $staffType = "Nurse";
-                                    break;
-                                case "ROLE-DOCTOR":
-                                    $staffType = "Dr";
-                                    break;
-                                default: 
-                                    $staffType = "";
+                            $staffRole = $staff->getRoles();
+
+                            //check if roles is in roles array
+                            if(in_array("ROLE_NURSE", $staffRole)) {
+                                $staffType = "Nurse";
+                            } else if (in_array("ROLE_DOCTOR", $staffRole)) {
+                                $staffType = "Dr";
+                            } else {
+                                $staffType = "";
                             }
                             $dueDate = $appointment->getDate();
                             $date = $dueDate->format("d M Y");
@@ -100,16 +99,14 @@ class AppointmentBackend extends AbstractController {
                     if(!$staffLastName) {
                         $staffLastName = "";
                     }
-                    $staffRole = $staff->getStaffType();
-                    switch($staffRole) {
-                        case "ROLE-NURSE":
-                            $staffType = "Nurse";
-                            break;
-                        case "ROLE-DOCTOR":
-                            $staffType = "Dr";
-                            break;
-                        default: 
-                            $staffType = "";
+                    $staffRole = $staff->getRoles();
+                    //check if roles is in roles array
+                    if(in_array("ROLE_NURSE", $staffRole)) {
+                        $staffType = "Nurse";
+                    } else if (in_array("ROLE_DOCTOR", $staffRole)) {
+                        $staffType = "Dr";
+                    } else {
+                        $staffType = "";
                     }
                     $staffName = $staffFirstName." ".$staffFirstName;
                     $dueDate = $appointment->getDate();
@@ -129,7 +126,7 @@ class AppointmentBackend extends AbstractController {
 
                 case "getAllStaff" :
 
-                    $allStaff = $entityManager->getRepository(UserStaff::class)->getAllMedicalStaffNames();
+                    $allStaff = $entityManager->getRepository(User::class)->getAllMedicalStaffNames();
 
                     if($allStaff) {
                         return new JsonResponse($allStaff);
@@ -153,7 +150,7 @@ class AppointmentBackend extends AbstractController {
                         $date = date_create($request->get("formattedDate"));
                         $status = $request->get("status");
 
-                        $staff = $entityManager->getRepository(UserStaff::class)->findOneBy([
+                        $staff = $entityManager->getRepository(User::class)->findOneBy([
                             "id" => $staffId
                         ]);
 
@@ -186,7 +183,7 @@ class AppointmentBackend extends AbstractController {
                         $date = date_create($request->get("formattedDate"));
                         $status = $request->get("status");
                         $staffId = $request->get("staffId");
-                        $staff = $entityManager->getRepository(UserStaff::class)->findOneBy([
+                        $staff = $entityManager->getRepository(User::class)->findOneBy([
                             "id" => $staffId
                         ]);
                         $departmentName = $request->get("departmentName");

@@ -17,7 +17,7 @@ class AAndERecord
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\UserStaff", inversedBy="aAndERecords")
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="aAndERecords")
      * @ORM\JoinColumn(nullable=true)
      */
     private $staffId;
@@ -98,12 +98,12 @@ class AAndERecord
         return $this->id;
     }
 
-    public function getStaffId(): ?UserStaff
+    public function getStaffId(): ?User
     {
         return $this->staffId;
     }
 
-    public function setStaffId(?UserStaff $staffId): self
+    public function setStaffId(?User $staffId): self
     {
         $this->staffId = $staffId;
 

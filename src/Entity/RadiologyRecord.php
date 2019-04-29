@@ -23,7 +23,7 @@ class RadiologyRecord
     private $patientId;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\UserStaff", inversedBy="radiologyRecords")
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="radiologyRecords")
      * @ORM\JoinColumn(nullable=true)
      */
     private $staffId;
@@ -100,12 +100,12 @@ class RadiologyRecord
         return $this;
     }
 
-    public function getStaffId(): ?UserStaff
+    public function getStaffId(): ?User
     {
         return $this->staffId;
     }
 
-    public function setStaffId(?UserStaff $staffId): self
+    public function setStaffId(?User $staffId): self
     {
         $this->staffId = $staffId;
 

@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Entity\UserStaff;
+use App\Entity\User;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response; 
 use Symfony\Component\HttpFoundation\JsonResponse; 
@@ -26,7 +26,7 @@ class StaffBackend extends AbstractController {
 
         switch($type) {
             case "getStaffDetails" :
-                $staff = $entityManager->getRepository(UserStaff::class)->findOneBy([
+                $staff = $entityManager->getRepository(User::class)->findOneBy([
                     "id" => $staffId
                 ]);
 
@@ -34,7 +34,7 @@ class StaffBackend extends AbstractController {
                     $firstName = $staff->getFirstName();
                     $lastName = $staff->getLastName();
                     $username = $staff->getUsername();
-                    $staffType = $staff->getStaffType();
+                    $staffType = $staff->getRoles();
 
                     $staffArray = array("firstName" => $firstName,"lastName" => $lastName,
                     "username" => $username, "staffType" => $staffType);
@@ -51,12 +51,12 @@ class StaffBackend extends AbstractController {
                 $staffType = $request->request->get('staffType');
 
                 //get user with given username that doesn't match current staff id
-                $existingUser = $entityManager->getRepository(UserStaff::class)->findOneByNotId($username, $staffId);
+                $existingUser = $entityManager->getRepository(User::class)->findOneByNotId($username, $staffId);
                 //if username already exists, send error
                 if($existingUser) {
                     return new Response("error");
                 } else {
-                    $userStaff = $entityManager->getRepository(UserStaff::class)->findOneBy([
+                    $userStaff = $entityManager->getRepository(User::class)->findOneBy([
                         "id" => $staffId
                     ]);
 
@@ -64,7 +64,8 @@ class StaffBackend extends AbstractController {
                         $userStaff->setFirstName($firstName);
                         $userStaff->setLastName($lastName);
                         $userStaff->setUsername($username);
-                        $userStaff->setStaffType($staffType);
+                        $userRoles = [$staffId];
+                        $userStaff->setRoles($userRoles);
     
                         $entityManager->flush();
                         
@@ -74,7 +75,7 @@ class StaffBackend extends AbstractController {
                 }  //end if/else             
                 break;
             case "deleteStaff":
-                $staff = $entityManager->getRepository(UserStaff::class)->findOneBy([
+                $staff = $entityManager->getRepository(User::class)->findOneBy([
                     "id" => $staffId
                 ]);
 

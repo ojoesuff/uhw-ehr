@@ -5,7 +5,7 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Patient;
-use App\Entity\UserStaff;
+use App\Entity\User;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response; 
 use Symfony\Component\HttpFoundation\JsonResponse; 
@@ -76,7 +76,7 @@ class SearchBackend extends AbstractController {
                     //check if any fields have a value in them before quering DB
                     if(!empty($firstName) or !empty($lastName) or !empty($username) or !empty($staffType)) {
 
-                        $staff = $entityManager->getRepository(UserStaff::class)->findStaffAdvanced(
+                        $staff = $entityManager->getRepository(User::class)->findStaffAdvanced(
                             $firstName, $lastName, $username, $staffType);
 
                         if($staff) {
@@ -127,7 +127,7 @@ class SearchBackend extends AbstractController {
             $firstName = $st->getFirstName();
             $lastName = $st->getLastName();
             $username = $st->getUsername();
-            $staffType = $st->getStaffType();
+            $staffType = $st->getRoles();
             
             $oneStaff = array("id" => $id, "firstName" => $firstName,  "lastName" => $lastName, 
             "username" => $username, "staffType" => $staffType);

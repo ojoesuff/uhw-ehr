@@ -4,18 +4,19 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Entity\UserStaff;
+use App\Entity\User;
 use App\Entity\Patient;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse; 
 use Symfony\Component\HttpFoundation\Response; 
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class AdminCreateBackend extends AbstractController {
     /**
      * @Route("/backend/admin/create", name="create") methods={"GET", "POST"}
      */
 
-     public function createStaff() {
+     public function createStaff(UserPasswordEncoderInterface $encoder) {
 
          $request = Request::createFromGlobals();
 
@@ -32,10 +33,10 @@ class AdminCreateBackend extends AbstractController {
                }
                $username = $request->request->get('username');
                $password = $request->request->get('password');
-               $staffType = $request->request->get('staffType');
+               $roles = [$request->request->get('staffType')];
 
                //get user with given username
-               $existingUser = $entityManager->getRepository(UserStaff::class)->findOneBy([
+               $existingUser = $entityManager->getRepository(User::class)->findOneBy([
                   "username" => $username
                ]);
 
@@ -43,12 +44,15 @@ class AdminCreateBackend extends AbstractController {
                if($existingUser) {
                   return new Response("error");
                } else {
-                  $userStaff = new UserStaff();
+                  $userStaff = new User();
                   $userStaff->setFirstName($firstName);
                   $userStaff->setLastName($lastName);
                   $userStaff->setUsername($username);
-                  $userStaff->setStaffPassword($password);
-                  $userStaff->setStaffType($staffType);
+                  //encode password
+                  $encodedPassword = $encoder->encodePassword($userStaff, $password);                  
+                  $userStaff->setPassword($encodedPassword);
+                  $userStaff->setRoles($roles);
+                  $userStaff->setAccountLocked(0);
    
                   $entityManager->persist($userStaff);
                   $entityManager->flush();

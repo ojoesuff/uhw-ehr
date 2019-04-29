@@ -3,15 +3,22 @@
     <div data-role="page">
         <div data-role="content">
             <div class="width-400 box centre" id="login-box">
+                
                 <img src="{{asset('assets/images/logo.svg')}}" class="centre-img width-small" alt="UHW Logo">   
                 <form method="post" id="login-form" class="width-960 centre">
                     <p id="username-error"></p>
-                    <label for="username" class="ui-hidden-accessible">Username:</label>
-                    <input type="text" id="username" name="username" placeholder="Username">
+                    <!--add error message from symfony security controller-->
+                    {% if error %}
+                    <div class="error">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                    {% endif %}
+                    <label for="inputUsername" class="ui-hidden-accessible">Username:</label>
+                    <input class="form-control" type="text" id="inputUsername" name="username" value="{{ last_username }}" placeholder="Username">
                     <p id="password-error"></p>
-                    <label for="password" class="ui-hidden-accessible">Password:</label>
-                    <input type="password" id="password" name="password" placeholder="Password">
-                    <p id="username-password-error"></p>      
+                    <label for="inputPassword" class="ui-hidden-accessible">Password:</label>
+                    <input class="form-control" type="password" id="inputPassword" name="password" placeholder="Password">
+                    <p id="username-password-error"></p>     
+                    <input type="hidden" name="_csrf_token"
+                        value="{{ csrf_token('authenticate') }}"> 
                     <input type="submit" id="loginButton" data-inline="true" value="Login" data-theme="b">
                 </form>
             </div>            
@@ -24,8 +31,8 @@
         event.preventDefault(); 
         //remove all previous errors
         removeError(".error");              
-        let username = $("#username").val();
-        let password = $("#password").val();
+        let username = $("#inputUsername").val();
+        let password = $("#inputPassword").val();
         //add error if username is blank
         if(username === "") {
             addError("#username-error", "Please enter a username");
@@ -38,31 +45,11 @@
         } else {
             removeError("#password-error")
         }
-        //post to backend if no errors exist
+        //submit form if no errors exist
         if(!($(".error").length)) {
-            console.log(username + " " + password);
-            $.post("../backend/staff/login", {username:username, password:password})        
-            .done(function(data) {
-                //redirect to dashboard
-                if(data === "true") {
-                    window.location = "/dashboard"; 
-                } else {
-                    addError("#username-password-error", "Username or password incorrect");
-                }
-                
-            });
+            this.submit();
         }
     })
-    
-    function removeError(target) {
-        $(target).text("");
-        $(target).removeClass(); 
-    }
-
-    function addError(target, msg) {
-        $(target).addClass("error");
-        $(target).text(msg);
-    }
     
 
 </script> 
