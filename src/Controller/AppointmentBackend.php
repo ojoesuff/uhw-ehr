@@ -11,6 +11,7 @@ use App\Entity\Patient;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response; 
 use Symfony\Component\HttpFoundation\JsonResponse; 
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class AppointmentBackend extends AbstractController {
     /**
@@ -30,6 +31,10 @@ class AppointmentBackend extends AbstractController {
          $patient = $entityManager->getRepository(Patient::class)->findOneBy([
             "id" => $patientId
         ]);
+
+        if(!$patient) {
+            throw $this->createNotFoundException('Requested patient could not be found');
+        }
 
          switch($type) {
              case "getUpcomingAppointments":           

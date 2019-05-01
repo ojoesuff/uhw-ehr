@@ -24,6 +24,10 @@ security:
             guard:
                 authenticators:
                     - App\Security\LoginAuthenticator
+            # logout for user and redirect to login page
+            logout:
+                path:   app_logout
+                target: app_login
 
             # activate different ways to authenticate
 
@@ -36,5 +40,10 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        # - { path: ^/admin, roles: ROLE_ADMIN }
-        # - { path: ^/profile, roles: ROLE_USER }
+         # - { path: ^/admin, roles: ROLE_ADMIN }
+         # - { path: /patient/appointment/create, roles: 
+         #   ROLE_CLERICAL, ROLE_NURSE, ROLE_DOCTOR }
+         # - { path: /patient/medical-record/create, roles: 
+         #   ROLE_NURSE, ROLE_DOCTOR }
+
+        

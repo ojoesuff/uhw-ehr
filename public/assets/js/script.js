@@ -23,7 +23,7 @@ function stringToBoolean(text) {
 
 
 //used with node.js and jasmine to test JS functions
-module.exports = {
+/*module.exports = {
     stringToBoolean: stringToBoolean,
     booleanToString: booleanToString
-};
+};*/
