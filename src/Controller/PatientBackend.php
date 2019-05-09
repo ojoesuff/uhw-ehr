@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse; 
 use Symfony\Component\HttpFoundation\Response; 
 use Symfony\Component\HttpFoundation\JsonResponse; 
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class PatientBackend extends AbstractController {
     /**
@@ -65,6 +66,8 @@ class PatientBackend extends AbstractController {
                $entityManager->flush();
 
                return new Response("success");
+            } else {
+               throw new NotFoundHttpException('Patient not found');
             }
          }
 
@@ -105,9 +108,9 @@ class PatientBackend extends AbstractController {
                "county" => $county, "country" => $country, "eircode" => $eircode, "email" => $email]);        
 
                return new JsonResponse($patientDetails);
+            } else {
+               throw new NotFoundHttpException('Patient not found');
             }
-
-            return new Response("No patient records found");
  
          }
 
@@ -219,7 +222,7 @@ class PatientBackend extends AbstractController {
 
                return new Response("success");
             } else {
-               return new Response("error");
+               throw new NotFoundHttpException('Patient not found');
             } //end if/else
             
          }

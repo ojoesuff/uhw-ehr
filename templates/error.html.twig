@@ -1,0 +1,18 @@
+{% include './header/header.html.twig' %}
+<body>
+<div data-role="page" id="error"> 
+    <div data-role="content" class="width-40p">
+        <h2 class="centre-text error">An unexpected error occurred</h2>
+        {% if is_granted("IS_AUTHENTICATED_FULLY") %}
+        <div class="green-box drop-shadow flex-item-small-form dashboard-link">
+            <a href="#" onclick="window.location = '/dashboard'"><p>Dashboard</p></a>
+        </div>
+        {% else %}
+        <div class="green-box drop-shadow flex-item-small-form dashboard-link">
+            <a href="#" onclick="window.location = '/login'"><p>Login</p></a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+</body>
+</html>

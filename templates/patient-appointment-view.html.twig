@@ -133,6 +133,10 @@
             $("#edit-appointment-time").val(time);
             $("#edit-appointment-status").val(status);
         }
+    })
+    //throw error if fails found at https://stackoverflow.com/questions/9847244/what-are-the-parameters-sent-to-fail-in-jquery
+    .fail(function (jqXHR, textStatus, error) {
+        showErrorPage();
     }); //end post
 
     //dynamically fetch medical staff members for staff select on edit screen
@@ -153,6 +157,10 @@
                 }) //end forEach
 
             } //end if
+        })
+        //throw error if fails found at https://stackoverflow.com/questions/9847244/what-are-the-parameters-sent-to-fail-in-jquery
+        .fail(function (jqXHR, textStatus, error) {
+            showErrorPage();
         }); //end post
     }); //end click event
 
@@ -193,6 +201,10 @@
                     removeError("#appointment-update-error");
                     window.location = `/patient/appointment/view?id=${patientId}&appoint=${appointmentId}`;
                 }
+            })
+            //throw error if fails found at https://stackoverflow.com/questions/9847244/what-are-the-parameters-sent-to-fail-in-jquery
+            .fail(function (jqXHR, textStatus, error) {
+                showErrorPage();
             }); //end post
         } //end if
     }); //end click
@@ -208,7 +220,11 @@
                removeError("#delete-appointment-error");
                window.location = `../../patient/appointment/all?id=${patientId}&msg=deleted`;
            }
-        }); //end post        
+        })
+        //throw error if fails found at https://stackoverflow.com/questions/9847244/what-are-the-parameters-sent-to-fail-in-jquery
+        .fail(function (jqXHR, textStatus, error) {
+            showErrorPage();
+        }); //end post      
     }); //end click event
     
 </script>

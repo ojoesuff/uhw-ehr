@@ -297,7 +297,11 @@
                     $("#edit-aande-notes").val(notes);       
                 }
             
-            });// end post */
+            })
+            //throw error if fails found at https://stackoverflow.com/questions/9847244/what-are-the-parameters-sent-to-fail-in-jquery
+            .fail(function (jqXHR, textStatus, error) {
+                showErrorPage();
+            }); //end post
         } //updateViewRadiologyRecord
     
         $("#edit-aande-submit-button").click(function(event) {
@@ -351,7 +355,11 @@
                  }
              })
             } //end if
-        }) //end post
+        })
+        //throw error if fails found at https://stackoverflow.com/questions/9847244/what-are-the-parameters-sent-to-fail-in-jquery
+        .fail(function (jqXHR, textStatus, error) {
+            showErrorPage();
+        }); //end post
     
         //show hidden fields if value of medicine is changed
         $("#edit-medication").change(function() {

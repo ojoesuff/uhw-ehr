@@ -80,6 +80,10 @@
             }) //end forEach
 
         } //end if
+    })
+    //throw error if fails found at https://stackoverflow.com/questions/9847244/what-are-the-parameters-sent-to-fail-in-jquery
+    .fail(function (jqXHR, textStatus, error) {
+        showErrorPage();
     }); //end post
 
     $("#appointment-create-button").click(function() {
@@ -142,6 +146,10 @@
                     removeError("#appointment-create-error");
                     window.location = `/patient/profile?id=${patientId}&msg=appoint`;
                 }
+            })
+            //throw error if fails found at https://stackoverflow.com/questions/9847244/what-are-the-parameters-sent-to-fail-in-jquery
+            .fail(function (jqXHR, textStatus, error) {
+                showErrorPage();
             }); //end post
         } //end if
     }); //end click event

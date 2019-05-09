@@ -106,7 +106,11 @@
                 $("#edit-staff-username").val(username);
                 $("#edit-staff-type").val(staffType);
             } //end if/else
-         }) //end post
+         })
+         //throw error if fails found at https://stackoverflow.com/questions/9847244/what-are-the-parameters-sent-to-fail-in-jquery
+         .fail(function (jqXHR, textStatus, error) {
+            showErrorPage();
+        }); //end post
      } //end getStaffDetails
 
      $("#edit-staff-form").submit(function(event) {
@@ -159,6 +163,10 @@
                         addError("#edit-staff-submit-error", "An unexpected error occurred");
                         break;
                 }
+            })
+            //throw error if fails found at https://stackoverflow.com/questions/9847244/what-are-the-parameters-sent-to-fail-in-jquery
+            .fail(function (jqXHR, textStatus, error) {
+                showErrorPage();
             }); //end post
         } //end if
 
@@ -174,7 +182,11 @@
                 removeError("#delete-staff-error");
                 window.location = "./search?msg=deleted";
             }
-         }); //end post
+         })
+         //throw error if fails found at https://stackoverflow.com/questions/9847244/what-are-the-parameters-sent-to-fail-in-jquery
+         .fail(function (jqXHR, textStatus, error) {
+            showErrorPage();
+        }); //end post
          
      }); //end click event
 

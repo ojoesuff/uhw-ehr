@@ -12,6 +12,7 @@ use App\Entity\User;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response; 
 use Symfony\Component\HttpFoundation\JsonResponse; 
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class MedicalRecordBackend extends AbstractController {
     /**
@@ -449,6 +450,8 @@ class MedicalRecordBackend extends AbstractController {
 
 
             } //end switch
+        } else {
+            throw new NotFoundHttpException('Error: patient not found');
         } //end if/else
 
         return new Response("none"); 

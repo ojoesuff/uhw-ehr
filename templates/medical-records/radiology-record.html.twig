@@ -270,7 +270,11 @@
         
             }
         
-        });// end post */
+        })
+        //throw error if fails found at https://stackoverflow.com/questions/9847244/what-are-the-parameters-sent-to-fail-in-jquery
+        .fail(function (jqXHR, textStatus, error) {
+            showErrorPage();
+        }); //end post
     } //updateViewRadiologyRecord
 
     $("#edit-radiology-submit-button").click(function(event) {
@@ -316,8 +320,12 @@
                  addError("#edit-radiology-submit-error", "An unexpected error occurred");
              }
          })
+         //throw error if fails found at https://stackoverflow.com/questions/9847244/what-are-the-parameters-sent-to-fail-in-jquery
+         .fail(function (jqXHR, textStatus, error) {
+            showErrorPage();
+        }); //end post
         } //end if
-    }) //end post
+    }) //end click
 
     //show hidden side field if certain body area is selected
     $("#edit-xray-area").change(function() {

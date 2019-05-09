@@ -140,7 +140,11 @@
                 $("#edit-macular-notes").val(notes);
             }
         
-        });
+        })
+        //throw error if fails found at https://stackoverflow.com/questions/9847244/what-are-the-parameters-sent-to-fail-in-jquery
+        .fail(function (jqXHR, textStatus, error) {
+            showErrorPage();
+        }); //end post
     } //updateViewMacularRecord
 
     $("#edit-macular-clinic-submit-button").click(function(event) {
@@ -191,6 +195,10 @@
                  addError("#edit-macular-submit-error", "An unexpected error occurred");
              }
          })
+         //throw error if fails found at https://stackoverflow.com/questions/9847244/what-are-the-parameters-sent-to-fail-in-jquery
+         .fail(function (jqXHR, textStatus, error) {
+            showErrorPage();
+        }); //end post
         } //end if
     })
 </script>

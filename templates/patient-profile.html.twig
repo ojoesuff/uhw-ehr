@@ -522,7 +522,11 @@
                     $(htmlAppointment).insertBefore("#upcoming-appointments-insert");
                 }); //end foreach            
             } //end if/else
-        }); //end post/done
+        })
+        //throw error if fails found at https://stackoverflow.com/questions/9847244/what-are-the-parameters-sent-to-fail-in-jquery
+        .fail(function (jqXHR, textStatus, error) {
+            showErrorPage();
+        }); //end post
     } //end getAppointments
 
     function getPatientDetails(patientId) {
@@ -609,7 +613,11 @@
             $("#edit-eircode").val(eircode);
             $("#edit-email").val(email);
 
-        });
+        })
+        //throw error if fails found at https://stackoverflow.com/questions/9847244/what-are-the-parameters-sent-to-fail-in-jquery
+        .fail(function (jqXHR, textStatus, error) {
+            showErrorPage();
+        }); //end post
     }
 
     function savePatientLastViewed(patientId, staffId) {
@@ -644,7 +652,11 @@
                 });
             } //end if/else        
             
-        }); //end post/done
+        })
+        //throw error if fails found at https://stackoverflow.com/questions/9847244/what-are-the-parameters-sent-to-fail-in-jquery
+        .fail(function (jqXHR, textStatus, error) {
+            showErrorPage();
+        }); //end post
 
     } //end getPatientOutstandingAppoint
 
@@ -671,7 +683,11 @@
                 });
             } //end if/else        
             
-        }); //end post/done
+        })
+        //throw error if fails found at https://stackoverflow.com/questions/9847244/what-are-the-parameters-sent-to-fail-in-jquery
+        .fail(function (jqXHR, textStatus, error) {
+            showErrorPage();
+        }); //end post
 
     } //end getPatientCompleteAppoint
 
@@ -716,6 +732,10 @@
                 } else {
                     alert("Patient details not found");
                 }                   
+            })
+            //throw error if fails found at https://stackoverflow.com/questions/9847244/what-are-the-parameters-sent-to-fail-in-jquery
+            .fail(function (jqXHR, textStatus, error) {
+                showErrorPage();
             }); //end post
         } //end if
     }); //end submit event
@@ -754,7 +774,11 @@
                 });
             } //end if/else        
             
-        }); //end post/done
+        })
+        //throw error if fails found at https://stackoverflow.com/questions/9847244/what-are-the-parameters-sent-to-fail-in-jquery
+        .fail(function (jqXHR, textStatus, error) {
+            showErrorPage();
+        }); //end post
     }); // end mouseup
 
     $("#view-medical-records").click(function() {
@@ -771,6 +795,10 @@
                removeError("#delete-patient-error");
                window.location = "./search?msg=deleted";
            }
+        })
+        //throw error if fails found at https://stackoverflow.com/questions/9847244/what-are-the-parameters-sent-to-fail-in-jquery
+        .fail(function (jqXHR, textStatus, error) {
+            showErrorPage();
         }); //end post        
     }); //end click event
 
