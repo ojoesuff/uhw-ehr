@@ -41,7 +41,7 @@ class MedicalRecordBackend extends AbstractController {
                     return new JsonResponse($patientDetails);
                     break;
                 case "createAAndERecord":
-                    //get details from request object                
+                    //get details from request object               
                     $locationOccurred = $request->get("locationOccurred");
                     $description = $request->get("description");
                     $injuryArea = $request->get("injuryArea");
@@ -81,12 +81,14 @@ class MedicalRecordBackend extends AbstractController {
                     $aAndERecord->setDateCreated($dateCreated);
                     $aAndERecord->setNotes($notes);
 
-                    //placeholder staff id
-                    $staffId = $entityManager->getRepository(User::class)->findOneBy([
-                        "id" => 1
+                    //set staff id for record
+                    $staffId = $request->get("staffId");
+                    $staff = $entityManager->getRepository(User::class)->findOneBy([
+                        "id" => $staffId
                     ]);
-
-                    $aAndERecord->setStaffId($staffId);
+                    if($staff) {
+                        $aAndERecord->setStaffId($staff);
+                    }                   
 
                     $entityManager->persist($aAndERecord);
                     $entityManager->flush();
@@ -123,11 +125,14 @@ class MedicalRecordBackend extends AbstractController {
                     $record->setNotes($notes);
                     $record->setDateCreated($dateCreated);
                     $record->setPatientId($patient);
-                    //placeholder staff id
-                    $staffId = $entityManager->getRepository(User::class)->findOneBy([
-                        "id" => 1
+                    //set staff id for record
+                    $staffId = $request->get("staffId");
+                    $staff = $entityManager->getRepository(User::class)->findOneBy([
+                        "id" => $staffId
                     ]);
-                    $record->setStaffId($staffId);
+                    if($staff) {
+                        $record->setStaffId($staff);
+                    }  
 
                     $entityManager->persist($record);
 
@@ -154,11 +159,14 @@ class MedicalRecordBackend extends AbstractController {
                     $record->setNotes($notes);                    
                     $record->setDateCreated($dateCreated);
                     $record->setPatientId($patient);
-                    //placeholder staff id
-                    $staffId = $entityManager->getRepository(User::class)->findOneBy([
-                        "id" => 1
+                    //set staff id for record
+                    $staffId = $request->get("staffId");
+                    $staff = $entityManager->getRepository(User::class)->findOneBy([
+                        "id" => $staffId
                     ]);
-                    $record->setStaffId($staffId);
+                    if($staff) {
+                        $record->setStaffId($staff);
+                    }
 
                     $entityManager->persist($record);
                     $entityManager->flush();
@@ -177,17 +185,14 @@ class MedicalRecordBackend extends AbstractController {
                     //send to front end with headings
                     if($aAndERecords) {
                         $allAAndERecords = $this->getMedicalRecordDetails($aAndERecords);
-
                         $recordsArray["aAndERecords"] = $allAAndERecords;
                     } //end if
                     if($radiologyRecords) {
                         $allRadiologyRecords = $this->getMedicalRecordDetails($radiologyRecords);
-
                         $recordsArray["radiologyRecords"] = $allRadiologyRecords;
                     } //end if
                     if($macularRecords) {
                         $allMacularRecords = $this->getMedicalRecordDetails($macularRecords);
-
                         $recordsArray["macularRecords"] = $allMacularRecords;
                     } //end if
 
@@ -206,6 +211,7 @@ class MedicalRecordBackend extends AbstractController {
                         $date = $record->getDateCreated();
                         $dateCreated = $date->format("d M Y, H:i");
                         $staff = $record->getStaffId();
+                        $staffId = $staff->getId();
                         $firstName = $staff->getFirstName();
                         $lastName = $staff->getLastName();
                         $createdBy = $firstName." ".$lastName;
@@ -215,7 +221,7 @@ class MedicalRecordBackend extends AbstractController {
                         $surgery = $record->getSurgery();
                         $notes = $record->getNotes();
 
-                        $recordArray = array("dateCreated" => $dateCreated,
+                        $recordArray = array("staffId" => $staffId, "dateCreated" => $dateCreated,
                         "createdBy" => $createdBy, "LVARangeWeeks" => $LVARangeWeeks,
                         "LVARangeMonths" => $LVARangeMonths, "testRequired" => $testRequired,
                         "surgery" => $surgery, "notes" => $notes);
@@ -268,6 +274,7 @@ class MedicalRecordBackend extends AbstractController {
                         $date = $record->getDateCreated();
                         $dateCreated = $date->format("d M Y, H:i");
                         $staff = $record->getStaffId();
+                        $staffId = $staff->getId();
                         $firstName = $staff->getFirstName();
                         $lastName = $staff->getLastName();
                         $createdBy = $firstName." ".$lastName;
@@ -283,7 +290,7 @@ class MedicalRecordBackend extends AbstractController {
                         $metalArea = $record->getMetalArea();
                         $notes = $record->getNotes();
 
-                        $recordArray = array("dateCreated" => $dateCreated,
+                        $recordArray = array("dateCreated" => $dateCreated, "staffId" => $staffId,
                         "createdBy" => $createdBy, "area" => $area,
                         "xrayType" => $xrayType, "contrast" => $contrast,
                         "side" => $side, "pacemaker" => $pacemaker,
@@ -349,6 +356,7 @@ class MedicalRecordBackend extends AbstractController {
                         $date = $record->getDateCreated();
                         $dateCreated = $date->format("d M Y, H:i");
                         $staff = $record->getStaffId();
+                        $staffId = $staff->getId();
                         $firstName = $staff->getFirstName();
                         $lastName = $staff->getLastName();
                         $createdBy = $firstName." ".$lastName;
@@ -378,7 +386,7 @@ class MedicalRecordBackend extends AbstractController {
                         $surgery = $record->getSurgery();
                         $priority = $patient->getPriority();
 
-                        $recordArray = array("dateCreated" => $dateCreated,
+                        $recordArray = array("dateCreated" => $dateCreated, "staffId" => $staffId,
                         "createdBy" => $createdBy, "notes" => $notes, "formattedArrivalDate" => $formattedArrivalDate,
                         "arrivalDate" => $arrivalDate, "arrivalTime" => $arrivalTime,
                         "locationOccurred" => $locationOccurred, "description" => $description,

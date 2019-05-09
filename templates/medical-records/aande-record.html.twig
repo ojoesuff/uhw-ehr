@@ -1,363 +1,369 @@
 <div data-role="page" data-dialog="true" id="edit-AandE-record">
-    <div data-role="header">
-        <h4 class="light-grey light-text">Accident and Emergency</h4>   
-        <h4 class="light-grey light-text">General Admission</h4>   
-        <h4 class="light-grey light-text name"></h4>      
-    </div>
-    <div data-role="content"> 
-        <div class="flex-container">
-            <div class="flex-item-small-form">
-                <p class="green">Created by</p>
-                <p class="input-style-light" id="view-created-by-aande"></p>
-            </div>
-            <div class="flex-item-small-form">
-                <p class="green">Date Created</p>
-                <p class="input-style-light" id="view-created-date-aande"></p>
-            </div>
-        </div>
-        <div class="flex-container">                               
-            <div class="flex-item-small-form">
-                <p class="green">Location Incident Occurred</p>
-                <p class="input-style-light" id="view-aande-location"></p>                      
-            </div> 
-        </div>   
-        <p class="green">Description of Injury</p>
-        <p class="input-style-light" id="view-injury-description"></p>
-        <div class="flex-container">
-            <div class="flex-item-small-form">
-                <p class="green">Injury Area</p>
-                <p class="input-style-light" id="view-injury-area"></p>                   
-            </div>                      
-            <div class="flex-item-small-form">
-                <p class="green">Type of Injury</p>
-                <p class="input-style-light" id="view-injury-type"></p>
-            </div> 
-        </div>                             
-            <div class="flex-container">
-                <div class="flex-item-small-form">
-                    <p class="green">Medication Taken</p>
-                    <p class="input-style-light" id="view-medication"></p>                     
-                </div>                      
-            </div>
-            <div class="flex-container">
-                <div class="flex-item-small-form" id="view-hidden-medicine-name" hidden>
-                    <p class="green">Medicine Name</p>
-                    <p class="input-style-light" id="view-medicine-name"></p>                      
-                </div> 
-                <div class="flex-item-small-form" id="view-hidden-medicine-amount" hidden>
-                    <p class="green">Amount</p>
-                    <p class="input-style-light" id="view-medicine-amount"></p>                   
-                </div>                  
-            </div> 
-            <div class="flex-container">
-                <div class="flex-item-small-form">
-                    <p class="green">X-ray Required</p>
-                    <p class="input-style-light" id="view-xray-required"></p>                       
-                </div>                      
-                <div class="flex-item-small-form">
-                    <p class="green">Vomitting</p>
-                    <p class="input-style-light" id="view-vomitting"></p>                      
-                </div> 
-            </div> 
-            <div class="flex-container">
-                <div class="flex-item-small-form">
-                    <p class="green">Priority</p>
-                    <p class="input-style-light" id="view-priority"></p>     
-                </div>                      
-                <div class="flex-item-small-form">
-                    <p class="green">Surgery Required</p>
-                    <p class="input-style-light" id="view-surgery-required"></p>                   
-                </div> 
-            </div>
-            <div class="flex-container">
-                <div class="flex-item-small-form">
-                    <p class="green">Arrival Date</p>
-                    <p class="input-style-light" id="view-arrival-date"></p>                      
-                </div> 
-                <div class="flex-item-small-form">
-                    <p class="green">Arrival Time</p>
-                    <p class="input-style-light" id="view-arrival-time"></p>                        
-                </div> 
-            </div>   
-            <p class="green">Notes</p> 
-            <p class="input-style-light" id="view-aande-notes"></p> 
-            <p id="edit-aande-submit-error"></p>
-            <a id="edit-aande-record-button" href="#edit-aande-record" class="ui-shadow ui-btn ui-corner-all ui-btn-inline" data-transition="pop">EDIT</a>       
-        </div>       
-     </div>
-</div> <!--end edit-aande-record-->
-
-<div data-role="page" id="edit-aande-record" data-dialog="true">
-    <div data-role="header">
-            <h4 class="light-grey light-text">aande</h4>   
+        <div data-role="header">
+            <h4 class="light-grey light-text">Accident and Emergency</h4>   
             <h4 class="light-grey light-text">General Admission</h4>   
             <h4 class="light-grey light-text name"></h4>      
         </div>
         <div data-role="content"> 
-            <form id="aande-admission-form" method="post">
-                    <div class="flex-container">                               
-                        <div class="flex-item-small-form">
-                            <p class="green">Location Incident Occurred</p>
-                            <p id="edit-aande-location-error"></p>  
-                            <input type="text" id="edit-aande-location">                       
-                        </div> 
-                    </div>   
-                    <p class="green">Description of Injury</p>
-                    <p id="edit-injury-description-error"></p> 
-                    <textarea id="edit-injury-description"></textarea>
-                    <div class="flex-container">
-                        <div class="flex-item-small-form">
-                            <p class="green">Injury Area</p>
-                            <p id="edit-injury-area-error"></p>
-                            <input type="text" id="edit-injury-area">                       
-                        </div>                      
-                        <div class="flex-item-small-form">
-                            <label for="edit-injury-type" class="green">Type of Injury</label>
-                            <select name="edit-injury-type" id="edit-injury-type" data-mini="true">
-                                <option value="Concussion">Concussion</option>
-                                <option value="Dislocation">Dislocation</option> 
-                                <option value="Fracture">Fracture</option> 
-                                <option value="Laceration">Laceration</option>                    
-                                <option value="Sprain">Sprain</option> 
-                            </select>
-                        </div> 
-                    </div>                             
-                        <div class="flex-container">
+            <div class="flex-container">
+                <div class="flex-item-small-form">
+                    <p class="green">Created by</p>
+                    <p class="input-style-light" id="view-created-by-aande"></p>
+                </div>
+                <div class="flex-item-small-form">
+                    <p class="green">Date Created</p>
+                    <p class="input-style-light" id="view-created-date-aande"></p>
+                </div>
+            </div>
+            <div class="flex-container">                               
+                <div class="flex-item-small-form">
+                    <p class="green">Location Incident Occurred</p>
+                    <p class="input-style-light" id="view-aande-location"></p>                      
+                </div> 
+            </div>   
+            <p class="green">Description of Injury</p>
+            <p class="input-style-light" id="view-injury-description"></p>
+            <div class="flex-container">
+                <div class="flex-item-small-form">
+                    <p class="green">Injury Area</p>
+                    <p class="input-style-light" id="view-injury-area"></p>                   
+                </div>                      
+                <div class="flex-item-small-form">
+                    <p class="green">Type of Injury</p>
+                    <p class="input-style-light" id="view-injury-type"></p>
+                </div> 
+            </div>                             
+                <div class="flex-container">
+                    <div class="flex-item-small-form">
+                        <p class="green">Medication Taken</p>
+                        <p class="input-style-light" id="view-medication"></p>                     
+                    </div>                      
+                </div>
+                <div class="flex-container">
+                    <div class="flex-item-small-form" id="view-hidden-medicine-name" hidden>
+                        <p class="green">Medicine Name</p>
+                        <p class="input-style-light" id="view-medicine-name"></p>                      
+                    </div> 
+                    <div class="flex-item-small-form" id="view-hidden-medicine-amount" hidden>
+                        <p class="green">Amount</p>
+                        <p class="input-style-light" id="view-medicine-amount"></p>                   
+                    </div>                  
+                </div> 
+                <div class="flex-container">
+                    <div class="flex-item-small-form">
+                        <p class="green">X-ray Required</p>
+                        <p class="input-style-light" id="view-xray-required"></p>                       
+                    </div>                      
+                    <div class="flex-item-small-form">
+                        <p class="green">Vomitting</p>
+                        <p class="input-style-light" id="view-vomitting"></p>                      
+                    </div> 
+                </div> 
+                <div class="flex-container">
+                    <div class="flex-item-small-form">
+                        <p class="green">Priority</p>
+                        <p class="input-style-light" id="view-priority"></p>     
+                    </div>                      
+                    <div class="flex-item-small-form">
+                        <p class="green">Surgery Required</p>
+                        <p class="input-style-light" id="view-surgery-required"></p>                   
+                    </div> 
+                </div>
+                <div class="flex-container">
+                    <div class="flex-item-small-form">
+                        <p class="green">Arrival Date</p>
+                        <p class="input-style-light" id="view-arrival-date"></p>                      
+                    </div> 
+                    <div class="flex-item-small-form">
+                        <p class="green">Arrival Time</p>
+                        <p class="input-style-light" id="view-arrival-time"></p>                        
+                    </div> 
+                </div>   
+                <p class="green">Notes</p> 
+                <p class="input-style-light" id="view-aande-notes"></p> 
+                <p id="edit-aande-submit-error"></p>
+                      
+            </div>       
+         </div>
+    </div> <!--end edit-aande-record-->
+    
+    <div data-role="page" id="edit-aande-record" data-dialog="true">
+        <div data-role="header">
+                <h4 class="light-grey light-text">aande</h4>   
+                <h4 class="light-grey light-text">General Admission</h4>   
+                <h4 class="light-grey light-text name"></h4>      
+            </div>
+            <div data-role="content"> 
+                <form id="aande-admission-form" method="post">
+                        <div class="flex-container">                               
                             <div class="flex-item-small-form">
-                                <label for="edit-medication" class="green">Medication Taken</label>
-                                <select name="edit-medication" id="edit-medication" data-mini="true">
-                                    <option value="None" selected>None</option>
-                                    <option value="Androgens">Androgens</option> 
-                                    <option value="Antacids">Antacids</option>
-                                    <option value="Antibiotics">Antibiotics</option> 
-                                    <option value="Antihistamines">Antihistamines</option> 
-                                    <option value="Asprin">Asprin</option> 
-                                    <option value="Anxiolytics">Anxiolytics</option>
-                                    <option value="Cytoprotectants">Cytoprotectants</option> 
-                                    <option value="Laxatives">Laxatives</option> 
-                                    <option value="Mydriatics">Mydriatics</option>
-                                    <option value="Opioids">Opioids</option>                         
-                                    <option value="Stimulants">Stimulants</option>     
-                                    <option value="Other">Other</option>                
-                                </select>                      
-                            </div>                      
-                        </div>
-                        <div class="flex-container">
-                            <div class="flex-item-small-form" hidden id="edit-hidden-medicine-name">
-                                <p class="green">Medicine Name</p>
-                                <input type="text" id="edit-medicine-name">                       
-                            </div> 
-                            <div class="flex-item-small-form" hidden id="edit-hidden-medicine-amount">
-                                <p class="green">Amount</p>
-                                <input type="text" id="edit-medicine-amount">                       
-                            </div>                  
-                        </div> 
-                        <div class="flex-container">
-                            <div class="flex-item-small-form">
-                                <label for="edit-xray-required" class="green">X-ray Required</label>
-                                <select name="edit-xray-required" id="edit-xray-required" data-mini="true">
-                                    <option value="Yes">Yes</option>
-                                    <option value="No">No</option> 
-                                </select>                     
-                            </div>                      
-                            <div class="flex-item-small-form">
-                                <label for="edit-vomitting" class="green">Vomitting</label>
-                                <select name="edit-vomitting" id="edit-vomitting" data-mini="true">
-                                    <option value="Yes">Yes</option>
-                                    <option value="No">No</option> 
-                                </select>                      
-                            </div> 
-                        </div> 
-                        <div class="flex-container">
-                            <div class="flex-item-small-form">
-                                <label for="edit-priority" class="green">Priority</label>
-                                <select name="edit-priority" id="edit-priority" data-mini="true">
-                                    <option value="Low" selected>Low</option>
-                                    <option value="Medium">Medium</option>    
-                                    <option value="High">High</option>     
-                                </select>      
-                            </div>                      
-                            <div class="flex-item-small-form">
-                                <label for="edit-surgery-required" class="green">Surgery Required</label>
-                                <select name="edit-surgery-required" id="edit-surgery-required" data-mini="true">
-                                    <option value="Yes">Yes</option>
-                                    <option value="No">No</option> 
-                                </select>                        
-                            </div> 
-                        </div>
-                        <div class="flex-container">
-                            <div class="flex-item-small-form">
-                                <p class="green">Arrival Date</p>
-                                <input type="date" id="edit-aande-arrival-date">                       
-                            </div> 
-                            <div class="flex-item-small-form">
-                                <p class="green">Arrival Time</p>
-                                <input type="time" id="edit-aande-arrival-time" name="edit-aande-arrival-time">                       
+                                <p class="green">Location Incident Occurred</p>
+                                <p id="edit-aande-location-error"></p>  
+                                <input type="text" id="edit-aande-location">                       
                             </div> 
                         </div>   
-                        <p class="green">Notes</p> 
-                        <textarea id="edit-aande-notes"></textarea>     
-                        <p id="edit-aande-submit-error"></p>
-                        <button id="edit-aande-submit-button" data-theme="e" data-inline="true">UPDATE</button>    
-                    </div>                
-                </form>
+                        <p class="green">Description of Injury</p>
+                        <p id="edit-injury-description-error"></p> 
+                        <textarea id="edit-injury-description"></textarea>
+                        <div class="flex-container">
+                            <div class="flex-item-small-form">
+                                <p class="green">Injury Area</p>
+                                <p id="edit-injury-area-error"></p>
+                                <input type="text" id="edit-injury-area">                       
+                            </div>                      
+                            <div class="flex-item-small-form">
+                                <label for="edit-injury-type" class="green">Type of Injury</label>
+                                <select name="edit-injury-type" id="edit-injury-type" data-mini="true">
+                                    <option value="Concussion">Concussion</option>
+                                    <option value="Dislocation">Dislocation</option> 
+                                    <option value="Fracture">Fracture</option> 
+                                    <option value="Laceration">Laceration</option>                    
+                                    <option value="Sprain">Sprain</option> 
+                                </select>
+                            </div> 
+                        </div>                             
+                            <div class="flex-container">
+                                <div class="flex-item-small-form">
+                                    <label for="edit-medication" class="green">Medication Taken</label>
+                                    <select name="edit-medication" id="edit-medication" data-mini="true">
+                                        <option value="None" selected>None</option>
+                                        <option value="Androgens">Androgens</option> 
+                                        <option value="Antacids">Antacids</option>
+                                        <option value="Antibiotics">Antibiotics</option> 
+                                        <option value="Antihistamines">Antihistamines</option> 
+                                        <option value="Asprin">Asprin</option> 
+                                        <option value="Anxiolytics">Anxiolytics</option>
+                                        <option value="Cytoprotectants">Cytoprotectants</option> 
+                                        <option value="Laxatives">Laxatives</option> 
+                                        <option value="Mydriatics">Mydriatics</option>
+                                        <option value="Opioids">Opioids</option>                         
+                                        <option value="Stimulants">Stimulants</option>     
+                                        <option value="Other">Other</option>                
+                                    </select>                      
+                                </div>                      
+                            </div>
+                            <div class="flex-container">
+                                <div class="flex-item-small-form" hidden id="edit-hidden-medicine-name">
+                                    <p class="green">Medicine Name</p>
+                                    <input type="text" id="edit-medicine-name">                       
+                                </div> 
+                                <div class="flex-item-small-form" hidden id="edit-hidden-medicine-amount">
+                                    <p class="green">Amount</p>
+                                    <input type="text" id="edit-medicine-amount">                       
+                                </div>                  
+                            </div> 
+                            <div class="flex-container">
+                                <div class="flex-item-small-form">
+                                    <label for="edit-xray-required" class="green">X-ray Required</label>
+                                    <select name="edit-xray-required" id="edit-xray-required" data-mini="true">
+                                        <option value="Yes">Yes</option>
+                                        <option value="No">No</option> 
+                                    </select>                     
+                                </div>                      
+                                <div class="flex-item-small-form">
+                                    <label for="edit-vomitting" class="green">Vomitting</label>
+                                    <select name="edit-vomitting" id="edit-vomitting" data-mini="true">
+                                        <option value="Yes">Yes</option>
+                                        <option value="No">No</option> 
+                                    </select>                      
+                                </div> 
+                            </div> 
+                            <div class="flex-container">
+                                <div class="flex-item-small-form">
+                                    <label for="edit-priority" class="green">Priority</label>
+                                    <select name="edit-priority" id="edit-priority" data-mini="true">
+                                        <option value="Low" selected>Low</option>
+                                        <option value="Medium">Medium</option>    
+                                        <option value="High">High</option>     
+                                    </select>      
+                                </div>                      
+                                <div class="flex-item-small-form">
+                                    <label for="edit-surgery-required" class="green">Surgery Required</label>
+                                    <select name="edit-surgery-required" id="edit-surgery-required" data-mini="true">
+                                        <option value="Yes">Yes</option>
+                                        <option value="No">No</option> 
+                                    </select>                        
+                                </div> 
+                            </div>
+                            <div class="flex-container">
+                                <div class="flex-item-small-form">
+                                    <p class="green">Arrival Date</p>
+                                    <input type="date" id="edit-aande-arrival-date">                       
+                                </div> 
+                                <div class="flex-item-small-form">
+                                    <p class="green">Arrival Time</p>
+                                    <input type="time" id="edit-aande-arrival-time" name="edit-aande-arrival-time">                       
+                                </div> 
+                            </div>   
+                            <p class="green">Notes</p> 
+                            <textarea id="edit-aande-notes"></textarea>     
+                            <p id="edit-aande-submit-error"></p>
+                            <button id="edit-aande-submit-button" data-theme="e" data-inline="true">UPDATE</button>    
+                        </div>                
+                    </form>
+            </div>
         </div>
     </div>
-</div>
-<script>
+    <script>
+    
+        var recordId;
+        var staffId = '{{ app.user.id }}';        
+    
+        function updateViewAandERecord(recordId) {
+    
+            this.recordId = recordId;
+            
+            $.post("/backend/medical-record", {type: "viewAandERecord", patientId:patientId,
+            recordId:recordId})
+            .done(function(data) {
+                if(data === "none") {
+                    addError("#edit-aande-submit-error", "An unexpected error occurred");
+                } else {
+                    removeError("#edit-aande-submit-error");                
+                    //get data from response
+                    let dateCreated = data.dateCreated;
+                    let createdBy = data.createdBy;
+                    let arrivalDate = data.arrivalDate;
+                    let arrivalTime = data.arrivalTime;
+                    let locationOccurred = data.locationOccurred;
+                    let description = data.description;
+                    let injuryArea = data.injuryArea;
+                    let typeOfInjury = data.typeOfInjury;
+                    let xrayRequired = booleanToString(data.xrayRequired);
+                    let vomitting = booleanToString(data.vomitting);
+                    let medication = data.medication;
+                    let formattedArrivalDate = data.formattedArrivalDate;
+                    //show name and amount if medicine is specified
+                    if(medication === "None") {
+                        $("#view-hidden-medicine-name").hide();
+                        $("#view-hidden-medicine-amount").hide();
+                    } else {
+                        $("#view-hidden-medicine-name").show();
+                        $("#view-hidden-medicine-amount").show();
+                    }
+                    let medicationAmount = data.medicationAmount;
+                    let medicationName = data.medicationName;
+                    let surgery = booleanToString(data.surgery);
+                    let priority = data.priority;
+                    let notes = data.notes;                
+    
+                    //update DOM with data 
+                    $("#view-created-by-aande").text(createdBy);
+                    $("#view-created-date-aande").text(dateCreated);
+                    $("#view-aande-location").text(locationOccurred);
+                    $("#view-injury-description").text(description);
+                    $("#view-injury-area").text(injuryArea);
+                    $("#view-injury-type").text(typeOfInjury);
+                    $("#view-medication").text(medication);
+                    $("#view-medicine-name").text(medicationName);
+                    $("#view-medicine-amount").text(medicationAmount);
+                    $("#view-xray-required").text(xrayRequired);
+                    $("#view-vomitting").text(vomitting);
+                    $("#view-priority").text(priority);
+                    $("#view-surgery-required").text(surgery);
+                    $("#view-arrival-date").text(arrivalDate);
+                    $("#view-arrival-time").text(arrivalTime);
+                    $("#view-aande-notes").text(notes);
 
-    var recordId;
+                    //add edit button if user id is same as who created it
+                    let createdStaffId = data.staffId;
+                    if(parseInt(staffId) === createdStaffId) {
+                        let htmlString = '<a id="edit-aande-record-button" href="#edit-aande-record" class="ui-shadow ui-btn ui-corner-all ui-btn-inline" data-transition="pop">EDIT</a>'
+                        $(htmlString).insertAfter("#edit-aande-submit-error");
+                    } //end if
 
-    function updateViewAandERecord(recordId) {
-
-        this.recordId = recordId;
-        
-        $.post("/backend/medical-record", {type: "viewAandERecord", patientId:patientId,
-        recordId:recordId})
-        .done(function(data) {
-            console.log(data);
-            if(data === "none") {
-                addError("#edit-aande-submit-error", "An unexpected error occurred");
+                    $("#edit-created-by-aande").val(createdBy);
+                    $("#edit-created-date-aande").val(dateCreated);
+                    $("#edit-aande-location").val(locationOccurred);
+                    $("#edit-injury-description").val(description);
+                    $("#edit-injury-area").val(injuryArea);
+                    $("#edit-injury-type").val(typeOfInjury);
+                    $("#edit-medication").val(medication);
+                    if(medication === "None") {
+                        $("#edit-hidden-medicine-name").hide();
+                        $("#edit-hidden-medicine-amount").hide();
+                    } else {
+                        $("#edit-hidden-medicine-name").show();
+                        $("#edit-hidden-medicine-amount").show();
+                    }
+                    $("#edit-medicine-name").val(medicationName);
+                    $("#edit-medicine-amount").val(medicationAmount);
+                    $("#edit-xray-required").val(xrayRequired);
+                    $("#edit-vomitting").val(vomitting);
+                    $("#edit-priority").val(priority);
+                    $("#edit-surgery-requirede").val();
+                    $("#edit-aande-arrival-date").val(formattedArrivalDate);
+                    $("#edit-aande-arrival-time").val(arrivalTime);
+                    $("#edit-aande-notes").val(notes);       
+                }
+            
+            });// end post */
+        } //updateViewRadiologyRecord
+    
+        $("#edit-aande-submit-button").click(function(event) {
+            event.preventDefault()
+            //remove all previous errors
+            removeError(".error");  
+             //get details from inputs
+            let locationOccurred = $("#edit-aande-location").val();
+            let description = $("#edit-injury-description").val();
+            let injuryArea = $("#edit-injury-area").val();
+            let typeOfInjury = $("#edit-injury-type").val();
+            let medication = $("#edit-medication").val();
+            let medicationName = $("#edit-medicine-name").val();
+            let medicationAmount = $("#edit-medicine-amount").val();
+            let xrayRequired = stringToBoolean($("#edit-xray-required").val());
+            let vomitting = stringToBoolean($("#edit-vomitting").val());
+            let priority = $("#edit-priority").val();
+            let surgery = stringToBoolean($("#edit-surgery-required").val());
+            let arrivalDate = $("#edit-aande-arrival-date").val();
+            let arrivalTime = $("#edit-aande-arrival-time").val();
+            let formattedArrivalDate = `${arrivalDate} ${arrivalTime}`;
+            let notes = $("#edit-aande-notes").val(); 
+            //form validation
+            if(locationOccurred === "") {
+                addError("#edit-aande-location-error", "Please enter a location");
             } else {
-                removeError("#edit-aande-submit-error");                
-                //get data from response
-                let dateCreated = data.dateCreated;
-                let createdBy = data.createdBy;
-                let arrivalDate = data.arrivalDate;
-                let arrivalTime = data.arrivalTime;
-                let locationOccurred = data.locationOccurred;
-                let description = data.description;
-                let injuryArea = data.injuryArea;
-                let typeOfInjury = data.typeOfInjury;
-                let xrayRequired = booleanToString(data.xrayRequired);
-                let vomitting = booleanToString(data.vomitting);
-                let medication = data.medication;
-                let formattedArrivalDate = data.formattedArrivalDate;
-                //show name and amount if medicine is specified
-                if(medication === "None") {
-                    $("#view-hidden-medicine-name").hide();
-                    $("#view-hidden-medicine-amount").hide();
-                } else {
-                    $("#view-hidden-medicine-name").show();
-                    $("#view-hidden-medicine-amount").show();
-                }
-                let medicationAmount = data.medicationAmount;
-                let medicationName = data.medicationName;
-                let surgery = booleanToString(data.surgery);
-                let priority = data.priority;
-                let notes = data.notes;                
-
-                //update DOM with data 
-                $("#view-created-by-aande").text(createdBy);
-                $("#view-created-date-aande").text(dateCreated);
-                $("#view-aande-location").text(locationOccurred);
-                $("#view-injury-description").text(description);
-                $("#view-injury-area").text(injuryArea);
-                $("#view-injury-type").text(typeOfInjury);
-                $("#view-medication").text(medication);
-                $("#view-medicine-name").text(medicationName);
-                $("#view-medicine-amount").text(medicationAmount);
-                $("#view-xray-required").text(xrayRequired);
-                $("#view-vomitting").text(vomitting);
-                $("#view-priority").text(priority);
-                $("#view-surgery-required").text(surgery);
-                $("#view-arrival-date").text(arrivalDate);
-                $("#view-arrival-time").text(arrivalTime);
-                $("#view-aande-notes").text(notes);
-                
-                $("#edit-created-by-aande").val(createdBy);
-                $("#edit-created-date-aande").val(dateCreated);
-                $("#edit-aande-location").val(locationOccurred);
-                $("#edit-injury-description").val(description);
-                $("#edit-injury-area").val(injuryArea);
-                $("#edit-injury-type").val(typeOfInjury);
-                $("#edit-medication").val(medication);
-                if(medication === "None") {
-                    $("#edit-hidden-medicine-name").hide();
-                    $("#edit-hidden-medicine-amount").hide();
-                } else {
-                    $("#edit-hidden-medicine-name").show();
-                    $("#edit-hidden-medicine-amount").show();
-                }
-                $("#edit-medicine-name").val(medicationName);
-                $("#edit-medicine-amount").val(medicationAmount);
-                $("#edit-xray-required").val(xrayRequired);
-                $("#edit-vomitting").val(vomitting);
-                $("#edit-priority").val(priority);
-                $("#edit-surgery-requirede").val();
-                $("#edit-aande-arrival-date").val(formattedArrivalDate);
-                $("#edit-aande-arrival-time").val(arrivalTime);
-                $("#edit-aande-notes").val(notes);       
+                removeError("#edit-aande-location-error");
             }
-        
-        });// end post */
-    } //updateViewRadiologyRecord
-
-    $("#edit-aande-submit-button").click(function(event) {
-        event.preventDefault()
-        //remove all previous errors
-        removeError(".error");  
-         //get details from inputs
-        let locationOccurred = $("#edit-aande-location").val();
-        let description = $("#edit-injury-description").val();
-        let injuryArea = $("#edit-injury-area").val();
-        let typeOfInjury = $("#edit-injury-type").val();
-        let medication = $("#edit-medication").val();
-        let medicationName = $("#edit-medicine-name").val();
-        let medicationAmount = $("#edit-medicine-amount").val();
-        let xrayRequired = stringToBoolean($("#edit-xray-required").val());
-        let vomitting = stringToBoolean($("#edit-vomitting").val());
-        let priority = $("#edit-priority").val();
-        let surgery = stringToBoolean($("#edit-surgery-required").val());
-        let arrivalDate = $("#edit-aande-arrival-date").val();
-        let arrivalTime = $("#edit-aande-arrival-time").val();
-        let formattedArrivalDate = `${arrivalDate} ${arrivalTime}`;
-        let notes = $("#edit-aande-notes").val(); 
-        //form validation
-        if(locationOccurred === "") {
-            addError("#edit-aande-location-error", "Please enter a location");
-        } else {
-            removeError("#edit-aande-location-error");
-        }
-        if(description === "") {
-            addError("#edit-injury-description-error", "Please describe injury");
-        } else {
-            removeError("#edit-injury-description-error");
-        }
-        if(injuryArea === "") {
-            addError("#edit-injury-area-error", "Please specify area");
-        } else {
-            removeError("#edit-injury-area-error");
-        }
-        //post to backend only if no errors exist
-        if(!($(".error").length)) {
-         $.post("/backend/medical-record", {type: "updateAAndERecord", patientId:patientId, recordId:recordId,
-         locationOccurred:locationOccurred, description:description, injuryArea:injuryArea, typeOfInjury:typeOfInjury,
-         medication:medication, medicationName:medicationName, medicationAmount:medicationAmount, xrayRequired:xrayRequired, 
-         vomitting:vomitting, priority:priority, surgery:surgery, formattedArrivalDate:formattedArrivalDate,
-         notes:notes})
-         .done(function(data) {
-             console.log(data);
-             if(data === "success") {
-                 window.location = `/patient/profile/?id=${patientId}&msg=success`;
-             } else {
-                 addError("#edit-aande-submit-error", "An unexpected error occurred");
-             }
-         })
-        } //end if
-    }) //end post
-
-    //show hidden fields if value of medicine is changed
-    $("#edit-medication").change(function() {
-        let value = $(this).find(":selected").val();
-        if(value !== "None") {
-            //if medicine selected, show other input fields
-            $("#edit-hidden-medicine-name").show();
-            $("#edit-hidden-medicine-amount").show();
-        } else {
-            //if none selected, hide other input fields
-            $("#edit-hidden-medicine-name").hide();
-            $("#edit-hidden-medicine-amount").hide();
-        }
-    })
-</script>
+            if(description === "") {
+                addError("#edit-injury-description-error", "Please describe injury");
+            } else {
+                removeError("#edit-injury-description-error");
+            }
+            if(injuryArea === "") {
+                addError("#edit-injury-area-error", "Please specify area");
+            } else {
+                removeError("#edit-injury-area-error");
+            }
+            //post to backend only if no errors exist
+            if(!($(".error").length)) {
+             $.post("/backend/medical-record", {type: "updateAAndERecord", patientId:patientId, recordId:recordId,
+             locationOccurred:locationOccurred, description:description, injuryArea:injuryArea, typeOfInjury:typeOfInjury,
+             medication:medication, medicationName:medicationName, medicationAmount:medicationAmount, xrayRequired:xrayRequired, 
+             vomitting:vomitting, priority:priority, surgery:surgery, formattedArrivalDate:formattedArrivalDate,
+             notes:notes})
+             .done(function(data) {
+                 if(data === "success") {
+                     window.location = `/patient/profile/?id=${patientId}&msg=success`;
+                 } else {
+                     addError("#edit-aande-submit-error", "An unexpected error occurred");
+                 }
+             })
+            } //end if
+        }) //end post
+    
+        //show hidden fields if value of medicine is changed
+        $("#edit-medication").change(function() {
+            let value = $(this).find(":selected").val();
+            if(value !== "None") {
+                //if medicine selected, show other input fields
+                $("#edit-hidden-medicine-name").show();
+                $("#edit-hidden-medicine-amount").show();
+            } else {
+                //if none selected, hide other input fields
+                $("#edit-hidden-medicine-name").hide();
+                $("#edit-hidden-medicine-amount").hide();
+            }
+        })
+    </script>

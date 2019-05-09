@@ -111,26 +111,20 @@ class StaffBackend extends AbstractController {
                 $staff = $entityManager->getRepository(User::class)->findOneBy([
                     "id" => $staffId
                 ]);
-                $newPatientId = $request->get("patientId");
+                $patientId = $request->get("patientId");
 
-                if($staff) {
-                    $lastPatient = $staff->getLastPatient();
-                    //if there is last patient data
-                    if($lastPatient) {
-                        $oldPatientId = $lastPatient->getId();
-                        //if the patient id is different from new one, save in DB
-                        if($oldPatientId != $newPatientId) {
-                            $patient = $entityManager->getRepository(Patient::class)->findOneBy([
-                                "id" => $newPatientId
-                            ]);
-                            if($patient) {
-                                //persist to DB
-                                $staff->setLastPatient($patient);
-                                $entityManager->persist($staff);
-                                $entityManager->flush();
-                            }
-                        }
-                    } //end if 
+
+                if($staff) {          
+                    $patient = $entityManager->getRepository(Patient::class)->findOneBy([
+                        "id" => $patientId
+                    ]);
+                    if($patient) {
+                        //persist to DB
+                        $staff->setLastPatient($patient);
+                        $entityManager->persist($staff);
+                        $entityManager->flush();                                
+                    } 
+                        
                 } else {
                     throw new NotFoundHttpException('Error: staff ID not found');
                 }

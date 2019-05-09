@@ -66,7 +66,7 @@
             <p class="green">Notes</p>
             <p class="input-style-light" id="view-radiology-notes"></p>
             <p id="radiology-submit-error"></p>
-            <a id="edit-radiology-record-button" href="#edit-radiology-record" class="ui-shadow ui-btn ui-corner-all ui-btn-inline" data-transition="pop">EDIT</a>        
+        
         
     </div>
 </div> <!--end edit-radiology-record-->
@@ -187,6 +187,7 @@
 <script>
 
     var recordId;
+    var staffId = '{{ app.user.id }}'; 
 
     function updateViewRadiologyRecord(recordId) {
 
@@ -236,6 +237,12 @@
                 if(!notes) {
                     notes = "";
                 }
+                //add edit button if user id is same as who created it
+                let createdStaffId = data.staffId;
+                if(parseInt(staffId) === createdStaffId) {
+                    let htmlString = '<a id="edit-radiology-record-button" href="#edit-radiology-record" class="ui-shadow ui-btn ui-corner-all ui-btn-inline" data-transition="pop">EDIT</a>'
+                    $(htmlString).insertAfter("#radiology-submit-error");
+                } //end if
                 //update DOM with data 
                 $("#view-created-by-radiology").text(createdBy);
                 $("#view-created-date-radiology").text(dateCreated);

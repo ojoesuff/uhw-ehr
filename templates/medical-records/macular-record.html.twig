@@ -40,7 +40,7 @@
         </div>
         <p class="green">Notes</p>
         <p class="input-style-light" id="view-macular-notes"><p></p>  
-        <a id="edit-macular-record-button" href="#edit-macular-record" class="ui-shadow ui-btn ui-corner-all ui-btn-inline" data-transition="pop">EDIT</a>
+        
     </div>
 </div><!--end macular-clinic-record-->
 
@@ -98,9 +98,10 @@
     function updateViewMacularRecord(recordId) {
 
         this.recordId = recordId;
+        var staffId = '{{ app.user.id }}';
         
         $.post("/backend/medical-record", {type: "viewMacularRecord", patientId:patientId,
-        recordId:recordId})
+        recordId:recordId, staffId:staffId})
         .done(function(data) {
             if(data === "none") {
                 addError("#macular-clinic-record-error", "An unexpected error occurred");
@@ -116,7 +117,13 @@
                 let notes = data.notes;
                 if(!notes) {
                     notes = "";
-                }
+                }    
+                //add edit button if user id is same as who created it
+                let createdStaffId = data.staffId;
+                if(parseInt(staffId) === createdStaffId) {
+                    let htmlString = '<a id="edit-macular-record-button" href="#edit-macular-record" class="ui-shadow ui-btn ui-corner-all ui-btn-inline" data-transition="pop">EDIT</a>'
+                    $(htmlString).insertAfter("#view-macular-notes");
+                } //end if            
                 //update DOM with data
                 $("#view-created-by-macular").text(createdBy);
                 $("#view-created-date-macular").text(dateCreated);

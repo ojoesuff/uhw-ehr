@@ -142,6 +142,9 @@ amber = #FFAE56
 .centre {
     margin: 0 auto;
 }
+.centre-text {
+    text-align: center;
+}
 
 .centre-img {
     display: block;

@@ -358,6 +358,7 @@
             $("#update-successful").text("");
         }
         var patientName = "";     
+        var staffId = '{{ app.user.id }}';
 
         //get patients name
         $.post("/backend/medical-record", {type: "getDetails", patientId: patientId})
@@ -436,7 +437,7 @@
 
         //post to backend only if no errors exist
         if(!($(".error").length)) {
-         $.post("/backend/medical-record", {type: "createAAndERecord", patientId:patientId,
+         $.post("/backend/medical-record", {type: "createAAndERecord", patientId:patientId, staffId:staffId,
          locationOccurred:locationOccurred, description:description, injuryArea:injuryArea,
          typeOfInjury:typeOfInjury, medication:medication, medicationName:medicationName,
          medicationAmount:medicationAmount, xrayRequired:xrayRequired, vomitting:vomitting,
@@ -525,7 +526,7 @@
         }
         //post to backend only if no errors exist
         if(!($(".error").length)) {
-         $.post("/backend/medical-record", {type: "createRadiologyRecord", patientId:patientId, 
+         $.post("/backend/medical-record", {type: "createRadiologyRecord", patientId:patientId,  staffId:staffId,
          area:area, xrayType:xrayType, contrast:contrast, side:side, pacemaker:pacemaker, 
          sedation:sedation, claustrophobia:claustrophobia, metal:metal, 
          metalArea:metalArea, notes:notes})
@@ -585,7 +586,7 @@
 
         //post to backend only if no errors exist
         if(!($(".error").length)) {
-         $.post("/backend/medical-record", {type: "createMacularRecord", patientId:patientId, 
+         $.post("/backend/medical-record", {type: "createMacularRecord", patientId:patientId, staffId:staffId,
          LVARangeWeeks:LVARangeWeeks, LVARangeMonths:LVARangeMonths, testRequired:testRequired, 
          surgery:surgery, notes:notes})
          .done(function(data) {

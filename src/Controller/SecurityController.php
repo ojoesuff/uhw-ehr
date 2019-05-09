@@ -25,7 +25,6 @@ class SecurityController extends AbstractController
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
         //if user is logged in, redirect from login page if accessed
-
         if ($this->get('security.authorization_checker')->isGranted('ROLE_USER')) {
             //return $this->render('dashboard.html.twig');
 

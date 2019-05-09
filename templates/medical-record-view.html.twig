@@ -41,6 +41,7 @@
      function getPatientsMedicalRecords(patientId) {
         $.post("/backend/medical-record", {type:"getMedicalRecords", patientId: patientId})
         .done(function(data) {
+            console.log(data);
             if(data === "none") {
                 $(".name").text("An unexpected error occurred");
                 $(".name").addClass("error");

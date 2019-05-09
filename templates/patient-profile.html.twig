@@ -3,13 +3,20 @@
 <div data-role="page">    
     {% include './sidenav/sidenav.html.twig' %} 
     <div data-role="content" class="width-960">  
+            <!-- shows links only if certain roles are logged in-->
+            {% if is_granted("ROLE_CLERICAL") %}
             <a href="#edit-profile" class="ui-shadow ui-btn ui-corner-all ui-btn-inline" data-transition="pop">EDIT</a>
-            <a href="#delete-profile" class="ui-shadow ui-btn ui-corner-all ui-btn-inline" data-transition="pop">DELETE</a>                   
+            {% endif %} 
+            {% if is_granted("ROLE_ADMIN") %}
+            <a href="#delete-profile" class="ui-shadow ui-btn ui-corner-all ui-btn-inline" data-transition="pop">DELETE</a> 
+            {% endif %}                  
         <h2 class="inline name"></h2>
         <h4 class="green" id="updated-success"></h4>
         <div class="flex-container">
             <div class="box flex-item-1">
-                <button data-inline="true" data-theme="e">+ MEDICAL RECORD</button>
+                {% if is_granted("ROLE_DOCTOR") or is_granted("ROLE_NURSE") %}
+                <button data-inline="true" data-theme="e" id="add-medical-record">+ MEDICAL RECORD</button>
+                {% endif %}  
                 <div class="flex-container">
                       
                     <div class="flex-item-small-form">
@@ -62,7 +69,9 @@
             </div>
             <div class="box flex-item-1">
                 <h3 class="green">Appointments</h3>
+                {% if is_granted("ROLE_DOCTOR") or is_granted("ROLE_NURSE") or is_granted("ROLE_CLERICAL")%}
                 <a data-inline="true" class="ui-shadow ui-btn ui-corner-all ui-btn-inline" href="#" id="add-appointmnet-button">+ APPOINTMENT</a>
+                {% endif %}
                 <div class="flex-container">
                     <input type="date" id="appointment-date">                
                     <form id="appointment-update-form" method="post" onsubmit="getAppointments(event);">
@@ -769,6 +778,11 @@
     $("#add-appointmnet-button").click(function() {
         window.location = `/patient/appointment/create?id=${patientId}`;
     }); //end click event
+
+    //add medical record for patient
+    $("#add-medical-record").click(function() {
+        window.location = `/patient/medical-record/create?id=${patientId}`;
+    });
 
 </script>
 </body>
