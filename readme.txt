@@ -1,0 +1,2 @@
+- Last viewed patient to User entity and displayed it on staff dashboard.
+- Fail at end of each post to redirect to error page if 200 status not sent back from backend

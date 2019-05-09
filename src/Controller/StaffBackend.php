@@ -5,6 +5,7 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\User;
+use App\Entity\Patient;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response; 
 use Symfony\Component\HttpFoundation\JsonResponse; 
@@ -106,7 +107,33 @@ class StaffBackend extends AbstractController {
                 } else {
                     throw new NotFoundHttpException('Error: staff ID not found');
                 }
-                
+            case "savePatientLastViewed":
+                $staff = $entityManager->getRepository(User::class)->findOneBy([
+                    "id" => $staffId
+                ]);
+                $newPatientId = $request->get("patientId");
+
+                if($staff) {
+                    $lastPatient = $staff->getLastPatient();
+                    //if there is last patient data
+                    if($lastPatient) {
+                        $oldPatientId = $lastPatient->getId();
+                        //if the patient id is different from new one, save in DB
+                        if($oldPatientId != $newPatientId) {
+                            $patient = $entityManager->getRepository(Patient::class)->findOneBy([
+                                "id" => $newPatientId
+                            ]);
+                            if($patient) {
+                                //persist to DB
+                                $staff->setLastPatient($patient);
+                                $entityManager->persist($staff);
+                                $entityManager->flush();
+                            }
+                        }
+                    } //end if 
+                } else {
+                    throw new NotFoundHttpException('Error: staff ID not found');
+                }
 
         } //end switch
 

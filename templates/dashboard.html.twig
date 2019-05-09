@@ -32,12 +32,19 @@
         <!--if medical staff-->
         {% if is_granted("ROLE_CLERICAL") or is_granted("ROLE_DOCTOR") or is_granted("ROLE_NURSE") %}
         <script>
-            var staffId = 10;
+            var staffId = '{{ app.user.id }}';
+            //get last viewed patient details from DB
             $.post("backend/staff", {type:"getLastViewedPatient", staffId:staffId})
-            .done(function(data, statusText, xhr) {
-                var status = xhr.status; 
-                console.log(status);
-                
+            .done(function(data) {
+                if(data === "none") {
+                    let htmlString = "<p>No last patient to view</p>";
+                    $("#patient-link").append(htmlString);
+                } else {
+                    let patientName = data.patientName;
+                    let patientId = data.patientId;
+                    let htmlString = `<a href="#" onclick="window.location='/patient/profile?id=${patientId}'"><p>${patientName}</p></a>`;
+                    $("#patient-link").append(htmlString);
+                }             
             })
             //throw error if fails found at https://stackoverflow.com/questions/9847244/what-are-the-parameters-sent-to-fail-in-jquery
             .fail(function (jqXHR, textStatus, error) {
@@ -50,8 +57,7 @@
                 <a href="/patient/search"><p>Search</p></a>
             </div>
             <h3>Last Viewed Profile</h3>
-            <div class="green-box drop-shadow dashboard-link left-text">
-                <a href="/patient/profile"><p>Patient Name</p></a>
+            <div class="green-box drop-shadow dashboard-link left-text" id="patient-link">
             </div>            
         {% endif %}
     </div>

@@ -477,9 +477,12 @@
      else {
         $("#updated-success").text("");
     }
+    //get staff id from user object
+    var staffId = '{{ app.user.id }}';
 
     getPatientDetails(patientId);
     getPatientOutstandingAppoint(patientId);
+    savePatientLastViewed(patientId, staffId);
     //add todays date to date input when page loads
     var todaysDate = new Date();
     //converts date to string formatted to html date input https://stackoverflow.com/questions/3066586/get-string-in-yyyymmdd-format-from-js-date-object
@@ -599,6 +602,15 @@
 
         });
     }
+
+    function savePatientLastViewed(patientId, staffId) {
+        $.post("/backend/staff", {type: "savePatientLastViewed", 
+        patientId:patientId, staffId:staffId})
+        //throw error if fails found at https://stackoverflow.com/questions/9847244/what-are-the-parameters-sent-to-fail-in-jquery
+        .fail(function () {
+            showErrorPage();
+        });
+    } //end savePatientLastViewed
 
     function getPatientOutstandingAppoint(patientId) {
         $.post("/backend/patient", {type:"outstandingAppoint", patientId:patientId})
@@ -744,7 +756,6 @@
     $("#delete-patient-yes").click(function() {
         $.post("/backend/patient", {type: "deletePatient", patientId:patientId})
         .done(function(data) {
-            console.log(data);
            if(data === "none") {
                addError("#delete-patient-error", "An unexpected error occurred");
            } else {
