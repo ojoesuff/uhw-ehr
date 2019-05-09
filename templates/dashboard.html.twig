@@ -8,7 +8,9 @@
         {% if is_granted("IS_AUTHENTICATED_FULLY") %}
             <h2 class="green">Welcome {{ app.user.firstName }}</h2>
         {% endif %}
-        <h2>Staff</h2>
+        <!--show different dashboard for admin-->
+        {% if is_granted("ROLE_ADMIN") %}
+        <h2>Staff </h2>
         <div class="flex-container width-80p">
             <div class="dark-green-box drop-shadow flex-item-small-form dashboard-link">
                 <a href="/admin/create/staff"><p>+ Create</p></a>
@@ -26,6 +28,32 @@
                     <a href="/patient/search"><p>Search</p></a>
                 </div>
         </div>
+        {% endif %}
+        <!--if medical staff-->
+        {% if is_granted("ROLE_CLERICAL") or is_granted("ROLE_DOCTOR") or is_granted("ROLE_NURSE") %}
+        <script>
+            var staffId = 10;
+            $.post("backend/staff", {type:"getLastViewedPatient", staffId:staffId})
+            .done(function(data, statusText, xhr) {
+                var status = xhr.status; 
+                console.log(status);
+                
+            })
+            //throw error if fails found at https://stackoverflow.com/questions/9847244/what-are-the-parameters-sent-to-fail-in-jquery
+            .fail(function (jqXHR, textStatus, error) {
+                showErrorPage();
+            });
+            
+        </script>
+            <h2>Patient Search</h2>
+            <div class="dark-green-box drop-shadow dashboard-link left-text">
+                <a href="/patient/search"><p>Search</p></a>
+            </div>
+            <h3>Last Viewed Profile</h3>
+            <div class="green-box drop-shadow dashboard-link left-text">
+                <a href="/patient/profile"><p>Patient Name</p></a>
+            </div>            
+        {% endif %}
     </div>
 </div>
 <script>

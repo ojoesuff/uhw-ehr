@@ -8,6 +8,7 @@ use App\Entity\User;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response; 
 use Symfony\Component\HttpFoundation\JsonResponse; 
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class StaffBackend extends AbstractController {
     /**
@@ -85,6 +86,27 @@ class StaffBackend extends AbstractController {
 
                     return new Response("success");
                 }
+            case "getLastViewedPatient":
+                $staff = $entityManager->getRepository(User::class)->findOneBy([
+                    "id" => $staffId
+                ]);
+
+                if($staff) {
+                    $lastPatient = $staff->getLastPatient();
+                    //if there is last patient data
+                    if($lastPatient) {
+                        $patientId = $lastPatient->getId();
+                        $firstName = $lastPatient->getFirstName();
+                        $lastName = $lastPatient->getLastName();
+                        $patientName = $firstName." ".$lastName;
+                        $patientArray = array("patientId"=> $patientId, "patientName" => $patientName);
+    
+                        return new JsonResponse($patientArray);
+                    } 
+                } else {
+                    throw new NotFoundHttpException('Error: staff ID not found');
+                }
+                
 
         } //end switch
 

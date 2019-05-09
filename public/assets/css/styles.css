@@ -248,6 +248,10 @@ ul {
     margin: 0;
 }
 
+.left-text {
+    text-align: left;
+}
+
 p {
     margin: 0.5vw;
 }

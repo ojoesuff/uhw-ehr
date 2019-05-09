@@ -20,6 +20,10 @@ function stringToBoolean(text) {
     //return 1 or 0 for DB
     return (text == "Yes") ? 1 : 0;
 }
+//load error page
+function showErrorPage() {
+    window.location = "/error";
+}
 
 
 //used with node.js and jasmine to test JS functions

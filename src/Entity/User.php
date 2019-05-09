@@ -67,6 +67,11 @@ class User implements UserInterface
      */
     private $appointments;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Patient")
+     */
+    private $lastPatient;
+
     public function __construct()
     {
         $this->macularClinicRecords = new ArrayCollection();
@@ -285,6 +290,18 @@ class User implements UserInterface
                 $appointment->setStaffId(null);
             }
         }
+        return $this;
+    }
+
+    public function getLastPatient(): ?Patient
+    {
+        return $this->lastPatient;
+    }
+
+    public function setLastPatient(?Patient $lastPatient): self
+    {
+        $this->lastPatient = $lastPatient;
+
         return $this;
     }
 }
