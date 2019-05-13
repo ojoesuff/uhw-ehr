@@ -15,6 +15,13 @@
         <a class="page-change-link" id="next-page" href="#"><p class="inline" >&gt;</p></a>
     </div>         
 </div>
+<input type="hidden" id="advanced-search-insert">
+<div id="hidden-delete-staff-button" hidden>
+    <button data-inline="true" id="delete-staff-button">Delete Selected</button>
+</div>
+<div id="hidden-delete-patient-button" hidden>
+    <button data-inline="true" id="delete-patient-button">Delete Selected</button>
+</div>
 <script>  
     
     var searchType;
@@ -130,7 +137,7 @@
                 }
                 let fullAddress = `${addressLine1} ${addressLine2} ${addressLine3} ${county}`;     
                 
-                let htmlString = `<div class='advanced-search-result'><a class='search-result-link' onclick="window.location = '/patient/profile?id=${id}'" href='#'><p>${name}, ${fullAddress}, ${id}</p></a><hr></div>`;
+                let htmlString = `<div class='advanced-search-result'>{% if is_granted("ROLE_ADMIN") %}<input type="checkbox" name="delete-patient" onclick="showHideDelete()" class="delete-patient-checkbox" data-inline="true" value="${id}">{% endif %}<a class='search-result-link' onclick="window.location = '/patient/profile?id=${id}'" href='#'><p class="inline">${name}, ${fullAddress}, ${id}</p></a><hr></div>`;
 
                 $(htmlString).insertBefore("#advanced-search-insert");
             } //end for
@@ -146,7 +153,11 @@
                 let username = staff.username;
                 let id = staff.id;
 
-                let htmlString = `<div class='advanced-search-result'><a class='search-result-link' onclick="window.location = './profile?id=${id}'" href='#'><p>${name}, ${username}, ${id}</p></a><hr></div>`
+                let htmlString = `<div class='advanced-search-result'>{% if is_granted("ROLE_ADMIN") %}
+                    <input type="checkbox" name="delete-staff" onclick="showHideDelete()" 
+                    class="delete-staff-checkbox" data-inline="true" value="${id}">{% endif %}
+                    <a class='search-result-link' onclick="window.location = './profile?id=${id}'" 
+                    href='#'><p class="inline">${name}, ${username}, ${id}</p></a><hr></div>`
 
                 $(htmlString).insertBefore("#advanced-search-insert");
                 
@@ -177,6 +188,61 @@
         if(currentPage <= totalPages) {
             updatePaginationItems();
         }         
+    });
+
+    //show of hide delete selected button if checkboxes are selected
+    function showHideDelete() {
+        //show patient delete button
+        if($(".delete-patient-checkbox").is(":checked")) {
+            $("#hidden-delete-patient-button").show();
+        } else {
+            $("#hidden-delete-patient-button").hide();
+        }
+        //show staff delete button
+        if($(".delete-staff-checkbox").is(":checked")) {
+            $("#hidden-delete-staff-button").show();
+        } else {
+            $("#hidden-delete-staff-button").hide();
+        }
+    }
+
+    //delete many patients when clicked
+    $("#delete-patient-button").click(function() {
+        //get array of patients id
+        let patientsArray = [];
+        //found at https://www.tutorialrepublic.com/faq/how-to-get-the-values-of-selected-checkboxes-in-a-group-using-jquery.php
+        $.each($("input[name='delete-patient']:checked"), function(){            
+            patientsArray.push(parseInt($(this).val()));
+        });
+        //delete patients from backend
+        $.post("/backend/patient", {type:"deleteManyPatients", patientsArray:patientsArray})
+        .done(function(data) {
+            advancedSearch(event, "patient");
+        })
+        //throw error if fails found at https://stackoverflow.com/questions/9847244/what-are-the-parameters-sent-to-fail-in-jquery
+        .fail(function (jqXHR, textStatus, error) {
+            showErrorPage();
+        }); //end post
+    });
+
+    //delete many staff when clicked
+    $("#delete-staff-button").click(function() {
+        //get array of staff id
+        let staffArray = [];
+        //found at https://www.tutorialrepublic.com/faq/how-to-get-the-values-of-selected-checkboxes-in-a-group-using-jquery.php
+        $.each($("input[name='delete-staff']:checked"), function(){            
+            staffArray.push(parseInt($(this).val()));
+        });
+        console.log(staffArray);
+        //delete staff from backend
+        $.post("/backend/staff", {type:"deleteManyStaff", staffArray:staffArray})
+        .done(function(data) {
+            advancedSearch(event, "staff");
+        })
+        //throw error if fails found at https://stackoverflow.com/questions/9847244/what-are-the-parameters-sent-to-fail-in-jquery
+        /*.fail(function (jqXHR, textStatus, error) {
+            showErrorPage();
+        }); //end post*/
     });
 
 </script>

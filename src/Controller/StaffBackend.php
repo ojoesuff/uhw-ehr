@@ -82,7 +82,7 @@ class StaffBackend extends AbstractController {
                 ]);
 
                 if($staff) {
-                    $entityManager->remove($staff);
+                    $this->deleteStaff($staff);
                     $entityManager->flush();
 
                     return new Response("success");
@@ -129,10 +129,56 @@ class StaffBackend extends AbstractController {
                     throw new NotFoundHttpException('Error: staff ID not found');
                 }
 
+            case "deleteManyStaff":
+
+                $staffArray = $request->get("staffArray");
+
+                foreach($staffArray as $staffId) {
+                    $staff = $entityManager->getRepository(User::class)->findOneBy([
+                        "id" => $staffId
+                    ]);
+                    if($staff) {
+                        $this->deleteStaff($staff);
+                    } //end if
+                } //end foreach
+
+                $entityManager->flush();
+                return new Response ("success");              
+
         } //end switch
 
         return new Response ("none");
 
      } //end index
+
+     public function deleteStaff($staff) {
+        $entityManager = $this->getDoctrine()->getManager();
+        //get all records and appointments assocated with user and set staff id to null
+        $macularClinicRecords = $staff->getMacularClinicRecords();
+        if($macularClinicRecords) {
+            foreach($macularClinicRecords as $macularClinicRecord) {
+                $macularClinicRecord->setStaffId(NULL);
+             }
+        }
+        $aAndERecords = $staff->getAAndERecords();
+        if($aAndERecords) {
+            foreach($aAndERecords as $aAndERecord) {
+                $aAndERecord->setStaffId(NULL);
+             }
+        }
+        $radiologyRecords = $staff->getRadiologyRecords();
+        if($radiologyRecords) {
+            foreach($radiologyRecords as $radiologyRecord) {
+                $radiologyRecord->setStaffId(NULL);
+             }
+        }
+        $appointments = $staff->getAppointments();
+        if($appointments) {
+            foreach($appointments as $appointment) {
+                $appointment->setStaffId(NULL);
+             }
+        }
+        $entityManager->remove($staff);
+     }
 
 } //end StaffBackend

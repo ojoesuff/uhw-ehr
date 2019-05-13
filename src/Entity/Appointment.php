@@ -45,6 +45,7 @@ class Appointment
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="appointments")
+     *  @ORM\JoinColumn(nullable=false)
      */
     private $staffId;
 

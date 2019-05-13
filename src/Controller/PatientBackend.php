@@ -37,32 +37,9 @@ class PatientBackend extends AbstractController {
             ]);
 
             if($patient) {
-               //get all records associated with patient and delete them
-               $aAndERecords = $entityManager->getRepository(AAndERecord::class)->findBy([
-                  "patientId" => $patient
-               ]);
-               foreach($aAndERecords as $record) {
-                  $entityManager->remove($record);
-               }
-               $macularRecords = $entityManager->getRepository(MacularClinicRecord::class)->findBy([
-                  "patientId" => $patient
-               ]);
-               foreach($macularRecords as $record) {
-                  $entityManager->remove($record);
-               }
-               $radiologyRecords = $entityManager->getRepository(RadiologyRecord::class)->findBy([
-                  "patientId" => $patient
-               ]);
-               foreach($radiologyRecords as $record) {
-                  $entityManager->remove($record);
-               }
-               $appointments = $entityManager->getRepository(Appointment::class)->findBy([
-                  "patient" => $patient
-               ]);
-               foreach($appointments as $record) {
-                  $entityManager->remove($record);
-               }
-               $entityManager->remove($patient);
+
+               $this->deletePatient($patient);
+               
                $entityManager->flush();
 
                return new Response("success");
@@ -293,6 +270,53 @@ class PatientBackend extends AbstractController {
             }            
          }
 
+         if($type === "deleteManyPatients") {
+            $patientsArray = $request->get("patientsArray");
+
+            if($patientsArray) {
+               foreach($patientsArray as $patientId) {
+                  $patient = $entityManager->getRepository(Patient::class)->findOneBy([
+                     "id" => $patientId
+                  ]);
+                  if($patient) {
+                     $this->deletePatient($patient);
+                  }                  
+                  $entityManager->flush();
+               } //end foreach
+            } //end if
+         } //end if
+
         return new Response("Success");
-     }
+     } //end index
+
+     public function deletePatient($patient) {
+         $entityManager = $this->getDoctrine()->getManager();
+         //get all records associated with patient and delete them
+         $aAndERecords = $entityManager->getRepository(AAndERecord::class)->findBy([
+            "patientId" => $patient
+         ]);
+         foreach($aAndERecords as $record) {
+            $entityManager->remove($record);
+         }
+         $macularRecords = $entityManager->getRepository(MacularClinicRecord::class)->findBy([
+            "patientId" => $patient
+         ]);
+         foreach($macularRecords as $record) {
+            $entityManager->remove($record);
+         }
+         $radiologyRecords = $entityManager->getRepository(RadiologyRecord::class)->findBy([
+            "patientId" => $patient
+         ]);
+         foreach($radiologyRecords as $record) {
+            $entityManager->remove($record);
+         }
+         $appointments = $entityManager->getRepository(Appointment::class)->findBy([
+            "patient" => $patient
+         ]);
+         foreach($appointments as $record) {
+            $entityManager->remove($record);
+         }
+
+         $entityManager->remove($patient);
+     } //end deletePatient
 }
