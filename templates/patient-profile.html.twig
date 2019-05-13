@@ -16,12 +16,11 @@
             <div class="box flex-item-1">
                 {% if is_granted("ROLE_DOCTOR") or is_granted("ROLE_NURSE") %}
                 <button data-inline="true" data-theme="e" id="add-medical-record">+ MEDICAL RECORD</button>
-                {% endif %}  
+                {% endif %}
                 <div class="flex-container">
-                      
-                    <div class="flex-item-small-form">
+                     <div class="flex-item-small-form">
                         <p class="green">Priority</p>
-                        <p class="input-style" id="priority"></p>                        
+                        <p class="input-style" id="priority"></p> 
                     </div>                      
                     <div class="flex-item-small-form">
                         <p class="green">Status</p>
@@ -35,7 +34,7 @@
                     </div>                      
                     <div class="flex-item-small-form">
                         <p class="green">Department</p>
-                        <p class="input-style bg-light-green" id="department"></p>                        
+                        <p class="input-style bg-light-green" id="department"></p>                                              
                     </div>                
                 </div>
                 <div class="flex-container">
@@ -106,6 +105,26 @@
     </div>
     <div data-role="content">
         <form method="post" id="update-patient-form">
+            <div class="flex-container">
+                <div class="flex-item-small-form">
+                    <p class="green">Priority</p>
+                    <select id="edit-priority" data-mini="true">
+                        <option value="Low">Low</option>  
+                        <option value="Medium">Medium</option>                     
+                        <option value="High">High</option>
+                    </select>                     
+                </div>                      
+                <div class="flex-item-small-form">
+                    <p class="green">Status</p>
+                    <select id="edit-status" data-mini="true">
+                        <option value="Deceased">Deceased</option>
+                        <option value="Discharged">Discharged</option>
+                        <option value="Inpatient">Inpatient</option>                     
+                        <option value="Outpatient">Outpatient</option> 
+                        <option value="Pending">Pending</option>                    
+                    </select>                  
+                </div>                
+            </div>
         <p class="green">First Name</p>
         <p id="edit-first-name-error"></p>
         <input type="text" class="input-style" id="edit-first-name" name="editfirstname">
@@ -122,9 +141,10 @@
             <div class="flex-item-small-form">
                 <label for="department" class="green">Department</label>
                 <select name="department" id="edit-department" data-mini="true">
-                    <option value="" disabled selected>Choose dept</option>
-                    <option value="Cardiology">Cardiology</option>
-                    <option value="A and E">A and E</option>  
+                    <option value="Unassigned">Unassigned</option>  
+                    <option value="A and E">A and E</option>                     
+                    <option value="Opthalmology">Opthalmology</option> 
+                    <option value="Radiology">Radiology</option>
                 </select>                  
             </div>                
         </div>
@@ -147,7 +167,6 @@
             <!-- found at http://www.waterfordwebdesign.ie/alphabetical-list-32-counties-ireland/-->
             <label for="county" class="green">County</label>
             <select name="county" id="edit-county" data-mini="true">
-                <option value="" disabled selected>Choose county</option>
                 <option value="Antrim">Antrim</option>
                 <option value="Armagh">Armagh</option>
                 <option value="Carlow">Carlow</option>
@@ -183,6 +202,7 @@
             </select>                       
             </div>                      
             <div class="flex-item-small-form">
+                <p class="green">Eircode</p>
                 <input type="text" class="input-style" id="edit-eircode">                      
             </div>                
         </div>
@@ -597,6 +617,8 @@
             $("#address-line3").text(addressArray[2]);    
 
             //add data to edit patient profile dialog window
+            $("#edit-priority").val(priority);
+            $("#edit-status").val(status);
             $("#edit-first-name").val(firstName);
             $("#edit-middle-names").val(middleNames);
             $("#edit-last-name").val(lastName);
@@ -608,7 +630,7 @@
             $("#edit-address-line2").val(addressArray[1]);
             $("#edit-address-line3").val(addressArray[2]);
             //ensure the county value is selected by converting to lowercase
-            $("#edit-county").val(county.toLowerCase());
+            $("#edit-county").val(county);
             $("#edit-country").val(country);
             $("#edit-eircode").val(eircode);
             $("#edit-email").val(email);
@@ -694,6 +716,8 @@
     $("#update-patient-form").submit(function(event) {
         event.preventDefault();
         let id = patientId;
+        let priority = $("#edit-priority").val();
+        let status = $("#edit-status").val();
         let firstName = $("#edit-first-name").val();
         let middleName = $("#edit-middle-names").val();
         let lastName = $("#edit-last-name").val();
@@ -724,7 +748,7 @@
             $.post("/backend/patient", {type:"updateDetails", patientId:id, firstName:firstName, 
             middleName:middleName, lastName:lastName, email:email, address:address,
             county:county, eircode:eircode, country:country, dateOfBirth:dateOfBirth,
-            telNo:telNo, mobileNo:mobileNo, department:department})
+            telNo:telNo, mobileNo:mobileNo, department:department, priority:priority, status:status})
             .done(function(data) {
                 //if successful, redirect / else show error
                 if(data === "success") {

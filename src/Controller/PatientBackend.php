@@ -177,7 +177,9 @@ class PatientBackend extends AbstractController {
             ]);
 
             if($patient) {
-               //get data from request            
+               //get data from request  
+               $priority = $request->request->get('priority');
+               $status = $request->request->get('status');          
                $firstName = $request->request->get('firstName');
                $middleName = $request->request->get('middleName');
                $lastName = $request->request->get('lastName');
@@ -206,6 +208,9 @@ class PatientBackend extends AbstractController {
                   $patient->setDepartment($department);
                }
 
+               //set details to patient object
+               $patient->setPriority($priority);
+               $patient->setStatus($status);
                $patient->setFirstName($firstName);
                $patient->setMiddleNames($middleName);
                $patient->setLastName($lastName);

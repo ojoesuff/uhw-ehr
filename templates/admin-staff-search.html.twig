@@ -21,12 +21,14 @@
             <fieldset data-role="controlgroup" name="staff-type" id="staff-type" data-theme="d" data-type="horizontal">
                 <legend class="green">Staff Type</legend>
                 <p id="staff-type-error"></p>
-                <input type="radio" name="staff-type" id="doctor" value="ROLE-DOCTOR">
+                <input type="radio" name="staff-type" id="doctor" value="ROLE_DOCTOR">
                 <label for="doctor">Doctor</label>
-                <input type="radio" name="staff-type" id="nurse" value="ROLE-NURSE">
+                <input type="radio" name="staff-type" id="nurse" value="ROLE_NURSE">
                 <label for="nurse">Nurse</label>
-                <input type="radio" name="staff-type" id="clerical" value="ROLE-CLERICAL">
+                <input type="radio" name="staff-type" id="clerical" value="ROLE_CLERICAL">
                 <label for="clerical">Clerical</label>
+                <input type="radio" name="staff-type" id="admin" value="ROLE_ADMIN">
+                <label for="admin">Admin</label>
             </fieldset>                      
             <a href="#advanced-search-results" data-inline="true" id="search-staff-button" onmousedown="advancedSearch(event, 'staff')" 
             class="ui-shadow ui-btn ui-corner-all ui-btn-inline" data-transition="pop" data-theme="d">Search</a>

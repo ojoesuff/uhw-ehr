@@ -49,6 +49,7 @@
             let lastName = $("#staff-last-name").val();
             let username = $("#staff-username").val();
             let staffType = $("input[name='staff-type']:checked").val();
+            console.log(staffType);
 
             backendJSONData = {type: "staffAdvancedSearch", firstName: firstName,
             lastName:lastName, username:username, staffType:staffType}

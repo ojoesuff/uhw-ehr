@@ -309,7 +309,7 @@ seen at https://jsfiddle.net/jag6ose3/ */
         left: 0;
         clip: initial;
         float: left;
-        width: 15%;
+        width: 15em;
     }
     .my-content {
         width: 67%;

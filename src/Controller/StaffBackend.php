@@ -66,7 +66,7 @@ class StaffBackend extends AbstractController {
                         $userStaff->setFirstName($firstName);
                         $userStaff->setLastName($lastName);
                         $userStaff->setUsername($username);
-                        $userRoles = [$staffId];
+                        $userRoles = [$staffType];
                         $userStaff->setRoles($userRoles);
     
                         $entityManager->flush();
