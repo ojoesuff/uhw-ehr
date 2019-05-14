@@ -99,6 +99,9 @@
 
         this.recordId = recordId;
         var staffId = '{{ app.user.id }}';
+
+        //remove edit button if exists
+        $("#edit-macular-record-button").remove();
         
         $.post("/backend/medical-record", {type: "viewMacularRecord", patientId:patientId,
         recordId:recordId, staffId:staffId})
@@ -188,9 +191,8 @@
          LVARangeWeeks:LVARangeWeeks, LVARangeMonths:LVARangeMonths, testRequired:testRequired, 
          surgery:surgery, notes:notes})
          .done(function(data) {
-             console.log(data);
              if(data === "success") {
-                 window.location = `/patient/profile/?id=${patientId}&msg=success`;
+                window.location = `/patient/medical-record/view?id=${patientId}&msg=success`;
              } else {
                  addError("#edit-macular-submit-error", "An unexpected error occurred");
              }

@@ -395,30 +395,31 @@
         } else {
             removeError("#patient-dob-error");
         }
-
-        $.post("/backend/admin/create", {type:"patient", firstName:firstName, 
-        middleNames:middleNames, lastName:lastName, email:email, address:address,
-        county:county, eircode:eircode, country:country, dateOfBirth:dateOfBirth,
-        telNo:telNo, mobileNo:mobileNo})
-        .done(function(data) {
-            console.log(data);
-            switch(data) {
-                //if email exists, display error
-                case "error":
-                    addError("#patient-email-error", "Email already exists");
-                    break;
-                case "success":
-                    window.location = "/dashboard?msg=success";
-                    break;
-                case "none":
-                    addError("#patient-submit-error", "An unexpected error occurred");
-                    break;
-            } //end switch
-        })
-        //throw error if fails found at https://stackoverflow.com/questions/9847244/what-are-the-parameters-sent-to-fail-in-jquery
-        .fail(function (jqXHR, textStatus, error) {
-            showErrorPage();
-        });
+        //post to backend only if no errors exist
+        if(!($(".error").length)) {
+            $.post("/backend/admin/create", {type:"patient", firstName:firstName, 
+            middleNames:middleNames, lastName:lastName, email:email, address:address,
+            county:county, eircode:eircode, country:country, dateOfBirth:dateOfBirth,
+            telNo:telNo, mobileNo:mobileNo})
+            .done(function(data) {
+                switch(data) {
+                    //if email exists, display error
+                    case "error":
+                        addError("#patient-email-error", "Email already exists");
+                        break;
+                    case "success":
+                        window.location = "/dashboard?msg=success";
+                        break;
+                    case "none":
+                        addError("#patient-submit-error", "An unexpected error occurred");
+                        break;
+                } //end switch
+            })
+            //throw error if fails found at https://stackoverflow.com/questions/9847244/what-are-the-parameters-sent-to-fail-in-jquery
+            .fail(function (jqXHR, textStatus, error) {
+                showErrorPage();
+            }); //end post
+        } // end if
     });
 
     $("#patient-country").change(function() {

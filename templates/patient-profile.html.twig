@@ -70,10 +70,11 @@
                 <h3 class="green">Appointments</h3>
                 {% if is_granted("ROLE_DOCTOR") or is_granted("ROLE_NURSE") or is_granted("ROLE_CLERICAL")%}
                 <a data-inline="true" class="ui-shadow ui-btn ui-corner-all ui-btn-inline" href="#" id="add-appointmnet-button">+ APPOINTMENT</a>
+                <a data-inline="true" class="ui-shadow ui-btn ui-corner-all ui-btn-inline" href="#" id="view-all-appointments">View All</a>
                 {% endif %}
                 <div class="flex-container">
                     <input type="date" id="appointment-date">                
-                    <form id="appointment-update-form" method="post" onsubmit="getAppointments(event);">
+                    <form id="appointment-update-form" method="post" onsubmit="getAppointmentsByDate(event);">
                         <button data-inline="true">View</button>
                     </form>
                 </div>  
@@ -143,7 +144,7 @@
                 <select name="department" id="edit-department" data-mini="true">
                     <option value="Unassigned">Unassigned</option>  
                     <option value="A and E">A and E</option>                     
-                    <option value="Opthalmology">Opthalmology</option> 
+                    <option value="Ophthalmology">Ophthalmology</option> 
                     <option value="Radiology">Radiology</option>
                 </select>                  
             </div>                
@@ -519,7 +520,7 @@
     $('#appointment-date').val(todaysDateFormat);
 
 
-    function getAppointments(event) {
+    function getAppointmentsByDate(event) {
         event.preventDefault();
         let date = $("#appointment-date").val();
         $.post("/backend/patient", {type:"getAppointmentsByDate", patientId:patientId, date:date})
@@ -537,7 +538,7 @@
                     let medicalStaff = appointment.medicalStaff;
                     let time = appointment.time;
 
-                    let htmlAppointment = `<p class='input-style-dark upcoming-appointments'>${date}, ${time}, ${medicalStaff}, ${departmentName}</p>`;
+                    let htmlAppointment = `<a class="upcoming-appointments" href="#" onclick="window.location = '/patient/appointment/view?id=${patientId}&appoint=${appointmentId}'"><p class='input-style-dark upcoming-appointments'>${date}, ${time}, ${medicalStaff}, ${departmentName}</p></a>`;
 
                     $(htmlAppointment).insertBefore("#upcoming-appointments-insert");
                 }); //end foreach            
@@ -547,7 +548,7 @@
         .fail(function (jqXHR, textStatus, error) {
             showErrorPage();
         }); //end post
-    } //end getAppointments
+    } //end getAppointmentsByDate
 
     function getPatientDetails(patientId) {
 
@@ -667,7 +668,7 @@
                     let medicalStaff = appointment.medicalStaff;
                     let time = appointment.time;
 
-                    let htmlAppointment = `<p class='input-style-dark upcoming-appointments'>${date}, ${time}, ${medicalStaff}, ${departmentName}</p>`;
+                    let htmlAppointment = `<a class="upcoming-appointments" href="#" onclick="window.location = '/patient/appointment/view?id=${patientId}&appoint=${appointmentId}'"><p class='input-style-dark upcoming-appointments'>${date}, ${time}, ${medicalStaff}, ${departmentName}</p></a>`;
 
                     $(htmlAppointment).insertBefore("#upcoming-appointments-insert");
                         
@@ -698,7 +699,7 @@
                     let medicalStaff = appointment.medicalStaff;
                     let time = appointment.time;
                         
-                    let htmlAppointment = `<p class='input-style-dark completed-appointment'>${date}, ${time}, ${medicalStaff}, ${departmentName}</p>`;
+                    let htmlAppointment = `<a class="upcoming-appointments" href="#" onclick="window.location = '/patient/appointment/view?id=${patientId}&appoint=${appointmentId}'"><p class='input-style-dark upcoming-appointments'>${date}, ${time}, ${medicalStaff}, ${departmentName}</p></a>`;
 
                     $(htmlAppointment).insertBefore("#completed-appointments-insert");
                         
@@ -830,6 +831,11 @@
     $("#add-appointmnet-button").click(function() {
         window.location = `/patient/appointment/create?id=${patientId}`;
     }); //end click event
+    $("#view-all-appointments").click(function() {
+        window.location = `/patient/appointment/all?id=${patientId}`;
+    }); //end click event
+
+    
 
     //add medical record for patient
     $("#add-medical-record").click(function() {

@@ -56,7 +56,6 @@
             let lastName = $("#staff-last-name").val();
             let username = $("#staff-username").val();
             let staffType = $("input[name='staff-type']:checked").val();
-            console.log(staffType);
 
             backendJSONData = {type: "staffAdvancedSearch", firstName: firstName,
             lastName:lastName, username:username, staffType:staffType}
@@ -65,7 +64,6 @@
         $.post("/backend/search", backendJSONData)
         .done(function(data) {
             searchResults = data;
-            console.log(data);
             $(".advanced-search-result").remove();
             if(data === "none") {
                 $("<div class='advanced-search-result' data-theme='c'><h4>No results found</h4></div>").insertBefore("#advanced-search-insert");
@@ -91,8 +89,6 @@
             lastItem = totalItems;
         }
         totalPages = Math.ceil(totalItems / itemsPerPage);
-        console.log(`total items: ${totalItems}, items per page: ${itemsPerPage},
-        first item: ${firstItem}, last item: ${lastItem}, current page: ${currentPage}, total pages: ${totalPages}`);
 
         //update DOM with new information for pagination
         $("#total-items").text(totalItems);
@@ -233,7 +229,6 @@
         $.each($("input[name='delete-staff']:checked"), function(){            
             staffArray.push(parseInt($(this).val()));
         });
-        console.log(staffArray);
         //delete staff from backend
         $.post("/backend/staff", {type:"deleteManyStaff", staffArray:staffArray})
         .done(function(data) {

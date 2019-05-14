@@ -47,12 +47,12 @@ class AppointmentRepository extends ServiceEntityRepository
         ;
     }
     */
-    public function getTwoMostRecentOutstandingApp($patientId) { 
+    public function getFiveMostRecentOutstandingApp($patientId) { 
         return $this->createQueryBuilder('p')
         ->andWhere("p.patient = $patientId")
         ->andWhere('p.complete = 0')
         ->orderBy('p.date', 'ASC')
-        ->setMaxResults(2)
+        ->setMaxResults(5)
         ->getQuery()
         ->getResult();
     }

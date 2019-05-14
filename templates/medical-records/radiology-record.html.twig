@@ -192,6 +192,9 @@
     function updateViewRadiologyRecord(recordId) {
 
         this.recordId = recordId;
+
+        //remove edit button if exists
+        $("#edit-radiology-record-button").remove();
         
         $.post("/backend/medical-record", {type: "viewRadiologyRecord", patientId:patientId,
         recordId:recordId})
@@ -315,7 +318,7 @@
          .done(function(data) {
              console.log(data);
              if(data === "success") {
-                 window.location = `/patient/profile/?id=${patientId}&msg=success`;
+                window.location = `/patient/medical-record/view?id=${patientId}&msg=success`;
              } else {
                  addError("#edit-radiology-submit-error", "An unexpected error occurred");
              }

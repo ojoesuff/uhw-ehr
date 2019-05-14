@@ -1,12 +1,24 @@
 <div data-role="panel" id="side-nav">
-    <a href="/dashboard"><img src="{{asset('assets/images/logo.svg')}}" class="centre-img width-90p" alt="UHW Logo"></a>
-    <a href="/dashboard" class="nav-link-button ui-btn ui-shadow ui-corner-all ui-btn-icon-right ui-icon-home" data-theme="c">Home</a>
+    <a href="#" onclick="window.location = '/dashboard'"><img src="{{asset('assets/images/logo.svg')}}" class="centre-img width-90p" alt="UHW Logo"></a>
+    <a href="#" onclick="window.location = '/dashboard'" class="nav-link-button ui-btn ui-shadow ui-corner-all ui-btn-icon-right ui-icon-home" data-theme="c">Home</a>
+    {% if not is_granted("ROLE_ADMIN") %}
     <a href="#" onclick="window.location = '/patient/search'" class="nav-link-button ui-btn ui-shadow ui-corner-all ui-btn-icon-right ui-icon-search" data-theme="c">Search</a>
-    <a href="#home" class="nav-link-button ui-btn ui-shadow ui-corner-all ui-btn-icon-right ui-icon-user" data-theme="c">Patient</a>
-    <a href="#home" class="nav-link-button ui-btn ui-shadow ui-corner-all ui-btn-icon-right ui-icon-bullets" data-theme="c">Records</a>
-    {% if is_granted("IS_AUTHENTICATED_FULLY") %}
-    <a href="/logout" class="nav-link-button ui-btn ui-shadow ui-corner-all ui-btn-icon-right ui-icon-bullets" data-theme="c">Logout</a>
     {% endif %}
+    <!--only show links if user has a last patient viewed and not admin-->
+    {% if app.user.lastPatient|default and not is_granted("ROLE_ADMIN")%}
+    <a href="#" onclick="window.location = '/patient/profile?id={{app.user.lastPatient.getId()}}'" class="nav-link-button ui-btn ui-shadow ui-corner-all ui-btn-icon-right ui-icon-user" data-theme="c">Patient</a>
+    <a href="#" onclick="window.location = '/patient/medical-record/view?id={{app.user.lastPatient.getId()}}'" class="nav-link-button ui-btn ui-shadow ui-corner-all ui-btn-icon-right ui-icon-tag" data-theme="c">Medical Records</a>
+    <a href="#" onclick="window.location = '/patient/appointment/all?id={{app.user.lastPatient.getId()}}'" class="nav-link-button ui-btn ui-shadow ui-corner-all ui-btn-icon-right ui-icon-calendar" data-theme="c">Appointments</a>
+    {% endif %}
+    <!--show links for admin staff only-->
+    {% if is_granted("ROLE_ADMIN") %}
+    <a href="#" onclick="window.location = '/admin/staff/search'" class="nav-link-button ui-btn ui-shadow ui-corner-all ui-btn-icon-right ui-icon-search" data-theme="c">Staff</a>
+    <a href="#" onclick="window.location = '/patient/search'" class="nav-link-button ui-btn ui-shadow ui-corner-all ui-btn-icon-right ui-icon-search" data-theme="c">Patient</a>
+    {% endif %}
+    {% if is_granted("IS_AUTHENTICATED_FULLY") %}
+    <a href="/logout" class="nav-link-button ui-btn ui-shadow ui-corner-all ui-btn-icon-right ui-icon-minus" data-theme="c">Logout</a>
+    {% endif %}
+    
     
 </div> 
 <div data-role="content">

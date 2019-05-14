@@ -64,14 +64,18 @@ class AdminCreateBackend extends AbstractController {
             
             case "patient":
                $email = $request->request->get('email');
-               //check if email address is unique
-               $existingUser = $entityManager->getRepository(Patient::class)->findOneBy([
-                  "email" => $email
-               ]);
 
-               if($existingUser) {
-                  return new Response("error");
+               if(!empty($email)) {
+                  //check if email address is unique
+                  $existingUser = $entityManager->getRepository(Patient::class)->findOneBy([
+                     "email" => $email
+                  ]);
+
+                  if($existingUser) {
+                     return new Response("error");
+                  }
                }
+               
                //get data from request
                $firstName = $request->request->get('firstName');
                $middleNames = $request->request->get('middleNames');
@@ -88,11 +92,15 @@ class AdminCreateBackend extends AbstractController {
                //prevent empty string being passed to DB for number
                if($telNo === "") {
                   $telNo = null;
+               } else {
+                  $telNo = (int)$telNo;
                }
                $mobileNo = $request->request->get('mobileNo');
                if($mobileNo === "") {
                   $mobileNo = null;
-               }   
+               }  else {
+                  $mobileNo = (int)$mobileNo;
+               }
 
                $patient = new Patient();
                $patient->setFirstName($firstName);

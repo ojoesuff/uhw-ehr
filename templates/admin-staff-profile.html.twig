@@ -148,7 +148,6 @@
             firstName: firstName, lastName:lastName,
             username:username, staffType:staffType})
             .done(function(data) {
-                console.log(data); 
                 //remove previous errors
                 removeError("#staff-username-error");
                 removeError("#staff-submit-error");            
@@ -176,7 +175,6 @@
      $("#delete-staff-yes").click(function() {
          $.post("/backend/staff", {type: "deleteStaff", staffId:staffId})
          .done(function(data) {
-             console.log(data);
             if(data === "none") {
                 addError("#delete-staff-error", "An unexpected error occurred");
             } else {

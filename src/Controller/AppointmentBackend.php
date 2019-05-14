@@ -50,22 +50,27 @@ class AppointmentBackend extends AbstractController {
                             $department = $appointment->getDepartment();
                             $departmentName = $department->getName();
                             $staff = $appointment->getStaffId();
-                            $staffFirstName = $staff->getFirstName();
-                            $staffLastName = $staff->getLastName();
-                            if(!$staffLastName) {
-                                $staffLastName = "";
-                            }
-                            $staffName = $staffFirstName." ".$staffFirstName;
-                            $staffRole = $staff->getRoles();
-
-                            //check if roles is in roles array
-                            if(in_array("ROLE_NURSE", $staffRole)) {
-                                $staffType = "Nurse";
-                            } else if (in_array("ROLE_DOCTOR", $staffRole)) {
-                                $staffType = "Dr";
+                            if($staff) {
+                                $staffFirstName = $staff->getFirstName();
+                                $staffLastName = $staff->getLastName();
+                                if(!$staffLastName) {
+                                    $staffLastName = "";
+                                }
+                                $staffName = $staffFirstName." ".$staffLastName;
+                                $staffRole = $staff->getRoles();
+                                //check if roles is in roles array
+                                if(in_array("ROLE_NURSE", $staffRole)) {
+                                    $staffType = "Nurse";
+                                } else if (in_array("ROLE_DOCTOR", $staffRole)) {
+                                    $staffType = "Dr";
+                                } else {
+                                    $staffType = "";
+                                }
                             } else {
+                                $staffName = "Unassigned";
                                 $staffType = "";
-                            }
+                            }                            
+                            
                             $dueDate = $appointment->getDate();
                             $date = $dueDate->format("d M Y");
                             $time = $dueDate->format("H:i");                            
@@ -98,22 +103,28 @@ class AppointmentBackend extends AbstractController {
                     $department = $appointment->getDepartment();
                     $departmentName = $department->getName();
                     $staff = $appointment->getStaffId();
-                    $staffId = $staff->getId();
-                    $staffFirstName = $staff->getFirstName();
-                    $staffLastName = $staff->getLastName();
-                    if(!$staffLastName) {
-                        $staffLastName = "";
-                    }
-                    $staffRole = $staff->getRoles();
-                    //check if roles is in roles array
-                    if(in_array("ROLE_NURSE", $staffRole)) {
-                        $staffType = "Nurse";
-                    } else if (in_array("ROLE_DOCTOR", $staffRole)) {
-                        $staffType = "Dr";
+                    if($staff) {
+                        $staffId = $staff->getId();
+                        $staffFirstName = $staff->getFirstName();
+                        $staffLastName = $staff->getLastName();
+                        if(!$staffLastName) {
+                            $staffLastName = "";
+                        }
+                        $staffName = $staffFirstName." ".$staffLastName;
+                        $staffRole = $staff->getRoles();
+                        //check if roles is in roles array
+                        if(in_array("ROLE_NURSE", $staffRole)) {
+                            $staffType = "Nurse";
+                        } else if (in_array("ROLE_DOCTOR", $staffRole)) {
+                            $staffType = "Dr";
+                        } else {
+                            $staffType = "";
+                        }
                     } else {
+                        $staffName = "Unassigned";
                         $staffType = "";
-                    }
-                    $staffName = $staffFirstName." ".$staffFirstName;
+                        $staffId = 0;
+                    } 
                     $dueDate = $appointment->getDate();
                     $date = $dueDate->format("d M Y");
                     $formattedDate = $dueDate->format("Y-m-d");

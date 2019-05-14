@@ -539,7 +539,6 @@
          sedation:sedation, claustrophobia:claustrophobia, metal:metal, 
          metalArea:metalArea, notes:notes})
          .done(function(data) {
-             console.log(data);
              if(data === "success") {
                  window.location = `/patient/medical-record/create?id=${patientId}&msg=success`;
              } else {
@@ -602,7 +601,6 @@
          LVARangeWeeks:LVARangeWeeks, LVARangeMonths:LVARangeMonths, testRequired:testRequired, 
          surgery:surgery, notes:notes})
          .done(function(data) {
-             console.log(data);
              if(data === "success") {
                  window.location = `/patient/medical-record/create?id=${patientId}&msg=success`;
              } else {

@@ -5,6 +5,7 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Patient;
+use App\Entity\User;
 use App\Entity\Department;
 use App\Entity\Appointment;
 use App\Entity\AAndERecord;
@@ -93,7 +94,7 @@ class PatientBackend extends AbstractController {
 
          if($type === "outstandingAppoint") {
 
-            $outstandingAppointments = $entityManager->getRepository(Appointment::class)->getTwoMostRecentOutstandingApp($patientId);
+            $outstandingAppointments = $entityManager->getRepository(Appointment::class)->getFiveMostRecentOutstandingApp($patientId);
 
             $twoAppointments = array("outstandingAppointments" => array());
 
@@ -103,11 +104,13 @@ class PatientBackend extends AbstractController {
                   $department = $appointment->getDepartment();
                   $departmentName = $department->getName();
                   $dueDate = $appointment->getDate();
+                  $staff = $appointment->getStaffId();
+                  $medicalStaff = $this->getStaffName($staff);
                   $date = $dueDate->format("d M Y");
                   $time = $dueDate->format("H:i");
                   
                   $appointmentArray = array("appointmentId" => $appointmentId, "departmentName" => $departmentName,
-                  "date" => $date, "time" => $time);
+                  "date" => $date, "time" => $time, "medicalStaff" => $medicalStaff);
 
                   array_push($twoAppointments["outstandingAppointments"], $appointmentArray);
                   
@@ -132,7 +135,8 @@ class PatientBackend extends AbstractController {
                   $dueDate = $appointment->getDate();
                   $date = $dueDate->format("d M Y");
                   $time = $dueDate->format("H:i");
-                  $medicalStaff = $appointment->getMedicalStaff();
+                  $staff = $appointment->getStaffId();
+                  $medicalStaff = $this->getStaffName($staff);
                   
                   $appointmentArray = array("appointmentId" => $appointmentId, "departmentName" => $departmentName,
                   "date" => $date, "time" => $time, "medicalStaff" => $medicalStaff);
@@ -226,7 +230,8 @@ class PatientBackend extends AbstractController {
                   $dueDate = $appointment->getDate();
                   $date = $dueDate->format("d M Y");
                   $time = $dueDate->format("H:i");
-                  $medicalStaff = $appointment->getMedicalStaff();
+                  $staff = $appointment->getStaffId();
+                  $medicalStaff = $this->getStaffName($staff);
                   
                   $appointmentArray = array("appointmentId" => $appointmentId, "departmentName" => $departmentName,
                   "date" => $date, "time" => $time, "medicalStaff" => $medicalStaff);
@@ -255,7 +260,8 @@ class PatientBackend extends AbstractController {
                   $dueDate = $appointment->getDate();
                   $date = $dueDate->format("d M Y");
                   $time = $dueDate->format("H:i");
-                  $medicalStaff = $appointment->getMedicalStaff();
+                  $staff = $appointment->getStaffId();
+                  $medicalStaff = $this->getStaffName($staff);
                   
                   $appointmentArray = array("appointmentId" => $appointmentId, "departmentName" => $departmentName,
                   "date" => $date, "time" => $time, "medicalStaff" => $medicalStaff);
@@ -289,6 +295,20 @@ class PatientBackend extends AbstractController {
         return new Response("Success");
      } //end index
 
+     //return string of staffs name
+     public function getStaffName($staff) {
+        if($staff) {
+            $firstName = $staff->getFirstName();
+            $lastName = $staff->getLastName();
+            if(empty($lastName)) {
+               $lastName = "";
+            }
+            return $medicalStaff = $firstName." ".$lastName;
+        } else {
+           return "Unassigned";
+        }         
+     }
+
      public function deletePatient($patient) {
          $entityManager = $this->getDoctrine()->getManager();
          //get all records associated with patient and delete them
@@ -315,6 +335,13 @@ class PatientBackend extends AbstractController {
          ]);
          foreach($appointments as $record) {
             $entityManager->remove($record);
+         }
+         //remove patient from last viewed column in user entity
+         $staff = $entityManager->getRepository(User::class)->findBy([
+            "lastPatient" => $patient
+         ]);
+         foreach($staff as $staffMember) {
+            $staffMember->setLastPatient(null);
          }
 
          $entityManager->remove($patient);

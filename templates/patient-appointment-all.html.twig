@@ -3,6 +3,7 @@
 <div data-role="page">  
     {% include './sidenav/sidenav.html.twig' %} 
     <div data-role="content" class="width-720"> 
+            <a data-inline="true" class="ui-shadow ui-btn ui-corner-all ui-btn-inline" href="#" id="new-appointment-button">+ APPOINTMENT</a>
         <div class="box">
             <p class="green" id="appointment-success-msg"></p>
             <h3 class="green">All Upcoming Appointments</h3>
@@ -76,10 +77,15 @@
             let time = appointment.time;
             let staffType = appointment.staffType;
 
-            let htmlAppointment = `<a class="upcoming-appointments" href="#" onclick="window.location='/patient/appointment/view?id=${patientId}&appoint=${appointmentId}'"><p class='input-style-dark'>${date}, ${time}, ${staffType}. ${staffName}, ${departmentName}</p></a>`;
+            let htmlAppointment = `<a class="upcoming-appointments" href="#" onclick="window.location='/patient/appointment/view?id=${patientId}&appoint=${appointmentId}'"><p class='input-style-dark'>${date}, ${time}, ${staffType} ${staffName}, ${departmentName}</p></a>`;
             $(htmlAppointment).insertBefore(`#${type}-appointments-insert-before`);
         }
     }
+
+    //direct to new appointment page
+    $("#new-appointment-button").click(function() {
+        window.location = `/patient/appointment/create?id=${patientId}`
+    })
     
 </script>
 </body>

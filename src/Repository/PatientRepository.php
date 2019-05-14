@@ -61,7 +61,7 @@ class PatientRepository extends ServiceEntityRepository
     }
 
     public function findPatientsAdvanced($firstName,  $middleNames, $lastName, 
-    $email, $addressLine1, $addressLine2, $addressLine3, $dob) {
+    $email, $addressLine1, $addressLine2, $addressLine3, $dob, $patientId) {
 
         $dobDefault = date_create("1000-01-01");
 
@@ -102,6 +102,11 @@ class PatientRepository extends ServiceEntityRepository
             $queryBuilder
                 ->andWhere('p.address LIKE :addressLine3')
                 ->setParameter('addressLine3', '%'.$addressLine3.'%');
+        }
+        if(!empty($patientId)) {
+            $queryBuilder
+                ->andWhere('p.id = :patientId')
+                ->setParameter('patientId', $patientId);
         }
         
         if($dob > $dobDefault) {

@@ -216,6 +216,8 @@
             $.post("/backend/medical-record", {type: "viewAandERecord", patientId:patientId,
             recordId:recordId})
             .done(function(data) {
+                //remove edit button if exists
+                $("#edit-aande-record-button").remove();
                 if(data === "none") {
                     addError("#edit-aande-submit-error", "An unexpected error occurred");
                 } else {
@@ -349,17 +351,18 @@
              notes:notes})
              .done(function(data) {
                  if(data === "success") {
-                     window.location = `/patient/profile/?id=${patientId}&msg=success`;
+                    window.location = `/patient/medical-record/view?id=${patientId}&msg=success`;
                  } else {
                      addError("#edit-aande-submit-error", "An unexpected error occurred");
                  }
              })
+             //throw error if fails found at https://stackoverflow.com/questions/9847244/what-are-the-parameters-sent-to-fail-in-jquery
+            .fail(function (jqXHR, textStatus, error) {
+                showErrorPage();
+            }); //end post
             } //end if
         })
-        //throw error if fails found at https://stackoverflow.com/questions/9847244/what-are-the-parameters-sent-to-fail-in-jquery
-        .fail(function (jqXHR, textStatus, error) {
-            showErrorPage();
-        }); //end post
+        
     
         //show hidden fields if value of medicine is changed
         $("#edit-medication").change(function() {

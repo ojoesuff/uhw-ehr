@@ -43,6 +43,7 @@ class StaffBackend extends AbstractController {
 
                     return new JsonResponse($staffArray);
                 } //end if
+                break;
             case "updateStaff":
                 $firstName = $request->request->get('firstName');
                 $lastName = $request->request->get('lastName');
@@ -87,6 +88,7 @@ class StaffBackend extends AbstractController {
 
                     return new Response("success");
                 }
+                break;
             case "getLastViewedPatient":
                 $staff = $entityManager->getRepository(User::class)->findOneBy([
                     "id" => $staffId
@@ -107,6 +109,7 @@ class StaffBackend extends AbstractController {
                 } else {
                     throw new NotFoundHttpException('Error: staff ID not found');
                 }
+                break;
             case "savePatientLastViewed":
                 $staff = $entityManager->getRepository(User::class)->findOneBy([
                     "id" => $staffId
@@ -128,6 +131,7 @@ class StaffBackend extends AbstractController {
                 } else {
                     throw new NotFoundHttpException('Error: staff ID not found');
                 }
+                break;
 
             case "deleteManyStaff":
 

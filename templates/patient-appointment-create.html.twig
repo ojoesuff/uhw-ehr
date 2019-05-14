@@ -2,7 +2,7 @@
 <body>
     <div data-role="page" id="create-appointment"> 
         {% include './sidenav/sidenav.html.twig' %} 
-        <div data-role="content" class="width-720 box"> 
+        <div data-role="content" class="width-560 box"> 
             <h3 class="green">Create Appointment</h3>
             <label for="create-appointment-staff-name" class="green">Staff Name</label>
             <p id="create-appointment-staff-name-error"></p>
@@ -14,7 +14,7 @@
                 <div class="flex-item-small-form">
                     <label for="create-appointment-department" class="green">Department</label>
                     <p id="create-appointment-department-error"></p>
-                    <select name="create-appointment-department" id="create-appointment-department">
+                    <select name="create-appointment-department" id="create-appointment-department" data-mini="true">
                         <option value="" disabled selected>Choose one</option>
                         <option value="A And E">Accident and Emergency</option>
                         <option value="Radiology">Radiology</option>
@@ -24,7 +24,7 @@
                 <div class="flex-item-small-form">
                     <label for="create-appointment-status" class="green">Type</label>
                     <p id="create-appointment-status-error"></p>
-                    <select name="create-appointment-status" id="create-appointment-status">
+                    <select name="create-appointment-status" id="create-appointment-status" data-mini="true">
                         <option value="" disabled selected>Choose one</option>
                         <option value="New">New</option>
                         <option value="Reappointment">Reappointment</option>
@@ -66,7 +66,6 @@
     //dynamically fetch medical staff members for staff select on create screen
     $.post("/backend/appointment", {type:"getAllStaff", patientId:patientId})
     .done(function(data) {
-        console.log(data);
         if(data) {
             data.forEach(function(staff) {
                 let lastName = staff.lastName;
@@ -139,7 +138,6 @@
             $.post("/backend/appointment", {type:"createAppointment", patientId:patientId,
             staffId:staffId, departmentName:departmentName, formattedDate:formattedDate, status:status})
             .done(function(data) {
-                console.log(data);
                 if(data === "none") {
                     addError("#appointment-create-error", "An unexpected error occurred");
                 } else {

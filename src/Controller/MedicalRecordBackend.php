@@ -211,11 +211,16 @@ class MedicalRecordBackend extends AbstractController {
                     if($record) {
                         $date = $record->getDateCreated();
                         $dateCreated = $date->format("d M Y, H:i");
-                        $staff = $record->getStaffId();
-                        $staffId = $staff->getId();
-                        $firstName = $staff->getFirstName();
-                        $lastName = $staff->getLastName();
-                        $createdBy = $firstName." ".$lastName;
+                        $staff = $record->getStaffId();                        
+                        if($staff) {
+                            $staffId = $staff->getId();
+                            $firstName = $staff->getFirstName();
+                            $lastName = $staff->getLastName();
+                            $createdBy = $firstName." ".$lastName;
+                        } else {
+                            $createdBy = "Unassigned";
+                            $staffId = 0;
+                        }                        
                         $LVARangeWeeks = $record->getLVARangeWeeks();
                         $LVARangeMonths = $record->getLVARangeMonths();
                         $testRequired = $record->getTestRequired();
@@ -274,11 +279,16 @@ class MedicalRecordBackend extends AbstractController {
                     if($record) {
                         $date = $record->getDateCreated();
                         $dateCreated = $date->format("d M Y, H:i");
-                        $staff = $record->getStaffId();
-                        $staffId = $staff->getId();
-                        $firstName = $staff->getFirstName();
-                        $lastName = $staff->getLastName();
-                        $createdBy = $firstName." ".$lastName;
+                        $staff = $record->getStaffId();                        
+                        if($staff) {
+                            $staffId = $staff->getId();
+                            $firstName = $staff->getFirstName();
+                            $lastName = $staff->getLastName();
+                            $createdBy = $firstName." ".$lastName;
+                        } else {
+                            $createdBy = "Unassigned";
+                            $staffId = 0;
+                        }   
 
                         $area = $record->getArea();
                         $xrayType = $record->getXrayType();
@@ -356,11 +366,16 @@ class MedicalRecordBackend extends AbstractController {
                     if($record) {
                         $date = $record->getDateCreated();
                         $dateCreated = $date->format("d M Y, H:i");
-                        $staff = $record->getStaffId();
-                        $staffId = $staff->getId();
-                        $firstName = $staff->getFirstName();
-                        $lastName = $staff->getLastName();
-                        $createdBy = $firstName." ".$lastName;
+                        $staff = $record->getStaffId();                        
+                        if($staff) {
+                            $staffId = $staff->getId();
+                            $firstName = $staff->getFirstName();
+                            $lastName = $staff->getLastName();
+                            $createdBy = $firstName." ".$lastName;
+                        } else {
+                            $createdBy = "Unassigned";
+                            $staffId = 0;
+                        }  
                         $notes = $record->getNotes();
                         if(!$notes) {
                             $notes = "";
@@ -477,9 +492,14 @@ class MedicalRecordBackend extends AbstractController {
         foreach($records as $record) {
             $recordId = $record->getId();
             $medicalStaff = $record->getStaffId();
-            $firstName = $medicalStaff->getFirstName();
-            $lastName = $medicalStaff->getLastName();
-            $staffName = $firstName." ".$lastName;
+            if($medicalStaff) {
+                $firstName = $medicalStaff->getFirstName();
+                $lastName = $medicalStaff->getLastName();
+                $staffName = $firstName." ".$lastName;
+            } else {
+                $staffName = "Unassigned";
+            }
+            
             $dateCreated = $record->getDateCreated();
             $date = $dateCreated->format("d M Y");
             $time = $dateCreated->format("H:i");

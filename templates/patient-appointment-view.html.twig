@@ -46,14 +46,14 @@
         <div class="flex-container">
             <div class="flex-item-small-form">
                 <label for="edit-appointment-complete" class="green">Status</label>
-                <select name="edit-appointment-complete" id="edit-appointment-complete">
+                <select name="edit-appointment-complete" id="edit-appointment-complete" data-mini="true">
                     <option value="Pending">Pending</option>
                     <option value="Complete">Complete</option>
                 </select>
             </div>
             <div class="flex-item-small-form">
                 <label for="edit-appointment-status" class="green">Type</label>
-                <select name="edit-appointment-status" id="edit-appointment-status">
+                <select name="edit-appointment-status" id="edit-appointment-status" data-mini="true">
                     <option value="New">New</option>
                     <option value="Reappointment">Reappointment</option>
                 </select>
@@ -115,7 +115,7 @@
             let departmentName = data.departmentName;
             let staffName = data.staffName;
             let staffType = data.staffType;
-            let staffFullTitle = `${staffType}. ${staffName}`;
+            let staffFullTitle = `${staffType} ${staffName}`;
             let time = data.time;
             let status = data.status;
             let formattedDate = data.formattedDate;

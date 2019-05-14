@@ -89,7 +89,6 @@
             $.post("/backend/admin/create", {type:"staff", firstName: firstName, lastName:lastName,
             username:username, password:password, staffType:staffType})
             .done(function(data) {
-                console.log(data); 
                 //remove previous errors
                 removeError("#staff-username-error");
                 removeError("#staff-submit-error");            
@@ -124,7 +123,8 @@
         } else if (firstName !== "" && lastName !== "") {
             //get first character of first name
             let char = firstName[0];
-            let suggestedUsername = (char + lastName).toLowerCase();
+            //replace whitepsace solution found at https://stackoverflow.com/questions/10800355/remove-whitespaces-inside-a-string-in-javascript
+            let suggestedUsername = (char + lastName).toLowerCase().replace(/ /g, '');
             $("#staff-username").val(suggestedUsername);
         }        
     }
